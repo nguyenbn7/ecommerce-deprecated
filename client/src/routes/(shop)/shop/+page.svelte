@@ -1,4 +1,5 @@
 <script>
+	import Pagination from '$lib/shares/pagination.svelte';
 	import ProductItem from '$lib/shares/product-item.svelte';
 </script>
 
@@ -36,48 +37,24 @@
 			</div>
 
 			<div class="row row-cols-3 g-3 mb-4">
-				<div class="col">
-					<ProductItem></ProductItem>
-				</div>
-				<div class="col">
-					<ProductItem></ProductItem>
-				</div>
-				<div class="col">
-					<ProductItem></ProductItem>
-				</div>
-				<div class="col">
-					<ProductItem></ProductItem>
-				</div>
-				<div class="col">
-					<ProductItem></ProductItem>
-				</div>
-				<div class="col">
-					<ProductItem></ProductItem>
-				</div>
-				<div class="col">
-					<ProductItem></ProductItem>
-				</div>
-				<div class="col">
-					<ProductItem></ProductItem>
-				</div>
-				<div class="col">
-					<ProductItem></ProductItem>
-				</div>
-				<div class="col">
-					<ProductItem></ProductItem>
-				</div>
-				<div class="col">
-					<ProductItem></ProductItem>
-				</div>
+				{#each Array(18) as _}
+					<div class="col">
+						<ProductItem></ProductItem>
+					</div>
+				{/each}
 			</div>
 
 			<div class="d-flex justify-content-center mb-3">
-				<!-- <app-pager
-					[totalItems]="totalItems"
-					[pageSize]="shopParams.pageSize"
-					(pageChanged)="onPageChanged($event)"
-				></app-pager> -->
-				Pagination here
+				<Pagination
+					totalItems={60}
+					itemsPerPage={6}
+					pageNumber={2}
+					maxSize={4}
+					previousText="&lsaquo;"
+					nextText="&rsaquo;"
+					firstText="&laquo;"
+					lastText="&raquo;"
+				></Pagination>
 			</div>
 		</div>
 	</div>
