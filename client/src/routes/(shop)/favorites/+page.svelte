@@ -1,1 +1,1 @@
-<h2>Wish list</h2>
+<h2>Favorites</h2>
