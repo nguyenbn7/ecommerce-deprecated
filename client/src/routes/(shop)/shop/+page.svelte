@@ -29,7 +29,7 @@
 		</div>
 	</div>
 	<div class="col-9">
-		<div class="d-flex justify-content-between align-items-center pb-2">
+		<div class="d-flex justify-content-between align-items-center pb-3">
 			<!-- <app-paging-header [totalItems]="totalItems" [pageNumber]="shopParams.pageNumber"
 				[pageSize]="shopParams.pageSize"></app-paging-header> -->
 			<div class="d-flex mt-2">
@@ -39,7 +39,7 @@
 			</div>
 		</div>
 
-		<div class="row row-cols-3 g-3 mb-4">
+		<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 row-cols-xxl-3 g-3 mb-4">
 			{#each Array(18) as _}
 				<div class="col">
 					<ProductItem></ProductItem>
