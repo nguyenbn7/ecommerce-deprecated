@@ -1,5 +1,12 @@
 <script>
 	import { page } from '$app/stores';
+	const paths = [
+		{ link: '/', name: 'Home' },
+		{ link: '/shop', name: 'Shop' },
+		{ link: '/favorites', name: 'Wishlist' },
+		{ link: '/about', name: 'About' },
+		{ link: '/blog', name: 'Blog' }
+	];
 </script>
 
 <nav class="nav nav-expand-md">
@@ -12,52 +19,19 @@
 			</div>
 
 			<ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0 nav-pills">
-				<li>
-					<a
-						href="/"
-						class="nav-link px-3"
-						class:disabled={$page.url.pathname === '/'}
-						class:active={$page.url.pathname == '/'}>Home</a
-					>
-				</li>
-				<li>
-					<a
-						href="/shop"
-						class="nav-link px-3"
-						class:disabled={$page.url.pathname === '/shop'}
-						class:active={$page.url.pathname == '/shop'}>Shop</a
-					>
-				</li>
-				<li>
-					<a
-						href="/favorites"
-						class="nav-link px-3"
-						class:disabled={$page.url.pathname === '/favorites'}
-						class:active={$page.url.pathname == '/favorites'}
-					>
-						Wishlist
-					</a>
-				</li>
-				<li>
-					<a
-						href="/about"
-						class="nav-link px-3"
-						class:disabled={$page.url.pathname === '/about'}
-						class:active={$page.url.pathname == '/about'}
-					>
-						About
-					</a>
-				</li>
-				<li>
-					<a
-						href="/blog"
-						class="nav-link px-3"
-						class:disabled={$page.url.pathname === '/blog'}
-						class:active={$page.url.pathname === '/blog'}
-					>
-						Blog
-					</a>
-				</li>
+				{#each paths as path}
+					<li>
+						<a
+							href={path.link}
+							class="nav-link px-3"
+							class:disabled={$page.url.pathname === path.link}
+							class:active={$page.url.pathname === path.link}
+							data-sveltekit-preload-data="tap"
+						>
+							{path.name}
+						</a>
+					</li>
+				{/each}
 			</ul>
 
 			<div class="col-md-3 text-end">
@@ -67,6 +41,7 @@
 					class:btn-outline-success={$page.url.pathname !== '/login'}
 					class:btn-success={$page.url.pathname === '/login'}
 					class:disabled={$page.url.pathname === '/login'}
+					data-sveltekit-reload
 					href="/login"
 				>
 					Login
@@ -77,6 +52,7 @@
 					class:btn-outline-danger={$page.url.pathname !== '/register'}
 					class:btn-danger={$page.url.pathname === '/register'}
 					class:disabled={$page.url.pathname === '/register'}
+					data-sveltekit-reload
 					href="/register"
 				>
 					Sign-up

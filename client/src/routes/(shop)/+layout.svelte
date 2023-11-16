@@ -3,6 +3,7 @@
 	import Footer from '$lib/shares/footer.svelte';
 	import Navbar from '$lib/shares/navbar.svelte';
 	import Navheader from '$lib/shares/navheader.svelte';
+	import '$lib/shop.style.scss';
 </script>
 
 <div class="sticky-top">
@@ -19,7 +20,7 @@
 </div>
 
 <div class="d-flex flex-column">
-	<main class="flex-grow-1">
+	<main class="flex-grow-1 mb-3 mt-5">
 		<div class="container">
 			<Breadcrumb class="breadcrumb-chevron ps-1 pb-3"></Breadcrumb>
 			<slot />
