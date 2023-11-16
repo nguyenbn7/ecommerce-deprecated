@@ -5,14 +5,25 @@
 	import Navheader from '$lib/shares/navheader.svelte';
 </script>
 
-<div class="d-flex flex-column h-100">
-	<div class="sticky-top">
-		<Navbar></Navbar>
-		<Navheader></Navheader>
+<div class="sticky-top">
+	<div class="bg-body">
+		<div class="container">
+			<Navbar></Navbar>
+		</div>
 	</div>
-	<main class="flex-grow-1 container">
-		<Breadcrumb class="breadcrumb-chevron p-3 rounded-3"></Breadcrumb>
-		<slot />
+	<div class="bg-light">
+		<div class="container">
+			<Navheader></Navheader>
+		</div>
+	</div>
+</div>
+
+<div class="d-flex flex-column">
+	<main class="flex-grow-1">
+		<div class="container">
+			<Breadcrumb class="breadcrumb-chevron ps-1 pb-3"></Breadcrumb>
+			<slot />
+		</div>
 	</main>
 	<Footer></Footer>
 </div>
