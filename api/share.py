@@ -1,12 +1,22 @@
 from abc import abstractmethod
 from typing import TypeVar
-from sqlalchemy.orm import DeclarativeBase, Session
+from sqlalchemy import create_engine
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
-from core import SessionLocal
+
+# TODO: read database url from env
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres:root@localhost/ecommerce100"
+
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL,
+    echo=True,
+)
+
+_Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def get_db():
-    db = SessionLocal()
+    db = _Session()
     try:
         yield db
     finally:
