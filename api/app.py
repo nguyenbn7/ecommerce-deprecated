@@ -1,7 +1,5 @@
-from fastapi import FastAPI
-from cores.apis import router
-
+from fastapi import APIRouter, FastAPI
 
 app = FastAPI()
 
-app.include_router(router)
+app.include_router(APIRouter)

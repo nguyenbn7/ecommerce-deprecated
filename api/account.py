@@ -5,9 +5,9 @@ from jose.constants import ALGORITHMS
 from pydantic import BaseModel
 from passlib.context import CryptContext
 
-router = APIRouter(prefix="/account", tags=["Account"])
+account_router = APIRouter(prefix="/account", tags=["Account"])
 
-
+# TODO: read secret key from env
 SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30 * 60 * 24
 
@@ -63,7 +63,7 @@ class RegisterDTO(BaseModel):
 user = AppUser()
 
 
-@router.post("/login")
+@account_router.post("/login")
 def login(loginDTO: LoginDTO):
     if loginDTO.email != user.email:
         raise HTTPException(
@@ -82,7 +82,7 @@ def login(loginDTO: LoginDTO):
     return SuccessResponse(generate_jwt_token(user), user.display_name, user.email)
 
 
-@router.post("/register")
+@account_router.post("/register")
 def register(registerDTO: RegisterDTO):
     if registerDTO.email == user.email:
         raise HTTPException(
