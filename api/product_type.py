@@ -14,14 +14,14 @@ class ProductType(Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
 
 
-class ProductTypeRepo(Repository):
+class ProductTypeRepository(Repository[ProductType]):
     def __init__(self, db: Annotated[Session, Depends(get_db)]) -> None:
-        super().__init__(db, ProductType)
+        super().__init__(db)
 
 
 product_type_router = APIRouter(prefix="/products/types", tags=["Product Types"])
 
 
 @product_type_router.get("/")
-def get_products_types(repo: Annotated[ProductTypeRepo, Depends(ProductTypeRepo)]):
+def get_products_types(repo: Annotated[ProductTypeRepository, Depends(ProductTypeRepository)]):
     return repo.get_all()

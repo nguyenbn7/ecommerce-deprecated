@@ -20,21 +20,21 @@ class Product(Base):
     product_type_id: Mapped[int] = mapped_column(ForeignKey("product_types.id"))
 
 
-class ProductRepo(Repository):
+class ProductRepository(Repository[Product]):
     def __init__(self, db: Annotated[Session, Depends(get_db)]) -> None:
-        super().__init__(db, Product)
+        super().__init__(db)
 
 
 product_router = APIRouter(prefix="/products", tags=["Products"])
 
 
 @product_router.get("/")
-def get_products(repo: Annotated[ProductRepo, Depends(ProductRepo)]):
+def get_products(repo: Annotated[ProductRepository, Depends(ProductRepository)]):
     return repo.get_all()
 
 
 @product_router.get("/{id}")
-def get_product(id: int, repo: Annotated[ProductRepo, Depends(ProductRepo)]):
+def get_product(id: int, repo: Annotated[ProductRepository, Depends(ProductRepository)]):
     product = repo.get_by_id(id)
     if not product:
         # TODO: use exception handler

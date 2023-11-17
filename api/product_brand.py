@@ -15,9 +15,9 @@ class ProductBrand(Base):
     products: Mapped[List[Product]] = relationship()
 
 
-class ProductBrandRepository(Repository):
+class ProductBrandRepository(Repository[ProductBrand]):
     def __init__(self, db: Annotated[Session, Depends(get_db)]) -> None:
-        super().__init__(db, ProductBrand)
+        super().__init__(db)
 
 
 product_brand_router = APIRouter(prefix="/products/brands", tags=["Product Brands"])

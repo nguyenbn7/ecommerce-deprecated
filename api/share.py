@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import TypeVar
+from typing import Generic, TypeVar, get_args
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
@@ -30,17 +30,18 @@ class Base(DeclarativeBase):
 T = TypeVar("T", bound=Base)
 
 
-class Repository:
+# https://stackoverflow.com/questions/48572831/how-to-access-the-type-arguments-of-typing-generic
+class Repository(Generic[T]):
     @abstractmethod
-    def __init__(self, db: Session, entity: T) -> None:
+    def __init__(self, db: Session) -> None:
         self.db = db
-        self.entity = entity
+        self.entity = get_args(self.__orig_bases__[0])[0]
 
     def get_all(self):
         return self.db.query(self.entity).all()
 
     def get_by_id(self, id: int):
-        return self.db.query(self.entity).filter(self.id == id).first()
+        return self.db.query(self.entity).filter(self.entity.id == id).first()
 
 
 class ErrorResponse:
