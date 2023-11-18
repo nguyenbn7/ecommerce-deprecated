@@ -1,6 +1,17 @@
 <script>
 	import Pagination from '$lib/shares/pagination.svelte';
 	import ProductItem from '$lib/shares/product-item.svelte';
+	import { onMount } from 'svelte';
+
+	/**
+	 * @type {Products}
+	 */
+	let products = [];
+
+	onMount(async () => {
+		const response = await fetch('http://localhost:8000/api/products');
+		products = [...(await response.json())];
+	});
 </script>
 
 <svelte:head>
@@ -40,9 +51,9 @@
 		</div>
 
 		<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 row-cols-xxl-3 g-3 mb-4">
-			{#each Array(18) as _}
+			{#each products as product}
 				<div class="col">
-					<ProductItem></ProductItem>
+					<ProductItem {product}></ProductItem>
 				</div>
 			{/each}
 		</div>

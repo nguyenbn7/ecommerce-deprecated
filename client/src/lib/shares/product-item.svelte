@@ -1,17 +1,28 @@
+<script>
+	import { formatAsUSD } from '$lib/helpers';
+
+	/**
+	 * @type {Product}
+	 */
+	export let product;
+</script>
+
 <div class="card shadow-sm">
 	<div class="image position-relative">
-		<img src="https://placehold.co/600x400/png" alt="Product name here" class="img-fluid bg-info" />
+		<img src={product.picture_url} alt={product.name} class="img-fluid bg-info" />
 		<div class="d-flex align-items-center justify-content-center hover-overlay">
 			<button class="btn btn-success bi bi-cart me-2" title="Add to cart"></button>
-			<a class="btn btn-primary" href="/shop/1" title="Detail"><i class="bi bi-info-circle"></i></a>
+			<a class="btn btn-primary" href="/shop/{product.id}" title="Detail">
+				<i class="bi bi-info-circle"></i>
+			</a>
 		</div>
 	</div>
 
 	<div class="card-body h-100 d-flex flex-column">
 		<a href={'#'} class="text-decoration-none">
-			<h5 class="text-uppercase">Product name here</h5>
+			<h5 class="text-uppercase">{product.name}</h5>
 		</a>
-		<span class="mb-2" style="font-size: 1.5em;">$100.00</span>
+		<span class="mb-2" style="font-size: 1.5em;">{formatAsUSD(product.price)}</span>
 	</div>
 </div>
 

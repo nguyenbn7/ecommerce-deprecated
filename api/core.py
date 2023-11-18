@@ -1,10 +1,7 @@
 from fastapi import APIRouter
-
-from sqlalchemy import create_engine
-
-from product import product_router
-from product_brand import product_brand_router
-from product_type import product_type_router
+from product.router import product_router
+from product_brand.router import product_brand_router
+from product_type.router import product_type_router
 from account import account_router
 
 

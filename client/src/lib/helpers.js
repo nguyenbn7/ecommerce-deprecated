@@ -12,3 +12,13 @@ export function titleCase(str) {
             .join(' ') ?? ''
     );
 }
+
+/**
+ * @param {number} amount
+ */
+export function formatAsUSD(amount) {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+    }).format(amount);
+}

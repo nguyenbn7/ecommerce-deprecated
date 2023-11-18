@@ -1,7 +1,7 @@
 from abc import abstractmethod
-from typing import Generic, TypeVar, get_args
+from typing import Generic, List, TypeVar, get_args
 from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker, Query, load_only
 
 
 # TODO: read database url from env
@@ -27,21 +27,34 @@ class Base(DeclarativeBase):
     pass
 
 
-T = TypeVar("T", bound=Base)
+TEntity = TypeVar("TEntity", bound=Base)
+
+
+class Specification:
+    @abstractmethod
+    def apply_spec(self, query: Query[TEntity]) -> Query[TEntity]:
+        pass
+
+
+P = TypeVar("P")
 
 
 # https://stackoverflow.com/questions/48572831/how-to-access-the-type-arguments-of-typing-generic
-class Repository(Generic[T]):
+class Repository(Generic[TEntity]):
     @abstractmethod
     def __init__(self, db: Session) -> None:
-        self.db = db
-        self.entity = get_args(self.__orig_bases__[0])[0]
+        self.db: Session = db
+        self.entity: TEntity = get_args(self.__orig_bases__[0])[0]
+        self.base_query: Query[TEntity] = self.db.query(self.entity)
 
-    def get_all(self):
-        return self.db.query(self.entity).all()
+    def get_all(self, specification: Specification = None) -> List[TEntity]:
+        query = self.base_query
+        if specification:
+            query = specification.apply_spec(query)
+        return query.all()
 
-    def get_by_id(self, id: int):
-        return self.db.query(self.entity).filter(self.entity.id == id).first()
+    def get_by_id(self, id: int) -> TEntity | None:
+        return self.base_query.filter(self.entity.id == id).first()
 
 
 class ErrorResponse:
