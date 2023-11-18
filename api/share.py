@@ -36,9 +36,6 @@ class Specification:
         pass
 
 
-P = TypeVar("P")
-
-
 # https://stackoverflow.com/questions/48572831/how-to-access-the-type-arguments-of-typing-generic
 class Repository(Generic[TEntity]):
     @abstractmethod
@@ -53,8 +50,11 @@ class Repository(Generic[TEntity]):
             query = specification.apply_spec(query)
         return query.all()
 
-    def get_by_id(self, id: int) -> TEntity | None:
-        return self.base_query.filter(self.entity.id == id).first()
+    def get_by_id(self, id: int, specification: Specification = None) -> TEntity | None:
+        query = self.base_query
+        if specification:
+            query = specification.apply_spec(query)
+        return query.filter(self.entity.id == id).first()
 
 
 class ErrorResponse:

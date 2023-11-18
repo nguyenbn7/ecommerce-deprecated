@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from product.repository import ProductRepository
 
-from product.specification import ProductsSpec
+from product.specification import ProductSpec, ProductsSpec
 from share import ErrorResponse
 
 
@@ -24,7 +24,8 @@ def get_products(repo: Annotated[ProductRepository, Depends(ProductRepository)])
 def get_product(
     id: int, repo: Annotated[ProductRepository, Depends(ProductRepository)]
 ):
-    product = repo.get_by_id(id)
+    spec = ProductSpec()
+    product = repo.get_by_id(id, spec)
     if not product:
         # TODO: use exception handler
         return JSONResponse(
