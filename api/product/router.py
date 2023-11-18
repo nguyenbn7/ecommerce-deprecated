@@ -1,5 +1,6 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends
+from product.model import map_to_dto, map_to_dtos
 from product.repository import ProductRepository
 
 from product.specification import ProductSpec, ProductsSpec
@@ -13,10 +14,7 @@ product_router = APIRouter(prefix="/products", tags=["Products"])
 def get_products(repo: Annotated[ProductRepository, Depends(ProductRepository)]):
     spec = ProductsSpec()
     products = repo.get_all(specification=spec)
-    # TODO: add prefix of url
-    for product in products:
-        product.picture_url = f"http://localhost:8000/{product.picture_url}"
-    return products
+    return map_to_dtos(products)
 
 
 @product_router.get("/{id}")
@@ -27,4 +25,4 @@ def get_product(
     product = repo.get_by_id(id, spec)
     if not product:
         raise NotFoundException("Product not found")
-    return product
+    return map_to_dto(product)
