@@ -1,7 +1,8 @@
+from fastapi import status
 from abc import abstractmethod
 from typing import Generic, List, TypeVar, get_args
 from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker, Query, load_only
+from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker, Query
 
 
 # TODO: read database url from env
@@ -57,6 +58,7 @@ class Repository(Generic[TEntity]):
         return query.filter(self.entity.id == id).first()
 
 
-class ErrorResponse:
+class NotFoundException(Exception):
     def __init__(self, message: str) -> None:
+        self.status_code = status.HTTP_404_NOT_FOUND
         self.message = message

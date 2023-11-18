@@ -1,10 +1,9 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends
-from fastapi.responses import JSONResponse
 from product.repository import ProductRepository
 
 from product.specification import ProductSpec, ProductsSpec
-from share import ErrorResponse
+from share import NotFoundException
 
 
 product_router = APIRouter(prefix="/products", tags=["Products"])
@@ -27,8 +26,5 @@ def get_product(
     spec = ProductSpec()
     product = repo.get_by_id(id, spec)
     if not product:
-        # TODO: use exception handler
-        return JSONResponse(
-            status_code=404, content=ErrorResponse("Product not found").__dict__
-        )
+        raise NotFoundException("Product not found")
     return product
