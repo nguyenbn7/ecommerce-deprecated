@@ -26,8 +26,8 @@ def get_products(
 def get_product(
     id: int, repo: Annotated[ProductRepository, Depends(ProductRepository)]
 ):
-    spec = ProductSpec()
-    product = repo.get_by_id(id, spec)
+    # spec = ProductSpec()
+    product = repo.get_by_id(id)
     if not product:
         raise APIException(404, "Product not found")
     return map_to_dto(product)

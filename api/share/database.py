@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Generic, List, TypeVar, get_args
+from typing import Any, Generic, List, TypeVar, get_args
 from sqlalchemy import func, select
 from sqlalchemy.orm import sessionmaker, Query, Session
 from sqlalchemy.sql.expression import and_
@@ -56,5 +56,10 @@ class Repository(Generic[TEntity]):
 
         return new_query.all()
 
-    def get_by_id(self, specification: Specification | None = None) -> TEntity | None:
-        return self.base_query.filter(specification()).first()
+    def get_by_id(
+        self, id: Any, specification: Specification | None = None
+    ) -> TEntity | None:
+        new_query = self.base_query.filter(self.entity.__mapper__.primary_key[0] == id)
+        if specification:
+            return new_query.filter(specification()).first()
+        return new_query.first()

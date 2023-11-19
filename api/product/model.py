@@ -34,8 +34,8 @@ class ProductDTO:
         self.description = kwargs.get("description", "")
         self.price = kwargs.get("price", -1.1)
         self.picture_url = f"http://localhost:8000/{kwargs.get('picture_url', '')}"
-        self.product_type = kwargs["product_type"].name
-        self.product_brand = kwargs["product_brand"].name
+        # self.product_type = kwargs["product_type"].name
+        # self.product_brand = kwargs["product_brand"].name
 
 
 def map_to_dtos(products: List[Product]) -> List[ProductDTO]:
