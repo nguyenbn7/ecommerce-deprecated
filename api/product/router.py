@@ -1,20 +1,25 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends
-from product.model import map_to_dto, map_to_dtos
+from product.model import ProductsParams, map_to_dto, map_to_dtos
 from product.repository import ProductRepository
 
-from product.specification import ProductSpec, ProductsSpec
-from share.error_handler import APIException
+from product.specification import ProductSpec, ProductSpecification
+from share.model import APIException, Pageable, Pagination
 
 
 product_router = APIRouter(prefix="/products", tags=["Products"])
 
 
 @product_router.get("/")
-def get_products(repo: Annotated[ProductRepository, Depends(ProductRepository)]):
-    spec = ProductsSpec()
-    products = repo.get_all(specification=spec)
-    return map_to_dtos(products)
+def get_products(
+    repo: Annotated[ProductRepository, Depends(ProductRepository)],
+    products_params: ProductsParams = Depends(),
+):
+    # TODO: add join
+    return repo.get_all(
+        ProductSpecification(products_params.brand_id, products_params.type_id),
+        Pageable(products_params.page_index, products_params.page_size),
+    )
 
 
 @product_router.get("/{id}")

@@ -1,7 +1,7 @@
 from fastapi import Request, status
 from fastapi.responses import JSONResponse
 
-from share.error_handler import APIException
+from share.model import APIException
 
 
 async def api_exception_handler(request: Request, ex: APIException):

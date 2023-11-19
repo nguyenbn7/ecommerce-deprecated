@@ -2,7 +2,7 @@ from sqlalchemy import BigInteger, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List
 
-from share.database import Base
+from share.model import Base
 
 
 class ProductBrand(Base):

@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from core.error_handler import api_exception_handler
 from core.router import api_router
 from core.setting import get_cors_settings
-from share.error_handler import APIException
+from share.model import APIException
 
 app = FastAPI()
 
