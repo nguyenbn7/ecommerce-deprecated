@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from product.router import product_router
 from product_brand.router import product_brand_router
 from product_type.router import product_type_router
-from account import account_router
+from auth.account import account_router
 
 
 api_router = APIRouter(prefix="/api")

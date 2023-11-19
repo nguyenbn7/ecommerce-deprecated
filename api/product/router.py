@@ -4,7 +4,7 @@ from product.model import map_to_dto, map_to_dtos
 from product.repository import ProductRepository
 
 from product.specification import ProductSpec, ProductsSpec
-from share import NotFoundException
+from share.error_handler import APIException
 
 
 product_router = APIRouter(prefix="/products", tags=["Products"])
@@ -24,5 +24,5 @@ def get_product(
     spec = ProductSpec()
     product = repo.get_by_id(id, spec)
     if not product:
-        raise NotFoundException("Product not found")
+        raise APIException(404, "Product not found")
     return map_to_dto(product)

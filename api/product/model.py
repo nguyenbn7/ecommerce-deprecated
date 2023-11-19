@@ -1,7 +1,8 @@
 from typing import List
 from sqlalchemy import BigInteger, ForeignKey, Numeric, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from share import Base
+
+from share.database import Base
 
 
 class Product(Base):

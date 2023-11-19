@@ -1,6 +1,6 @@
-from sqlalchemy.orm import Query, load_only, joinedload
+from sqlalchemy.orm import Query, joinedload
 from product.model import Product
-from share import Specification
+from share.database import Specification
 
 
 class ProductsSpec(Specification):

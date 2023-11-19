@@ -1,28 +1,27 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
-from core import api_router
-from share import NotFoundException
+from core.error_handler import api_exception_handler
+from core.router import api_router
+from core.setting import get_cors_settings
+from share.error_handler import APIException
 
 app = FastAPI()
 
-origins = ["http://localhost:5173"]
+# Global error handler for app (exclude uvicorn ...)
+app.add_exception_handler(APIException, api_exception_handler)
 
-# TODO: dynamic base on environment
+# Static files
+app.mount("/images", StaticFiles(directory="www/images"), name="images")
+
+# CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=get_cors_settings().ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.mount("/images", StaticFiles(directory="www/images"), name="images")
-
+# API Routes
 app.include_router(api_router)
-
-
-@app.exception_handler(NotFoundException)
-async def not_found_exception_handler(request: Request, ex: NotFoundException):
-    return JSONResponse(status_code=ex.status_code, content={"message": ex.message})

@@ -1,22 +1,12 @@
-from fastapi import status
 from abc import abstractmethod
 from typing import Generic, List, TypeVar, get_args
-from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker, Query
-
-
-# TODO: read database url from env
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:root@localhost/ecommerce100"
-
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL,
-    echo=True,
-)
+from sqlalchemy.orm import sessionmaker, DeclarativeBase, Query, Session
+from core.database import engine
 
 _Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-def get_db():
+def get_db_context():
     db = _Session()
     try:
         yield db
@@ -34,7 +24,7 @@ TEntity = TypeVar("TEntity", bound=Base)
 class Specification:
     @abstractmethod
     def apply_spec(self, query: Query[TEntity]) -> Query[TEntity]:
-        pass
+        raise NotImplementedError("Specification is an Abstract class")
 
 
 # https://stackoverflow.com/questions/48572831/how-to-access-the-type-arguments-of-typing-generic
@@ -56,9 +46,3 @@ class Repository(Generic[TEntity]):
         if specification:
             query = specification.apply_spec(query)
         return query.filter(self.entity.id == id).first()
-
-
-class NotFoundException(Exception):
-    def __init__(self, message: str) -> None:
-        self.status_code = status.HTTP_404_NOT_FOUND
-        self.message = message

@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from share import Base
+from share.database import Base
 from product.model import Product
 from product_brand.model import ProductBrand
 from product_type.model import ProductType
