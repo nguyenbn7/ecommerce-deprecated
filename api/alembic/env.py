@@ -9,6 +9,7 @@ from share.database import Base
 from product.model import Product
 from product_brand.model import ProductBrand
 from product_type.model import ProductType
+from core.setting import get_database_settings
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -29,6 +30,12 @@ target_metadata = [Base.metadata]
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
+section = config.config_ini_section
+db_settings = get_database_settings()
+config.set_section_option(section, "DB_USER", db_settings.USER)
+config.set_section_option(section, "DB_PASS", db_settings.PASSWORD)
+config.set_section_option(section, "DB_HOST", db_settings.HOST)
+config.set_section_option(section, "DB_NAME", db_settings.DB)
 
 
 def run_migrations_offline() -> None:
