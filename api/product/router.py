@@ -1,9 +1,9 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends
-from product.model import ProductsParams, map_to_dto, map_to_dtos
+from product.model import ProductProjection, ProductsParams
 from product.repository import ProductRepository
 
-from product.specification import ProductSpec, ProductSpecification
+from product.specification import ProductSpecification
 from share.model import APIException, Pageable, Pagination
 
 
@@ -15,19 +15,20 @@ def get_products(
     repo: Annotated[ProductRepository, Depends(ProductRepository)],
     products_params: ProductsParams = Depends(),
 ):
-    # TODO: add join
-    return repo.get_all(
+    page_products: Pagination[ProductProjection] = repo.get_all(
         ProductSpecification(products_params.brand_id, products_params.type_id),
         Pageable(products_params.page_index, products_params.page_size),
+        ProductProjection,
     )
+    page_products.data = list(map(lambda p: p.to_dto(), page_products.data))
+    return page_products
 
 
 @product_router.get("/{id}")
 def get_product(
     id: int, repo: Annotated[ProductRepository, Depends(ProductRepository)]
 ):
-    # spec = ProductSpec()
-    product = repo.get_by_id(id)
+    product: ProductProjection = repo.get_by_id(id, projected_class=ProductProjection)
     if not product:
         raise APIException(404, "Product not found")
-    return map_to_dto(product)
+    return product.to_dto()

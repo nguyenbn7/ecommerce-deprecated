@@ -18,6 +18,7 @@ def get_db_context():
 
 
 TEntity = TypeVar("TEntity", bound=Base)
+TClass = TypeVar("TClass", bound=Base)
 
 
 # https://stackoverflow.com/questions/48572831/how-to-access-the-type-arguments-of-typing-generic
@@ -32,8 +33,9 @@ class Repository(Generic[TEntity]):
         self,
         specification: Specification | None = None,
         pageable: Pageable | None = None,
-    ) -> List[TEntity] | Pagination[TEntity]:
-        new_query = self.base_query
+        projected_to: TClass | None = None,
+    ):
+        new_query = self.base_query if not projected_to else self.db.query(projected_to)
         if specification:
             new_query = new_query.filter(specification())
 
@@ -57,9 +59,15 @@ class Repository(Generic[TEntity]):
         return new_query.all()
 
     def get_by_id(
-        self, id: Any, specification: Specification | None = None
-    ) -> TEntity | None:
-        new_query = self.base_query.filter(self.entity.__mapper__.primary_key[0] == id)
+        self,
+        id: Any,
+        specification: Specification | None = None,
+        projected_class: TClass | None = None,
+    ):
+        new_query = (
+            self.base_query if not projected_class else self.db.query(projected_class)
+        )
+        new_query = new_query.filter(self.entity.__mapper__.primary_key[0] == id)
         if specification:
             return new_query.filter(specification()).first()
         return new_query.first()
