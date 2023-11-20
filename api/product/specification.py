@@ -18,6 +18,8 @@ class ProductSpecification(Specification):
 
         if self.type_id:
             predicates.append(Product.product_type_id == self.type_id)
+        
+        print(len(predicates))
 
         if len(predicates) > 1:
             return and_(*predicates)

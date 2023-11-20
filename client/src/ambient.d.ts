@@ -11,3 +11,29 @@ type Product = {
     product_type_id: number
     product_brand_id: number
 }
+
+type Page<T> = {
+    page_index: number
+    page_size: number,
+    total_items: number,
+    data: T[]
+}
+
+type ShopParams = {
+    page_index: number,
+    page_size: number,
+    sort: string,
+    search: string | undefined,
+    brand_id: number,
+    type_id: number
+}
+
+type ProductBrand = {
+    id: number,
+    name: string,
+}
+
+type ProductType = {
+    id: number,
+    name: string,
+}

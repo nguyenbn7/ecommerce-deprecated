@@ -53,6 +53,9 @@ class Repository(Generic[TEntity], ABC):
 
             page_index, page_size = pageable.page_index, pageable.page_size
 
+            if page_size < 1:
+                page_size = 6
+
             if page_index * page_size > total_items:
                 page_index = 1
                 page_size = 6

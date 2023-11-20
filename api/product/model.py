@@ -38,8 +38,8 @@ class ProductDTO:
 class ProductsParams(BaseModel):
     page_index: int | None = Field(default=1, ge=1)
     page_size: int | None = Field(default=6, ge=1, le=200)
-    brand_id: int | None = Field(default=None, gt=0)
-    type_id: int | None = Field(default=None, gt=0)
+    brand_id: int | None = Field(default=None)
+    type_id: int | None = Field(default=None)
     sort: str | None = Field(default=None)
     search: str | None = Field(default=None)
 

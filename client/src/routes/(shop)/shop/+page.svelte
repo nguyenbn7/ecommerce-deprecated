@@ -1,17 +1,130 @@
+<script context="module">
+	/**
+	 * @param {ShopParams} shopParams
+	 * @returns {Promise<Page<Product>>}
+	 */
+	async function getPageProduct(shopParams) {
+		const params = {};
+		if (shopParams.brand_id > 0) params['brand_id'] = shopParams.brand_id;
+		if (shopParams.type_id > 0) params['type_id'] = shopParams.type_id;
+		params['sort'] = shopParams.sort;
+		params['page_index'] = shopParams.page_index;
+		params['page_size'] = shopParams.page_size;
+		if (shopParams.search) params['search'] = shopParams.search;
+
+		let paramsStr = Object.entries(params)
+			.map((k) => `${k[0]}=${k[1]}`)
+			.join('&');
+
+		let param = paramsStr.length ? '?' + paramsStr : '';
+
+		const response = await fetch(`${PUBLIC_BASE_API_URL}/products${param}`);
+		return await response.json();
+	}
+
+	/**
+	 * @returns {Promise<ProductBrand[]>}
+	 */
+	async function getProductBrands() {
+		const response = await fetch(`${PUBLIC_BASE_API_URL}/products/brands/`);
+		return await response.json();
+	}
+
+	/**
+	 * @returns {Promise<ProductType[]>}
+	 */
+	async function getProductTypes() {
+		const response = await fetch(`${PUBLIC_BASE_API_URL}/products/types/`);
+		return await response.json();
+	}
+</script>
+
 <script>
+	import { PUBLIC_BASE_API_URL } from '$env/static/public';
 	import Pagination from '$lib/shares/pagination.svelte';
 	import ProductItem from '$lib/shares/product-item.svelte';
+	import PagingHeader from '$lib/shares/paging-header.svelte';
 	import { onMount } from 'svelte';
 
 	/**
-	 * @type {Products}
+	 * @type {Product[]}
 	 */
 	let products = [];
+	/**
+	 * @type {ProductBrand[]}
+	 */
+	let productBrands = [];
+	/**
+	 * @type {ProductType[]}
+	 */
+	let productTypes = [];
+
+	/**
+	 * @type {number}
+	 */
+	let totalItems;
+	/**
+	 * @type {ShopParams}
+	 */
+	let shopParams = {
+		page_index: 1,
+		page_size: 6,
+		sort: 'name',
+		search: undefined,
+		brand_id: 0,
+		type_id: 0
+	};
+	const maxSize = 5;
 
 	onMount(async () => {
-		const response = await fetch('http://localhost:8000/api/products');
-		products = [...(await response.json())];
+		productBrands = [{ id: 0, name: 'All' }, ...(await getProductBrands())];
+		productTypes = [{ id: 0, name: 'All' }, ...(await getProductTypes())];
+
+		const pageProduct = await getPageProduct(shopParams);
+		products = [...pageProduct.data];
+		shopParams.page_index = pageProduct.page_index;
+		shopParams.page_size = pageProduct.page_size;
+		totalItems = pageProduct.total_items;
 	});
+
+	/**
+	 * @param {number} brandId
+	 */
+	async function onBrandIdSelected(brandId) {
+		shopParams.brand_id = brandId;
+		shopParams.page_index = 1;
+		await update(shopParams);
+	}
+
+	/**
+	 * @param {ShopParams} shopParams
+	 */
+	async function update(shopParams) {
+		shopParams.page_size = shopParams.page_size < 6 ? 6 : shopParams.page_size;
+		const pageProduct = await getPageProduct(shopParams);
+		products = [...pageProduct.data];
+		shopParams.page_index = pageProduct.page_index;
+		shopParams.page_size = pageProduct.page_size;
+		totalItems = pageProduct.total_items;
+	}
+
+	/**
+	 * @param {number} typeId
+	 */
+	async function onTypeIdSelected(typeId) {
+		shopParams.type_id = typeId;
+		shopParams.page_index = 1;
+		await update(shopParams);
+	}
+
+	/**
+	 * @param {CustomEvent<any>} $event
+	 */
+	async function pageChanged($event) {
+		shopParams.page_index = $event.detail.pageNumber;
+		console.log($event.detail.pageNumber);
+		await update(shopParams);
+	}
 </script>
 
 <svelte:head>
@@ -29,20 +142,38 @@
 		<div class="my-2">
 			<h5 class="text-warning ms-3">Brands</h5>
 			<ul class="list-group">
-				<li class="list-group-item">Chym Co</li>
+				{#each productBrands as brand}
+					<a
+						href={'#'}
+						class="list-group-item"
+						on:click={() => onBrandIdSelected(brand.id)}
+						class:active={brand.id === shopParams.brand_id}
+					>
+						{brand.name}
+					</a>
+				{/each}
 			</ul>
 		</div>
 		<div class="my-2">
 			<h5 class="text-warning ms-3">Types</h5>
 			<ul class="list-group">
-				<li class="list-group-item">Vipe</li>
+				{#each productTypes as type}
+					<a
+						href={'#'}
+						class="list-group-item"
+						on:click={() => onTypeIdSelected(type.id)}
+						class:active={type.id === shopParams.type_id}
+					>
+						{type.name}
+					</a>
+				{/each}
 			</ul>
 		</div>
 	</div>
 	<div class="col-9">
 		<div class="d-flex justify-content-between align-items-center pb-3">
-			<!-- <app-paging-header [totalItems]="totalItems" [pageNumber]="shopParams.pageNumber"
-				[pageSize]="shopParams.pageSize"></app-paging-header> -->
+			<PagingHeader pageNumber={shopParams.page_index} {totalItems} pageSize={shopParams.page_size}
+			></PagingHeader>
 			<div class="d-flex mt-2">
 				<input type="text" placeholder="Search" class="form-control me-2" />
 				<button type="button" class="btn btn-outline-primary mx-2"> Search </button>
@@ -60,14 +191,15 @@
 
 		<div class="d-flex justify-content-center mb-3">
 			<Pagination
-				totalItems={60}
-				itemsPerPage={6}
-				pageNumber={2}
-				maxSize={4}
+				{totalItems}
+				itemsPerPage={shopParams.page_size}
+				pageNumber={shopParams.page_index}
+				{maxSize}
 				previousText="&lsaquo;"
 				nextText="&rsaquo;"
 				firstText="&laquo;"
 				lastText="&raquo;"
+				on:pageChanged={pageChanged}
 			></Pagination>
 		</div>
 	</div>

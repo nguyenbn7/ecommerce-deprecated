@@ -21,7 +21,7 @@
 	/**
 	 * @type {Number}
 	 */
-	export let pageNumber = 1;
+	export let pageNumber;
 
 	const dispatch = createEventDispatcher();
 	const eventName = 'pageChanged';
@@ -32,7 +32,7 @@
 	function onClickPage(page) {
 		if (page < 1 || page > lastPage) return;
 		pageNumber = page;
-		dispatch(eventName, { page });
+		dispatch(eventName, { pageNumber });
 	}
 
 	$: lastPage = itemsPerPage < 1 || totalItems < 1 ? 0 : Math.ceil(totalItems / itemsPerPage);
@@ -58,7 +58,7 @@
 	$: pages = [...generateSize(pageNumber, lastPage, maxSize)];
 </script>
 
-{#if lastPage}
+{#if lastPage && itemsPerPage}
 	<ul class="pagination">
 		{#if firstText}
 			<li class="page-item" class:disabled={pageNumber <= 1} title="First">
