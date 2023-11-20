@@ -80,11 +80,7 @@
 		productBrands = [{ id: 0, name: 'All' }, ...(await getProductBrands())];
 		productTypes = [{ id: 0, name: 'All' }, ...(await getProductTypes())];
 
-		const pageProduct = await getPageProduct(shopParams);
-		products = [...pageProduct.data];
-		shopParams.page_index = pageProduct.page_index;
-		shopParams.page_size = pageProduct.page_size;
-		totalItems = pageProduct.total_items;
+		await getNewPageProduct(shopParams);
 	});
 
 	/**
@@ -93,14 +89,14 @@
 	async function onBrandIdSelected(brandId) {
 		shopParams.brand_id = brandId;
 		shopParams.page_index = 1;
-		await update(shopParams);
+		shopParams.page_size = shopParams.page_size < 6 ? 6 : shopParams.page_size;
+		await getNewPageProduct(shopParams);
 	}
 
 	/**
 	 * @param {ShopParams} shopParams
 	 */
-	async function update(shopParams) {
-		shopParams.page_size = shopParams.page_size < 6 ? 6 : shopParams.page_size;
+	async function getNewPageProduct(shopParams) {
 		const pageProduct = await getPageProduct(shopParams);
 		products = [...pageProduct.data];
 		shopParams.page_index = pageProduct.page_index;
@@ -114,7 +110,8 @@
 	async function onTypeIdSelected(typeId) {
 		shopParams.type_id = typeId;
 		shopParams.page_index = 1;
-		await update(shopParams);
+		shopParams.page_size = shopParams.page_size < 6 ? 6 : shopParams.page_size;
+		await getNewPageProduct(shopParams);
 	}
 
 	/**
@@ -122,8 +119,7 @@
 	 */
 	async function pageChanged($event) {
 		shopParams.page_index = $event.detail.pageNumber;
-		console.log($event.detail.pageNumber);
-		await update(shopParams);
+		await getNewPageProduct(shopParams);
 	}
 </script>
 
