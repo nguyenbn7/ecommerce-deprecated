@@ -1,8 +1,7 @@
 from abc import abstractmethod
-from typing import Any, Generic, List, TypeVar, get_args
+from typing import Any, Generic, TypeVar, get_args
 from sqlalchemy import func, select
 from sqlalchemy.orm import sessionmaker, Query, Session
-from sqlalchemy.sql.expression import and_
 from core.database import engine
 from share.model import Base, Pageable, Pagination, Specification
 
@@ -62,10 +61,10 @@ class Repository(Generic[TEntity]):
         self,
         id: Any,
         specification: Specification | None = None,
-        projected_class: TClass | None = None,
+        projected_to: TClass | None = None,
     ):
         new_query = (
-            self.base_query if not projected_class else self.db.query(projected_class)
+            self.base_query if not projected_to else self.db.query(projected_to)
         )
         new_query = new_query.filter(self.entity.__mapper__.primary_key[0] == id)
         if specification:

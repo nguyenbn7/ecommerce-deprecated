@@ -9,33 +9,30 @@ class Base(DeclarativeBase):
     pass
 
 
+@dataclass
 class APIException(Exception):
-    def __init__(
-        self, status_code: int, message: str, headers: dict | None = None
-    ) -> None:
-        self.status_code = status_code
-        self.message = message
-        self.headers = headers
+    status_code: int
+    message: str | None = None
+    headers: dict | None = None
 
 
-TPage = TypeVar("TPage")
+TData = TypeVar("TData")
 
 
-class Pagination(Generic[TPage]):
-    def __init__(
-        self, page_index: int, page_size: int, total_items: int, data: List[TPage]
-    ) -> None:
-        self.page_index = page_index
-        self.page_size = page_size
-        self.total_items = total_items
-        self.data = data
+@dataclass
+class Pagination(Generic[TData]):
+    page_index: int
+    page_size: int
+    total_items: int
+    data: List[TData]
 
 
 class Specification(ABC):
     @abstractmethod
     def to_criterion(self) -> ColumnExpressionArgument[bool] | ColumnElement[bool]:
         """
-        Use `and_`, `or_` and many more functions in `sqlalchemy.sql.expression`
+        Use `and_`, `or_` and many more functions in `sqlalchemy.sql.expression` to
+        construct criteria.
         """
         raise NotImplementedError()
 

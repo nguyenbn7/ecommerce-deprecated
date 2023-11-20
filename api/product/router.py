@@ -28,7 +28,9 @@ def get_products(
 def get_product(
     id: int, repo: Annotated[ProductRepository, Depends(ProductRepository)]
 ):
-    product: ProductProjection = repo.get_by_id(id, projected_class=ProductProjection)
+    product: ProductProjection | None = repo.get_by_id(
+        id, projected_to=ProductProjection
+    )
     if not product:
         raise APIException(404, "Product not found")
     return product.to_dto()

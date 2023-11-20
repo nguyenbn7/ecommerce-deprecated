@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import List
 from pydantic import BaseModel, Field
 from sqlalchemy import BigInteger, ForeignKey, Numeric, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
@@ -34,10 +33,6 @@ class ProductDTO:
     picture_url: str
     product_brand: str
     product_type: str
-
-
-# def map_to_dtos(products: List[Product]) -> List[ProductDTO]:
-#     return list(map(map_to_dto, products))
 
 
 class ProductsParams(BaseModel):
