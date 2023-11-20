@@ -1,7 +1,8 @@
-from abc import abstractmethod
+from abc import ABC
+from dataclasses import dataclass
 from typing import Any, Generic, TypeVar, get_args
 from sqlalchemy import func, select
-from sqlalchemy.orm import sessionmaker, Query, Session
+from sqlalchemy.orm import sessionmaker, Session
 from core.database import engine
 from share.model import Base, Pageable, Pagination, Specification
 
@@ -21,12 +22,11 @@ TClass = TypeVar("TClass", bound=Base)
 
 
 # https://stackoverflow.com/questions/48572831/how-to-access-the-type-arguments-of-typing-generic
-class Repository(Generic[TEntity]):
-    @abstractmethod
-    def __init__(self, db: Session) -> None:
+@dataclass(frozen=True)
+class Repository(Generic[TEntity], ABC):
+    def __init__(self, db: Session):
         self.db: Session = db
         self.entity: TEntity = get_args(self.__orig_bases__[0])[0]
-        self.base_query: Query[TEntity] = self.db.query(self.entity)
 
     def get_all(
         self,
@@ -34,7 +34,12 @@ class Repository(Generic[TEntity]):
         pageable: Pageable | None = None,
         projected_to: TClass | None = None,
     ):
-        new_query = self.base_query if not projected_to else self.db.query(projected_to)
+        new_query = (
+            self.db.query(self.entity)
+            if not projected_to
+            else self.db.query(projected_to)
+        )
+
         if specification:
             new_query = new_query.filter(specification())
 
@@ -45,6 +50,7 @@ class Repository(Generic[TEntity]):
                 .filter(specification())
                 .order_by(None)
             ).scalar()
+
             page_index, page_size = pageable.page_index, pageable.page_size
 
             if page_index * page_size > total_items:
@@ -53,7 +59,7 @@ class Repository(Generic[TEntity]):
 
             data = new_query.offset((page_index - 1) * page_size).limit(page_size).all()
 
-            return Pagination(page_index, len(data), total_items, data)
+            return Pagination[TClass](page_index, len(data), total_items, data)
 
         return new_query.all()
 
@@ -64,9 +70,13 @@ class Repository(Generic[TEntity]):
         projected_to: TClass | None = None,
     ):
         new_query = (
-            self.base_query if not projected_to else self.db.query(projected_to)
+            self.db.query(self.entity)
+            if not projected_to
+            else self.db.query(projected_to)
         )
+
         new_query = new_query.filter(self.entity.__mapper__.primary_key[0] == id)
+
         if specification:
             return new_query.filter(specification()).first()
         return new_query.first()
