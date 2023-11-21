@@ -19,24 +19,35 @@
 	/**
 	 * @type {Product}
 	 */
-	export let product;
+	let product;
 	let productName = '';
 	let buttonText = 'Add to cart';
 	let quantity = 1;
 	let quantityInBasket = 0;
 
-	breadcrumb.mapPathToAlias('[productId]', '');
-
 	onMount(async () => {
 		const productId = $page.params.productId;
 		product = await getProduct(productId);
-		breadcrumb.mapPathToAlias('[productId]', product.name);
 		productName = product.name;
+		breadcrumb.mapPathToAlias('[productId]', productName);
 	});
+
+	function incrementQuantity() {
+		quantity++;
+	}
+
+	function decrementQuantity() {
+		if (quantity < 1) return;
+		quantity--;
+	}
 </script>
 
 <svelte:head>
-	<title>Ecommerce - {productName}</title>
+	{#if productName}
+		<title>Ecommerce - {productName}</title>
+	{:else}
+		<title>Ecommerce</title>
+	{/if}
 </svelte:head>
 
 {#if product}
@@ -54,12 +65,18 @@
 				</h5>
 
 				<div class="d-flex justify-content-start align-items-center">
-					<i class="bi bi-dash-circle text-warning me-2" style="cursor: pointer; font-size: 2em;">
-					</i>
-					<span class="font-weight-bold" style="font-size: 1.5em;">{1}</span>
-					<i class="bi bi-plus-circle text-warning ms-2" style="cursor: pointer; font-size: 2em;"
-					></i>
-					<button class="btn btn-danger ms-4">{'Add to cart'}</button>
+					<button
+						class="p-0 m-0 me-2 border-0 quantity-btn"
+						on:click={decrementQuantity}
+						disabled={quantity < 1}
+					>
+						<i class="bi bi-dash-circle" style="font-size: 2em;"></i>
+					</button>
+					<span class="font-weight-bold" style="font-size: 1.5em;">{quantity}</span>
+					<button class="p-0 m-0 ms-2 border-0 quantity-btn" on:click={incrementQuantity}>
+						<i class="bi bi-plus-circle" style="font-size: 2em;"></i>
+					</button>
+					<button class="btn btn-danger ms-4">{buttonText}</button>
 				</div>
 				<div class="row mt-4">
 					<h4>Description</h4>
@@ -69,3 +86,24 @@
 		</div>
 	</div>
 {/if}
+
+<style lang="scss">
+	.quantity-btn {
+		--bs-text-opacity: 1;
+		color: rgba(var(--bs-warning-rgb), var(--bs-text-opacity));
+		background-color: transparent;
+	}
+
+	.quantity-btn:hover i {
+		color: rgba(245, 197, 53, 0.8);
+	}
+
+	.quantity-btn:active i {
+		color: rgb(185, 143, 18);
+	}
+
+	.quantity-btn:disabled i {
+		color: rgb(207, 183, 109, 0.65);
+		pointer-events: none;
+	}
+</style>

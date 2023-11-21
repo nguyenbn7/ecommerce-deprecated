@@ -46,9 +46,10 @@
 			let href = null;
 
 			// @ts-ignore
-			if (Object.keys(pathParams).length && mapper && mapper[paths[idx]]) {
+			if (paths[idx].startsWith('[')) {
 				// @ts-ignore
-				alias = titleCase(mapper[paths[idx]]);
+				if (mapper && mapper[paths[idx]]) alias = titleCase(mapper[paths[idx]]);
+				else alias = pathParams[paths[idx].slice(1, -1)];
 			} else {
 				alias = titleCase(paths[idx]);
 			}
