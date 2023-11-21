@@ -75,11 +75,23 @@
 		type_id: 0
 	};
 	const maxSize = 5;
+
 	const sortOptions = [
 		{ name: 'Alphabetical', value: 'name' },
 		{ name: 'Price: Low to High', value: 'price' },
 		{ name: 'Price: High to Low', value: '-price' }
 	];
+
+	let searchTerm = '';
+
+	const defaultShopParams = {
+		page_index: 1,
+		page_size: 6,
+		sort: 'name',
+		search: undefined,
+		brand_id: 0,
+		type_id: 0
+	};
 
 	onMount(async () => {
 		productBrands = [{ id: 0, name: 'All' }, ...(await getProductBrands())];
@@ -135,6 +147,31 @@
 		shopParams.sort = $event?.target?.value ?? 'name';
 		await getNewPageProduct(shopParams);
 	}
+
+	/**
+	 * @param {KeyboardEvent & { currentTarget: EventTarget & HTMLInputElement; }} $event
+	 */
+	async function onKeyUpSearch($event) {
+		if ($event.code === 'Enter') {
+			await onSearch();
+		}
+	}
+
+	async function onSearch() {
+		if (searchTerm) {
+			shopParams.search = searchTerm;
+			shopParams.page_index = 1;
+			await getNewPageProduct(shopParams);
+		}
+	}
+
+	async function onReset() {
+		if (searchTerm) {
+			searchTerm = '';
+			shopParams = Object.assign(shopParams, defaultShopParams);
+			await getNewPageProduct(shopParams);
+		}
+	}
 </script>
 
 <svelte:head>
@@ -187,9 +224,17 @@
 			<PagingHeader pageNumber={shopParams.page_index} {totalItems} pageSize={shopParams.page_size}
 			></PagingHeader>
 			<div class="d-flex mt-2">
-				<input type="text" placeholder="Search" class="form-control me-2" />
-				<button type="button" class="btn btn-outline-primary mx-2"> Search </button>
-				<button type="button" class="btn btn-outline-danger">Clear</button>
+				<input
+					type="text"
+					placeholder="Search product name"
+					class="form-control me-2"
+					bind:value={searchTerm}
+					on:keyup|preventDefault={onKeyUpSearch}
+				/>
+				<button type="button" class="btn btn-outline-primary mx-2" on:click={onSearch}>
+					Search
+				</button>
+				<button type="button" class="btn btn-outline-danger" on:click={onReset}>Clear</button>
 			</div>
 		</div>
 
