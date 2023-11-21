@@ -75,6 +75,11 @@
 		type_id: 0
 	};
 	const maxSize = 5;
+	const sortOptions = [
+		{ name: 'Alphabetical', value: 'name' },
+		{ name: 'Price: Low to High', value: 'price' },
+		{ name: 'Price: High to Low', value: '-price' }
+	];
 
 	onMount(async () => {
 		productBrands = [{ id: 0, name: 'All' }, ...(await getProductBrands())];
@@ -121,6 +126,15 @@
 		shopParams.page_index = $event.detail.pageNumber;
 		await getNewPageProduct(shopParams);
 	}
+
+	/**
+	 * @param {Event} $event
+	 */
+	async function onSortSelected($event) {
+		// @ts-ignore
+		shopParams.sort = $event?.target?.value ?? 'name';
+		await getNewPageProduct(shopParams);
+	}
 </script>
 
 <svelte:head>
@@ -131,8 +145,10 @@
 	<div class="col-3">
 		<div class="my-2">
 			<h5 class="text-warning ms-3">Sort By</h5>
-			<select class="form-select mb-4">
-				<option>Alphabetical</option>
+			<select class="form-select mb-4" on:change={onSortSelected}>
+				{#each sortOptions as sort}
+					<option value={sort.value}>{sort.name}</option>
+				{/each}
 			</select>
 		</div>
 		<div class="my-2">
