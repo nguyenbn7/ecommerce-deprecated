@@ -26,7 +26,7 @@ def get_products(
 
     page_products: Pagination[ProductProjection] = repo.get_all(
         specification=ProductSpecification(
-            products_params.brand_id, products_params.type_id
+            products_params.brand_id, products_params.type_id, products_params.search
         ),
         sort=sort_options,
         pageable=Pageable(products_params.page_index, products_params.page_size),
