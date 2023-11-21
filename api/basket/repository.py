@@ -1,0 +1,31 @@
+from datetime import timedelta
+import json
+from typing import Annotated
+
+from fastapi import Depends
+from redis import Redis
+from basket.model import CustomerBasket
+
+from core.redis_client import get_redis_context
+
+
+class BasketRepository:
+    def __init__(self, db: Annotated[Redis, Depends(get_redis_context)]):
+        self.db = db
+
+    def get_basket(self, basket_id: str):
+        basket = self.db.get(basket_id)
+        if basket:
+            return json.loads(basket)
+        return None
+
+    def update_basket(self, basket: CustomerBasket):
+        created = self.db.setex(
+            basket.id, timedelta(30), json.dumps(basket, default=lambda o: o.__dict__)
+        )
+        if not created:
+            return None
+        return self.get_basket(basket.id)
+    
+    def delete_basket(self, basket_id: str):
+        return self.db.delete(basket_id)
