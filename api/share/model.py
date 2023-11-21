@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from enum import Enum
 from typing import List, TypeVar, Generic
 from sqlalchemy import ColumnElement, ColumnExpressionArgument
 from sqlalchemy.orm import DeclarativeBase
@@ -38,6 +39,17 @@ class Specification(ABC):
 
     def __call__(self) -> ColumnExpressionArgument[bool] | ColumnElement[bool]:
         return self.to_criterion()
+
+
+class SortDirection(Enum):
+    ASC = 1
+    DESC = 2
+
+
+@dataclass(frozen=True)
+class Sort:
+    by: ColumnExpressionArgument | str
+    direction: SortDirection | None = SortDirection.ASC
 
 
 @dataclass(frozen=True)

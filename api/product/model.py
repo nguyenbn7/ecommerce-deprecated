@@ -40,7 +40,7 @@ class ProductsParams(BaseModel):
     page_size: int | None = Field(default=6, ge=1, le=200)
     brand_id: int | None = Field(default=None)
     type_id: int | None = Field(default=None)
-    sort: str | None = Field(default=None)
+    sort: str | None = Field(default="name")
     search: str | None = Field(default=None)
 
 

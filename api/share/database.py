@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Generic, List, TypeVar, get_args
-from sqlalchemy import func, select
+from sqlalchemy import func, select, desc
 from sqlalchemy.orm import sessionmaker, Session
 from core.database import engine
-from share.model import Base, Pageable, Pagination, Specification
+from share.model import Base, Pageable, Pagination, Sort, SortDirection, Specification
 
 _Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -32,6 +32,7 @@ class Repository(Generic[TEntity], ABC):
     def get_all(
         self,
         specification: Specification | None = None,
+        sort: List[Sort] | None = None,
         pageable: Pageable | None = None,
         projected_to: TClass | None = None,
     ) -> Pagination[TClass | TEntity] | List[TClass | TEntity]:
@@ -41,31 +42,51 @@ class Repository(Generic[TEntity], ABC):
             else self.db.query(projected_to)
         )
 
+        sort_options = None
+
+        if sort:
+            sort_options = list(
+                map(
+                    lambda s: desc(s.by) if s.direction == SortDirection.DESC else s.by,
+                    sort,
+                )
+            )
+
         if specification:
             new_query = new_query.filter(specification())
 
-        if pageable:
-            total_items = self.db.execute(
-                select(func.count())
-                .select_from(self.entity)
-                .filter(specification())
-                .order_by(None)
-            ).scalar()
+        if not pageable:
+            if sort_options and len(sort_options) > 0:
+                new_query = new_query.order_by(*sort_options)
+            return new_query.all()
 
-            page_index, page_size = pageable.page_index, pageable.page_size
+        count_statement = (
+            select(func.count()).select_from(self.entity).filter(specification())
+        )
 
-            if page_size < 1:
-                page_size = 6
+        total_items = self.db.execute(count_statement).scalar()
 
-            if page_index * page_size > total_items:
-                page_index = 1
-                page_size = 6
+        page_index, page_size = pageable.page_index, pageable.page_size
 
-            data = new_query.offset((page_index - 1) * page_size).limit(page_size).all()
+        if page_size < 1:
+            page_size = 6
 
-            return Pagination[TClass](page_index, len(data), total_items, data)
+        if page_index * page_size > total_items:
+            page_index = 1
+            page_size = 6
 
-        return new_query.all()
+        data_statement = new_query
+
+        if sort_options and len(sort_options) > 0:
+            data_statement = data_statement.order_by(*sort_options)
+
+        data_statement = data_statement.offset((page_index - 1) * page_size).limit(
+            page_size
+        )
+
+        data = data_statement.all()
+
+        return Pagination[TClass | TEntity](page_index, len(data), total_items, data)
 
     def get_by_id(
         self,
