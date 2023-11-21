@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Any, Generic, TypeVar, get_args
+from typing import Any, Generic, List, TypeVar, get_args
 from sqlalchemy import func, select
 from sqlalchemy.orm import sessionmaker, Session
 from core.database import engine
@@ -34,7 +34,7 @@ class Repository(Generic[TEntity], ABC):
         specification: Specification | None = None,
         pageable: Pageable | None = None,
         projected_to: TClass | None = None,
-    ):
+    ) -> Pagination[TClass | TEntity] | List[TClass | TEntity]:
         new_query = (
             self.db.query(self.entity)
             if not projected_to
@@ -72,7 +72,7 @@ class Repository(Generic[TEntity], ABC):
         id: Any,
         specification: Specification | None = None,
         projected_to: TClass | None = None,
-    ):
+    ) -> TEntity | TClass | None:
         new_query = (
             self.db.query(self.entity)
             if not projected_to
