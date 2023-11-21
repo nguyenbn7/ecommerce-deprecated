@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Generic, TypeVar, get_args
 from sqlalchemy import func, select
@@ -24,6 +24,7 @@ TClass = TypeVar("TClass", bound=Base)
 # https://stackoverflow.com/questions/48572831/how-to-access-the-type-arguments-of-typing-generic
 @dataclass(frozen=True)
 class Repository(Generic[TEntity], ABC):
+    @abstractmethod
     def __init__(self, db: Session):
         self.db: Session = db
         self.entity: TEntity = get_args(self.__orig_bases__[0])[0]
