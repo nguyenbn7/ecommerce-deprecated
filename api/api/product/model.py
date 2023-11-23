@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from pydantic import BaseModel, Field
 from sqlalchemy import BigInteger, ForeignKey, Numeric, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
-from product_brand.model import ProductBrand
-from product_type.model import ProductType
+from api.product_brand.model import ProductBrand
+from api.product_type.model import ProductType
 
 from share.model import Base
 

@@ -1,9 +1,9 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends
-from product.model import Product, ProductProjection, ProductsParams
-from product.repository import ProductRepository
+from api.product.model import Product, ProductProjection, ProductsParams
+from api.product.repository import ProductRepository
 
-from product.specification import ProductSpecification
+from api.product.specification import ProductSpecification
 from share.model import APIException, Pageable, Pagination, Sort, SortDirection
 
 

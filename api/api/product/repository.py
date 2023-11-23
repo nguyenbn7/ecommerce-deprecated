@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends
 from sqlalchemy.orm import Session
-from product.model import Product
+from api.product.model import Product
 from share.database import Repository, get_db_context
 
 

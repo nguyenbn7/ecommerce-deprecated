@@ -22,12 +22,3 @@ class DatabaseSetting(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env", extra="ignore", env_prefix="POSTGRES_"
     )
-
-
-@lru_cache
-def get_database_settings():
-    return DatabaseSetting()
-
-@lru_cache
-def get_cors_settings():
-    return CorsSetting()

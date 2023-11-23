@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.orm import Session
-from product_brand.model import ProductBrand
+from api.product_brand.model import ProductBrand
 from share.database import Repository, get_db_context
 
 

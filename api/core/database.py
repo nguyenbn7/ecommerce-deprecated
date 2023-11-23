@@ -1,7 +1,7 @@
 # Database
 from sqlalchemy import create_engine
 
-from core.setting import get_database_settings
+from share.setting import get_database_settings
 
 _setting = get_database_settings()
 

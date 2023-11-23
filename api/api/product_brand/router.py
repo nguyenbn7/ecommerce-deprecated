@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends
 
-from product_brand.repository import ProductBrandRepository
+from api.product_brand.repository import ProductBrandRepository
 
 
 product_brand_router = APIRouter(prefix="/products/brands", tags=["Product Brands"])

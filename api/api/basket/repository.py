@@ -4,9 +4,9 @@ from typing import Annotated
 
 from fastapi import Depends
 from redis import Redis
-from basket.model import CustomerBasket
+from api.basket.model import CustomerBasket
 
-from core.redis_client import get_redis_context
+from core.redis import get_redis_context
 
 
 class BasketRepository:
@@ -26,6 +26,6 @@ class BasketRepository:
         if not created:
             return None
         return self.get_basket(basket.id)
-    
+
     def delete_basket(self, basket_id: str):
         return self.db.delete(basket_id)

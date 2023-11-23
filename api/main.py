@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from core.error_handler import api_exception_handler
-from core.router import api_router
-from core.setting import get_cors_settings
+from core.middleware import api_exception_handler
+from api.router import api_router
+from share.setting import get_cors_settings
 from share.model import APIException
 
 app = FastAPI()

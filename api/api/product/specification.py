@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from sqlalchemy import ColumnElement, ColumnExpressionArgument
 from sqlalchemy.sql.expression import and_, true
-from product.model import Product
+from api.product.model import Product
 from share.model import Specification
 
 

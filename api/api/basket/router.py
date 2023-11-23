@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, Response
-from basket.model import BasketItem, CustomerBasket, CustomerBasketDTO
-from basket.repository import BasketRepository
+from api.basket.model import BasketItem, CustomerBasket, CustomerBasketDTO
+from api.basket.repository import BasketRepository
 from share.model import APIException
 
 
