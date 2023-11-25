@@ -12,6 +12,7 @@
 <script>
 	import { page } from '$app/stores';
 	import { PUBLIC_BASE_API_URL } from '$env/static/public';
+	import { ECOMMERCE_NAME } from '$lib/constants';
 	import { formatAsUSD } from '$lib/helpers';
 	import { breadcrumb } from '$lib/shares/breadcrumb.svelte';
 	import { onMount } from 'svelte';
@@ -44,9 +45,9 @@
 
 <svelte:head>
 	{#if productName}
-		<title>Ecommerce - {productName}</title>
+		<title>{ECOMMERCE_NAME} - {productName}</title>
 	{:else}
-		<title>Ecommerce</title>
+		<title>{ECOMMERCE_NAME}</title>
 	{/if}
 </svelte:head>
 

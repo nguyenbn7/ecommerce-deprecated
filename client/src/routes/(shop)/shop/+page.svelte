@@ -1,50 +1,10 @@
-<script context="module">
-	/**
-	 * @param {ShopParams} shopParams
-	 * @returns {Promise<Page<Product>>}
-	 */
-	async function getPageProduct(shopParams) {
-		const params = {};
-		if (shopParams.brand_id > 0) params['brand_id'] = shopParams.brand_id;
-		if (shopParams.type_id > 0) params['type_id'] = shopParams.type_id;
-		params['sort'] = shopParams.sort;
-		params['page_index'] = shopParams.page_index;
-		params['page_size'] = shopParams.page_size;
-		if (shopParams.search) params['search'] = shopParams.search;
-
-		let paramsStr = Object.entries(params)
-			.map((k) => `${k[0]}=${k[1]}`)
-			.join('&');
-
-		let param = paramsStr.length ? '?' + paramsStr : '';
-
-		const response = await fetch(`${PUBLIC_BASE_API_URL}/products${param}`);
-		return await response.json();
-	}
-
-	/**
-	 * @returns {Promise<ProductBrand[]>}
-	 */
-	async function getProductBrands() {
-		const response = await fetch(`${PUBLIC_BASE_API_URL}/products/brands/`);
-		return await response.json();
-	}
-
-	/**
-	 * @returns {Promise<ProductType[]>}
-	 */
-	async function getProductTypes() {
-		const response = await fetch(`${PUBLIC_BASE_API_URL}/products/types/`);
-		return await response.json();
-	}
-</script>
-
 <script>
-	import { PUBLIC_BASE_API_URL } from '$env/static/public';
 	import Pagination from '$lib/shares/pagination.svelte';
 	import ProductItem from '$lib/shares/product-item.svelte';
 	import PagingHeader from '$lib/shares/paging-header.svelte';
 	import { onMount } from 'svelte';
+	import { ECOMMERCE_NAME } from '$lib/constants';
+	import { getPageProduct, getProductBrands, getProductTypes } from '$lib/request/product';
 
 	/**
 	 * @type {Product[]}
@@ -67,7 +27,7 @@
 	 * @type {ShopParams}
 	 */
 	let shopParams = {
-		page_index: 1,
+		page_number: 1,
 		page_size: 6,
 		sort: 'name',
 		search: undefined,
@@ -85,7 +45,7 @@
 	let searchTerm = '';
 
 	const defaultShopParams = {
-		page_index: 1,
+		page_number: 1,
 		page_size: 6,
 		sort: 'name',
 		search: undefined,
@@ -105,7 +65,7 @@
 	 */
 	async function onBrandIdSelected(brandId) {
 		shopParams.brand_id = brandId;
-		shopParams.page_index = 1;
+		shopParams.page_number = 1;
 		shopParams.page_size = shopParams.page_size < 6 ? 6 : shopParams.page_size;
 		await getNewPageProduct(shopParams);
 	}
@@ -116,7 +76,7 @@
 	async function getNewPageProduct(shopParams) {
 		const pageProduct = await getPageProduct(shopParams);
 		products = [...pageProduct.data];
-		shopParams.page_index = pageProduct.page_index;
+		shopParams.page_number = pageProduct.page_number;
 		shopParams.page_size = pageProduct.page_size;
 		totalItems = pageProduct.total_items;
 	}
@@ -126,7 +86,7 @@
 	 */
 	async function onTypeIdSelected(typeId) {
 		shopParams.type_id = typeId;
-		shopParams.page_index = 1;
+		shopParams.page_number = 1;
 		shopParams.page_size = shopParams.page_size < 6 ? 6 : shopParams.page_size;
 		await getNewPageProduct(shopParams);
 	}
@@ -135,7 +95,7 @@
 	 * @param {CustomEvent<any>} $event
 	 */
 	async function pageChanged($event) {
-		shopParams.page_index = $event.detail.pageNumber;
+		shopParams.page_number = $event.detail.pageNumber;
 		await getNewPageProduct(shopParams);
 	}
 
@@ -160,7 +120,7 @@
 	async function onSearch() {
 		if (searchTerm) {
 			shopParams.search = searchTerm;
-			shopParams.page_index = 1;
+			shopParams.page_number = 1;
 			await getNewPageProduct(shopParams);
 		}
 	}
@@ -175,7 +135,7 @@
 </script>
 
 <svelte:head>
-	<title>Ecommerce - Shop</title>
+	<title>{ECOMMERCE_NAME} - Shop</title>
 </svelte:head>
 
 <div class="row">
@@ -221,7 +181,7 @@
 	</div>
 	<div class="col-9">
 		<div class="d-flex justify-content-between align-items-center pb-3">
-			<PagingHeader pageNumber={shopParams.page_index} {totalItems} pageSize={shopParams.page_size}
+			<PagingHeader pageNumber={shopParams.page_number} {totalItems} pageSize={shopParams.page_size}
 			></PagingHeader>
 			<div class="d-flex mt-2">
 				<input
@@ -250,7 +210,7 @@
 			<Pagination
 				{totalItems}
 				itemsPerPage={shopParams.page_size}
-				pageNumber={shopParams.page_index}
+				pageNumber={shopParams.page_number}
 				{maxSize}
 				previousText="&lsaquo;"
 				nextText="&rsaquo;"

@@ -13,14 +13,14 @@ type Product = {
 }
 
 type Page<T> = {
-    page_index: number
+    page_number: number
     page_size: number,
     total_items: number,
     data: T[]
 }
 
 type ShopParams = {
-    page_index: number,
+    page_number: number,
     page_size: number,
     sort: string,
     search: string | undefined,
