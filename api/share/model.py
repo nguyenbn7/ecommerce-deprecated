@@ -21,7 +21,7 @@ TData = TypeVar("TData")
 
 
 @dataclass
-class Pagination(Generic[TData]):
+class Page(Generic[TData]):
     page_index: int
     page_size: int
     total_items: int
@@ -47,7 +47,7 @@ class SortDirection(Enum):
 
 
 @dataclass(frozen=True)
-class Sort:
+class SortOption:
     by: ColumnExpressionArgument | str
     direction: SortDirection | None = SortDirection.ASC
 

@@ -4,7 +4,7 @@ from typing import Any, Generic, List, TypeVar, get_args
 from sqlalchemy import func, select, desc
 from sqlalchemy.orm import sessionmaker, Session
 from core.database import engine
-from share.model import Base, Pageable, Pagination, Sort, SortDirection, Specification
+from share.model import Base, Pageable, Page, SortOption, SortDirection, Specification
 
 _Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -32,10 +32,10 @@ class Repository(Generic[TEntity], ABC):
     def get_all(
         self,
         specification: Specification | None = None,
-        sort: List[Sort] | None = None,
+        sort: List[SortOption] | None = None,
         pageable: Pageable | None = None,
         projected_to: TClass | None = None,
-    ) -> Pagination[TClass | TEntity] | List[TClass | TEntity]:
+    ) -> Page[TClass | TEntity] | List[TClass | TEntity]:
         new_query = (
             self.db.query(self.entity)
             if not projected_to
@@ -66,13 +66,13 @@ class Repository(Generic[TEntity], ABC):
 
         total_items = self.db.execute(count_statement).scalar()
 
-        page_index, page_size = pageable.page_index, pageable.page_size
+        page_number, page_size = pageable.page_index, pageable.page_size
 
         if page_size < 1:
             page_size = 6
 
-        if page_index * page_size > total_items:
-            page_index = 1
+        if page_number * page_size > total_items:
+            page_number = 1
             page_size = 6
 
         data_statement = new_query
@@ -80,13 +80,13 @@ class Repository(Generic[TEntity], ABC):
         if sort_options and len(sort_options) > 0:
             data_statement = data_statement.order_by(*sort_options)
 
-        data_statement = data_statement.offset((page_index - 1) * page_size).limit(
+        data_statement = data_statement.offset((page_number - 1) * page_size).limit(
             page_size
         )
 
         data = data_statement.all()
 
-        return Pagination[TClass | TEntity](page_index, len(data), total_items, data)
+        return Page[TClass | TEntity](page_number, len(data), total_items, data)
 
     def get_by_id(
         self,

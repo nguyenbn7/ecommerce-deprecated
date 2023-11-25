@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ValidationInfo, field_validator
 from sqlalchemy import BigInteger, ForeignKey, Numeric, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
 from api.product_brand.model import ProductBrand
@@ -36,12 +36,21 @@ class ProductDTO:
 
 
 class ProductsParams(BaseModel):
-    page_index: int | None = Field(default=1, ge=1)
-    page_size: int | None = Field(default=6, ge=1, le=200)
+    page_number: int | None = Field(default=1)
+    page_size: int | None = Field(default=6)
     brand_id: int | None = Field(default=None)
     type_id: int | None = Field(default=None)
-    sort: str | None = Field(default="name")
+    sort: str | None = Field(default=None)
     search: str | None = Field(default=None)
+
+    @field_validator("brand_id", "type_id", "page_number", "page_size")
+    @classmethod
+    def set_ids(cls, v: int | None, info: ValidationInfo):
+        if v is None:
+            return None
+        if v < 1:
+            raise ValueError(f"{info.field_name} can not be less than 1")
+        return v
 
 
 class ProductProjection(Base):

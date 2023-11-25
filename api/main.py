@@ -1,14 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from core.middleware import api_exception_handler
 from api.router import api_router
+from core.middleware import *
 from share.setting import get_cors_settings
-from share.model import APIException
 
 app = FastAPI()
 
-# Global error handler for app (exclude uvicorn ...)
+app.add_exception_handler(500, internal_exception_handler)
+app.add_exception_handler(RequestValidationError, request_validation_exception_handler)
+app.add_exception_handler(ValidationError, validation_exception_handler)
 app.add_exception_handler(APIException, api_exception_handler)
 
 # Static files
