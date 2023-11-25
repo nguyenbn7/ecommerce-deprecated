@@ -139,7 +139,7 @@
 </svelte:head>
 
 <div class="row">
-	<div class="col-3">
+	<aside class="col-3 sidebar">
 		<div class="my-2">
 			<h5 class="text-warning ms-3">Sort By</h5>
 			<select class="form-select mb-4" on:change={onSortSelected}>
@@ -178,7 +178,7 @@
 				{/each}
 			</ul>
 		</div>
-	</div>
+	</aside>
 	<div class="col-9">
 		<div class="d-flex justify-content-between align-items-center pb-3">
 			<PagingHeader pageNumber={shopParams.page_number} {totalItems} pageSize={shopParams.page_size}
@@ -221,3 +221,16 @@
 		</div>
 	</div>
 </div>
+
+<style lang="scss">
+	.sidebar {
+		position: -webkit-sticky;
+		position: sticky;
+		top: 5rem;
+		display: block !important;
+		height: calc(100vh - 6rem);
+		padding-left: 0.25rem;
+		margin-left: -0.25rem;
+		overflow-y: auto;
+	}
+</style>
