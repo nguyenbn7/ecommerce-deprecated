@@ -1,9 +1,7 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, HTTPException, Response
 from api.basket.model import BasketItem, CustomerBasket, CustomerBasketDTO
 from api.basket.repository import BasketRepository
-from share.model import APIException
-
 
 basket_router = APIRouter(prefix="/basket", tags=["Basket"])
 
@@ -36,5 +34,5 @@ def delete_basket(
 ):
     deleted = basket_repo.delete_basket(basket_id)
     if not deleted:
-        raise APIException(404)
+        raise HTTPException(404)
     return Response(status_code=200)

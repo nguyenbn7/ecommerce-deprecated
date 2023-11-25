@@ -4,9 +4,8 @@ from fastapi import Request, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from pydantic import ValidationError
-
-from share.model import APIException
 
 
 @dataclass(frozen=True)
@@ -16,8 +15,8 @@ class ErrorResponse:
     errors: Any | None = None
 
 
-async def api_exception_handler(request: Request, ex: APIException):
-    message = ex.message
+async def api_exception_handler(request: Request, ex: StarletteHTTPException):
+    message = ex.detail
     headers = getattr(ex, "headers", None)
 
     if not message:

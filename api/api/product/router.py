@@ -1,10 +1,10 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from api.product.model import Product, ProductProjection, ProductsParams
 from api.product.repository import ProductRepository
 
 from api.product.specification import ProductSpecification
-from share.model import APIException, Pageable, Page, SortOption, SortDirection
+from share.model import Pageable, Page, SortOption, SortDirection
 
 
 product_router = APIRouter(prefix="/products", tags=["Products"])
@@ -48,5 +48,5 @@ def get_product(
         id, projected_to=ProductProjection
     )
     if not product:
-        raise APIException(404, "Product not found")
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Product not found")
     return product.to_dto()

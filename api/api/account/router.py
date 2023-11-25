@@ -1,13 +1,11 @@
 from datetime import timedelta, datetime
-from fastapi import APIRouter, status
+from fastapi import APIRouter, HTTPException, status
 from jose import jwt
 from jose.constants import ALGORITHMS
 
 from passlib.context import CryptContext
 
 from api.account.model import AppUser, LoginDTO, RegisterDTO, SuccessResponse
-from share.model import APIException
-
 
 account_router = APIRouter(prefix="/account", tags=["Account"])
 
@@ -42,16 +40,16 @@ def generate_jwt_token(user: AppUser):
 @account_router.post("/login")
 def login(loginDTO: LoginDTO):
     if loginDTO.email != user.email:
-        raise APIException(
+        raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            message="Email or Password incorrect",
+            detail="Email or Password incorrect",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
     if not pwd_context.verify(loginDTO.password, user.password_hash):
-        raise APIException(
+        raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            message="Email or Password incorrect",
+            detail="Email or Password incorrect",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
@@ -61,7 +59,7 @@ def login(loginDTO: LoginDTO):
 @account_router.post("/register")
 def register(registerDTO: RegisterDTO):
     if registerDTO.email == user.email:
-        raise APIException(
+        raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             message="Email already exists",
         )

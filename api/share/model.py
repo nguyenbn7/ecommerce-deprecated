@@ -10,13 +10,6 @@ class Base(DeclarativeBase):
     pass
 
 
-@dataclass
-class APIException(Exception):
-    status_code: int
-    message: str | None = None
-    headers: dict | None = None
-
-
 TData = TypeVar("TData")
 
 
