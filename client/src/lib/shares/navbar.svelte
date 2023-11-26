@@ -1,11 +1,21 @@
 <script>
 	import { page } from '$app/stores';
+	import { basketSource } from '$lib/basket';
 	const paths = [
 		{ link: '/', name: 'Home' },
 		{ link: '/shop', name: 'Shop' },
 		{ link: '/about', name: 'About' },
 		{ link: '/blog', name: 'Blog' }
 	];
+
+	$: basket = $basketSource;
+
+	/**
+	 * @param {BasketItem[]} items
+	 */
+	function getCount(items) {
+		return items.reduce((total, item) => total + item.quantity, 0);
+	}
 </script>
 
 <header class="nav nav-expand-md sticky-top bg-body">
@@ -13,7 +23,7 @@
 		class="container-xxl d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3"
 	>
 		<div class="col-md-3 mb-2 mb-md-0">
-			<a href={'#'} class="text-decoration-none">
+			<a href="/" class="text-decoration-none">
 				<img src="images/logo.png" alt="logo" style="max-height: 45px;" class="logo" />
 			</a>
 		</div>
@@ -44,8 +54,15 @@
 			<a class="nav-btn text-secondary" href="/login" title="Login">
 				<i class="bi bi-person"></i>
 			</a>
-			<a class="nav-btn text-secondary" href="/cart" title="Cart">
+			<a class="nav-btn text-secondary position-relative" href="/cart" title="Cart">
 				<i class="bi bi-cart"></i>
+				{#if basket}
+					<span
+						class="position-absolute start-100 translate-middle p-2 bg-primary badge rounded-pill text-white cart-no"
+					>
+						{getCount(basket.items)}
+					</span>
+				{/if}
 			</a>
 		</div>
 	</nav>
@@ -60,5 +77,13 @@
 		& i {
 			font-size: 1.25em;
 		}
+	}
+
+	.cart-no {
+		top: 20%;
+	}
+
+	.logo {
+		cursor: pointer;
 	}
 </style>
