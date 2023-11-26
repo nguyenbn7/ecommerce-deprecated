@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from pydantic import BaseModel, EmailStr, field_validator, model_validator
+import re
+from pydantic import BaseModel, EmailStr, constr, model_validator
 from sqlalchemy import BigInteger, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -18,6 +19,11 @@ class LoginDTO(BaseModel):
     password: str
 
 
+password_pattern = re.compile(
+    r"(?=^.{6,10}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\s).*$"
+)
+
+
 class RegisterDTO(BaseModel):
     email: EmailStr
     display_name: str
@@ -27,9 +33,13 @@ class RegisterDTO(BaseModel):
     @model_validator(mode="after")
     def check_passwords_match(self):
         pw1 = self.password
+        if not password_pattern.match(pw1):
+            raise ValueError(
+                "Password must have 1 uppercase, 1 lowercase, 1 number, 1 non alphanumeric and at least 6 characters"
+            )
         pw2 = self.confirm_password
         if pw1 is not None and pw2 is not None and pw1 != pw2:
-            raise ValueError("password and confirm password do not match")
+            raise ValueError("password and confirm_password do not match")
         return self
 
 
