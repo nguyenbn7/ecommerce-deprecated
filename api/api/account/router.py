@@ -28,7 +28,7 @@ def login(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    return SuccessResponse(generate_jwt_token(user), user.display_name, user.email)
+    return SuccessResponse(generate_jwt_token(user), user.email, user.display_name)
 
 
 @account_router.post("/register")
@@ -40,7 +40,7 @@ def register(
     if user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            message="Email already exists",
+            detail="Email already exists",
         )
 
     user = ApplicationUser()
@@ -49,4 +49,6 @@ def register(
     user.display_name = registerDTO.display_name
     user.password_hash = hash_password(registerDTO.password)
 
-    return SuccessResponse(generate_jwt_token(user), user.display_name, user.email)
+    user_repo.save(user)
+
+    return SuccessResponse(generate_jwt_token(user), user.email, user.display_name)

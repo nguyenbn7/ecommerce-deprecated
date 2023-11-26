@@ -1,5 +1,4 @@
-from datetime import timedelta
-import datetime
+from datetime import timedelta, datetime
 
 from passlib.context import CryptContext
 
@@ -11,6 +10,8 @@ from share.setting import get_token_service_settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+# TODO: change this later
+# 30 days
 ACCESS_TOKEN_EXPIRE_MINUTES = 30 * 60 * 24
 
 settings = get_token_service_settings()
@@ -37,6 +38,7 @@ def generate_jwt_token(user: ApplicationUser):
 
 def verfiy_password(secret: str | bytes, hash: str | bytes | None):
     return pwd_context.verify(secret, hash)
+
 
 def hash_password(password: str):
     return pwd_context.hash(password)

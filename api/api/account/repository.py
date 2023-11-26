@@ -23,3 +23,10 @@ class UserRepository(Repository[ApplicationUser]):
             .filter(self.entity.normalized_email == email.upper())
             .first()
         )
+
+    def save(self, entity: ApplicationUser):
+        entity.normalized_email = entity.email.strip().upper()
+        entity.normalized_user_name = entity.user_name.strip().upper()
+        self.db.add(entity)
+        self.db.commit()
+        return entity

@@ -6,10 +6,11 @@ from sqlalchemy import pool
 from alembic import context
 
 from share.database import BaseORM
-from product.model import Product
-from product_brand.model import ProductBrand
-from product_type.model import ProductType
-from core.setting import get_database_settings
+from api.product.model import Product
+from api.product_brand.model import ProductBrand
+from api.product_type.model import ProductType
+from api.account.model import ApplicationUser, ApplicationUserAddress
+from share.setting import get_database_settings
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
