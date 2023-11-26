@@ -40,6 +40,7 @@ async def api_exception_handler(request: Request, ex: StarletteHTTPException):
 
 
 async def internal_exception_handler(request: Request, exc: Exception):
+    # TODO: 
     print(exc)
     return JSONResponse(
         status_code=500,
@@ -73,3 +74,11 @@ async def request_validation_exception_handler(
             exclude_none=True,
         ),
     )
+
+
+application_exception_handlers = {
+    Exception: internal_exception_handler,
+    RequestValidationError: request_validation_exception_handler,
+    ValidationError: validation_exception_handler,
+    StarletteHTTPException: api_exception_handler,
+}

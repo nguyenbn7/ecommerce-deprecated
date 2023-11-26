@@ -4,7 +4,7 @@ from typing import Any, Generic, List, TypeVar, get_args
 from sqlalchemy import func, select, desc
 from sqlalchemy.orm import sessionmaker, Session
 from core.database import engine
-from share.model import Base, Pageable, Page, SortOption, SortDirection, Specification
+from share.model import BaseORM, Pageable, Page, SortOption, SortDirection, Specification
 
 _Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -17,8 +17,8 @@ def get_db_context():
         db.close()
 
 
-TEntity = TypeVar("TEntity", bound=Base)
-TClass = TypeVar("TClass", bound=Base)
+TEntity = TypeVar("TEntity", bound=BaseORM)
+TClass = TypeVar("TClass", bound=BaseORM)
 
 
 # https://stackoverflow.com/questions/48572831/how-to-access-the-type-arguments-of-typing-generic

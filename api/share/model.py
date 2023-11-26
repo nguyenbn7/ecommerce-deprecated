@@ -6,7 +6,7 @@ from sqlalchemy import ColumnElement, ColumnExpressionArgument
 from sqlalchemy.orm import DeclarativeBase
 
 
-class Base(DeclarativeBase):
+class BaseORM(DeclarativeBase):
     pass
 
 

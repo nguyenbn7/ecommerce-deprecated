@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from share.database import Base
+from share.database import BaseORM
 from product.model import Product
 from product_brand.model import ProductBrand
 from product_type.model import ProductType
@@ -24,7 +24,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = [Base.metadata]
+target_metadata = [BaseORM.metadata]
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

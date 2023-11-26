@@ -1,52 +1,27 @@
-from datetime import timedelta, datetime
-from fastapi import APIRouter, HTTPException, status
-from jose import jwt
-from jose.constants import ALGORITHMS
+from typing import Annotated
+from fastapi import APIRouter, Depends, HTTPException, status
 
-from passlib.context import CryptContext
-
-from api.account.model import AppUser, LoginDTO, RegisterDTO, SuccessResponse
+from api.account.model import ApplicationUser, LoginDTO, RegisterDTO, SuccessResponse
+from api.account.repository import UserRepository
+from api.account.service import generate_jwt_token, hash_password, verfiy_password
 
 account_router = APIRouter(prefix="/account", tags=["Account"])
 
-# TODO: read secret key from env
-SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30 * 60 * 24
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-user = AppUser()
-
-
-def create_access_token(claims: dict, expires_delta: timedelta | None = None):
-    to_encode = claims.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHMS.HS256)
-    return encoded_jwt
-
-
-def generate_jwt_token(user: AppUser):
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        claims={"sub": user.display_name}, expires_delta=access_token_expires
-    )
-    return access_token
-
 
 @account_router.post("/login")
-def login(loginDTO: LoginDTO):
-    if loginDTO.email != user.email:
+def login(
+    loginDTO: LoginDTO, user_repo: Annotated[UserRepository, Depends(UserRepository)]
+):
+    user = user_repo.get_user_by_username(loginDTO.email)
+
+    if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Email or Password incorrect",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    if not pwd_context.verify(loginDTO.password, user.password_hash):
+    if not verfiy_password(loginDTO.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Email or Password incorrect",
@@ -57,14 +32,21 @@ def login(loginDTO: LoginDTO):
 
 
 @account_router.post("/register")
-def register(registerDTO: RegisterDTO):
-    if registerDTO.email == user.email:
+def register(
+    registerDTO: RegisterDTO,
+    user_repo: Annotated[UserRepository, Depends(UserRepository)],
+):
+    user = user_repo.get_user_by_email(registerDTO.email)
+    if user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             message="Email already exists",
         )
 
-    password_hash = pwd_context.hash(registerDTO.password)
-    print(password_hash)
+    user = ApplicationUser()
+    user.user_name = registerDTO.email
+    user.email = registerDTO.email
+    user.display_name = registerDTO.display_name
+    user.password_hash = hash_password(registerDTO.password)
 
     return SuccessResponse(generate_jwt_token(user), user.display_name, user.email)

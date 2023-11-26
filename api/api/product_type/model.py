@@ -2,10 +2,10 @@ from typing import List
 from sqlalchemy import BigInteger, String
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 
-from share.model import Base
+from share.model import BaseORM
 
 
-class ProductType(Base):
+class ProductType(BaseORM):
     __tablename__ = "product_types"
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)

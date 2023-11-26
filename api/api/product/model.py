@@ -5,10 +5,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
 from api.product_brand.model import ProductBrand
 from api.product_type.model import ProductType
 
-from share.model import Base
+from share.model import BaseORM
 
 
-class Product(Base):
+class Product(BaseORM):
     __tablename__ = "products"
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
@@ -53,7 +53,7 @@ class ProductsParams(BaseModel):
         return v
 
 
-class ProductProjection(Base):
+class ProductProjection(BaseORM):
     __table__ = Product.__table__.join(ProductBrand.__table__).join(
         ProductType.__table__
     )

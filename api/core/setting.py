@@ -22,3 +22,8 @@ class DatabaseSetting(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env", extra="ignore", env_prefix="POSTGRES_"
     )
+
+
+class TokenServiceSetting(BaseSettings):
+    SECRET_KEY: str
+    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
