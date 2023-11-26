@@ -31,11 +31,11 @@ def get_products(
         specification=ProductSpecification(
             products_params.brand_id, products_params.type_id, products_params.search
         ),
-        sort=sort_options,
-        pageable=Pageable(products_params.page_number, products_params.page_size),
+        sort_by=sort_options,
+        pageable=Pageable(products_params.page_number - 1, products_params.page_size),
         projected_to=ProductProjection,
     )
-
+    
     page_products.data = list(map(lambda p: p.to_dto(), page_products.data))
     return page_products
 

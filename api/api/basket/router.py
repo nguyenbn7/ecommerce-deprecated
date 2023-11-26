@@ -8,11 +8,11 @@ basket_router = APIRouter(prefix="/basket", tags=["Basket"])
 
 @basket_router.get("/")
 def get_basket(
-    basket_id: str, basket_repo: Annotated[BasketRepository, Depends(BasketRepository)]
+    id: str, basket_repo: Annotated[BasketRepository, Depends(BasketRepository)]
 ):
-    basket = basket_repo.get_basket(basket_id)
+    basket = basket_repo.get_basket(id)
     if not basket:
-        return CustomerBasket(basket_id)
+        return CustomerBasket(id)
     return basket
 
 
@@ -30,9 +30,9 @@ def update_basket(
 
 @basket_router.delete("/")
 def delete_basket(
-    basket_id: str, basket_repo: Annotated[BasketRepository, Depends(BasketRepository)]
+    id: str, basket_repo: Annotated[BasketRepository, Depends(BasketRepository)]
 ):
-    deleted = basket_repo.delete_basket(basket_id)
+    deleted = basket_repo.delete_basket(id)
     if not deleted:
         raise HTTPException(404)
     return Response(status_code=200)

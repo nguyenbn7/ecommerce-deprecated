@@ -32,7 +32,7 @@ class Repository(Generic[TEntity], ABC):
     def get_all(
         self,
         specification: Specification | None = None,
-        sort: List[SortOption] | None = None,
+        sort_by: List[SortOption] | None = None,
         pageable: Pageable | None = None,
         projected_to: TClass | None = None,
     ) -> Page[TClass | TEntity] | List[TClass | TEntity]:
@@ -44,11 +44,11 @@ class Repository(Generic[TEntity], ABC):
 
         sort_options = None
 
-        if sort:
+        if sort_by:
             sort_options = list(
                 map(
                     lambda s: desc(s.by) if s.direction == SortDirection.DESC else s.by,
-                    sort,
+                    sort_by,
                 )
             )
 
@@ -66,13 +66,13 @@ class Repository(Generic[TEntity], ABC):
 
         total_items = self.db.execute(count_statement).scalar()
 
-        page_number, page_size = pageable.page_index, pageable.page_size
+        page_index, page_size = pageable.page_index, pageable.page_size
 
         if page_size < 1:
             page_size = 6
 
-        if page_number * page_size > total_items:
-            page_number = 1
+        if page_index * page_size > total_items:
+            page_index = 1
             page_size = 6
 
         data_statement = new_query
@@ -80,13 +80,11 @@ class Repository(Generic[TEntity], ABC):
         if sort_options and len(sort_options) > 0:
             data_statement = data_statement.order_by(*sort_options)
 
-        data_statement = data_statement.offset((page_number - 1) * page_size).limit(
-            page_size
-        )
+        data_statement = data_statement.offset(page_index * page_size).limit(page_size)
 
         data = data_statement.all()
 
-        return Page[TClass | TEntity](page_number, len(data), total_items, data)
+        return Page[TClass | TEntity](page_index + 1, len(data), total_items, data)
 
     def get_by_id(
         self,

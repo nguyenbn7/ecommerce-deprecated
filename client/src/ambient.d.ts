@@ -8,8 +8,8 @@ type Product = {
     name: string
     description: string
     id: number
-    product_type_id: number
-    product_brand_id: number
+    product_type: string
+    product_brand: string
 }
 
 type Page<T> = {
@@ -36,4 +36,19 @@ type ProductBrand = {
 type ProductType = {
     id: number,
     name: string,
+}
+
+type Basket = {
+    id: string
+    items: BasketItem[]
+}
+
+type BasketItem = {
+    id: number
+    product_name: string
+    price: number
+    quantity: number
+    picture_url: string
+    brand: string
+    type: string
 }

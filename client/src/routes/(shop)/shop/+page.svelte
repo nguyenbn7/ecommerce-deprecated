@@ -139,7 +139,7 @@
 </svelte:head>
 
 <div class="row">
-	<aside class="col-3 sidebar">
+	<aside class="col-3 sidebar-sticky">
 		<div class="my-2">
 			<h5 class="text-warning ms-3">Sort By</h5>
 			<select class="form-select mb-4" on:change={onSortSelected}>
@@ -223,7 +223,7 @@
 </div>
 
 <style lang="scss">
-	.sidebar {
+	.sidebar-sticky {
 		position: -webkit-sticky;
 		position: sticky;
 		top: 5rem;

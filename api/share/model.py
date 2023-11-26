@@ -15,7 +15,7 @@ TData = TypeVar("TData")
 
 @dataclass
 class Page(Generic[TData]):
-    page_index: int
+    page_number: int
     page_size: int
     total_items: int
     data: List[TData]

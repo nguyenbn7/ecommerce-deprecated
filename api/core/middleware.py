@@ -53,7 +53,9 @@ async def validation_exception_handler(request: Request, exc: ValidationError):
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         content=jsonable_encoder(
-            ErrorResponse("One or more field can not be validated"),
+            ErrorResponse(
+                "One or more field can not be validated", errors=exc.errors()
+            ),
             exclude_none=True,
         ),
     )
@@ -65,7 +67,9 @@ async def request_validation_exception_handler(
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         content=jsonable_encoder(
-            ErrorResponse("One or more field can not be validated!!!!"),
+            ErrorResponse(
+                "One or more field can not be validated!!!!", errors=exc.errors()
+            ),
             exclude_none=True,
         ),
     )
