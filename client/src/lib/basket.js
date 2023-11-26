@@ -1,19 +1,70 @@
-import { writable } from "svelte/store";
-import { setBasket } from "./request/cart";
+import { PUBLIC_BASE_API_URL } from "$env/static/public";
+import { get, writable } from "svelte/store";
 
 /**
  * @type {import("svelte/store").Writable<Basket | null>}
  */
 export const basketSource = writable(null);
 
-function getCurrentBasket() {
+/**
+ * @type {import("svelte/store").Writable<BasketTotals | null>}
+ */
+export const basketTotalsSource = writable(null);
+
+/**
+ * @param {string} id
+ */
+export async function getBasket(id) {
+    const response = await fetch(`${PUBLIC_BASE_API_URL}/basket?id=${id}`);
+
     /**
-     * @type {Basket | null}
+     * @type {Basket}
      */
-    let basket = null;
-    const unsub = basketSource.subscribe(b => basket = b);
-    unsub();
-    return basket;
+    const basket = await response.json();
+    basketSource.update(() => basket);
+    calculateTotals();
+    return basketSource;
+}
+
+/**
+ * @param {Basket} basket
+ */
+export async function setBasket(basket) {
+    const response = await fetch(`${PUBLIC_BASE_API_URL}/basket/`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(basket)
+    });
+
+    /**
+     * @type {Basket}
+     */
+    const newBasket = await response.json();
+    basketSource.update(() => newBasket);
+    calculateTotals();
+    return basketSource;
+}
+
+/**
+ * @param {Basket} basket
+ */
+export async function deleteBasket(basket) {
+    const response = await fetch(`${PUBLIC_BASE_API_URL}/basket?id=${basket.id}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    if (response.status === 200) {
+        basketSource.update(() => null);
+        basketTotalsSource.update(() => null);
+        return basketSource;
+    }
+    console.log(response.json());
+    return basketSource;
 }
 
 /**
@@ -24,10 +75,14 @@ export async function addItemToBasket(item, quantity = 1) {
     if (isProduct(item))
         item = mapProductItemToBasketItem(item);
 
-    const basket = getCurrentBasket() ?? createBasket();
+    const basket = get(basketSource) ?? createBasket();
     basket.items = addOrUpdateItem(basket.items, item, quantity);
-    console.log(basket);    
     await setBasket(basket);
+}
+
+export async function loadBasket() {
+    const basketId = localStorage.getItem('basket_id');
+    if (basketId) await getBasket(basketId);
 }
 
 /**
@@ -79,4 +134,33 @@ function mapProductItemToBasketItem(item) {
  */
 function isProduct(item) {
     return Object.hasOwn(item, "product_brand");
+}
+
+function calculateTotals() {
+    const basket = get(basketSource);
+    if (!basket) return;
+    const shipping = 0;
+    const subtotal = basket.items.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0
+    );
+    const total = subtotal + shipping;
+    basketTotalsSource.update(() => ({ shipping, subtotal, total }));
+}
+
+/**
+ * @param {number} id
+ */
+export function removeItemFromBasket(id, quantity = 1) {
+    const basket = get(basketSource);
+    if (!basket) return;
+    const item = basket.items.find((i) => i.id === id);
+    if (item) {
+        item.quantity -= quantity;
+        if (item.quantity <= 0) {
+            basket.items = basket.items.filter((i) => i.id !== id);
+        }
+        if (basket.items.length > 0) setBasket(basket);
+        else deleteBasket(basket);
+    }
 }

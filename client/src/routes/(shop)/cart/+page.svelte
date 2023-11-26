@@ -1,17 +1,10 @@
 <script>
+	import OrderTotals from '$lib/shares/order-totals.svelte';
+	import { addItemToBasket, basketSource, removeItemFromBasket } from '$lib/basket';
 	import { ECOMMERCE_NAME } from '$lib/constants';
 	import { formatAsUSD } from '$lib/helpers';
-	import { getBasket } from '$lib/request/cart';
-	import { onMount } from 'svelte';
 
-	/**
-	 * @type {Basket | null}
-	 */
-	let basket;
-	onMount(async () => {
-		const basketSource = await getBasket('basket1');
-		basketSource.subscribe((b) => (basket = b));
-	});
+	$: basket = $basketSource;
 </script>
 
 <svelte:head>
@@ -60,7 +53,7 @@
 									</div>
 									<div class="ms-3 d-inline-block align-middle">
 										<h5 class="mb-0">
-											<a href="/shop/{basket.id}" class="text-dark text-decoration-none">
+											<a href="/shop/{item.id}" class="text-dark text-decoration-none">
 												{item.product_name}
 											</a>
 										</h5>
@@ -72,22 +65,31 @@
 								</td>
 								<td class="align-middle">
 									<div class="d-flex align-items-center">
-										<i
-											class="bi bi-dash-circle text-warning me-2"
-											style="cursor: pointer; font-size: 2em;"
-										></i>
+										<button
+											class="p-0 m-0 me-2 border-0 quantity-btn"
+											on:click={() => removeItemFromBasket(item.id, 1)}
+											disabled={item.quantity < 1}
+										>
+											<i class="bi bi-dash-circle" style="font-size: 2em;"></i>
+										</button>
 										<strong style="font-size: 1.5em;">{item.quantity}</strong>
-										<i
-											class="bi bi-plus-circle text-warning ms-2"
-											style="cursor: pointer; font-size: 2em;"
-										></i>
+										<button
+											class="p-0 m-0 ms-2 border-0 quantity-btn"
+											on:click={() => addItemToBasket(item, 1)}
+										>
+											<i class="bi bi-plus-circle" style="font-size: 2em;"></i>
+										</button>
 									</div>
 								</td>
 								<td class="align-middle">
 									<strong>{formatAsUSD(item.price * item.quantity)}</strong>
 								</td>
 								<td class="align-middle">
-									<a class="text-danger" href={'#'}>
+									<a
+										class="text-danger"
+										href={'#'}
+										on:click={() => removeItemFromBasket(item.id, item.quantity)}
+									>
 										<i class="bi bi-trash" style="font-size: 2em; cursor: pointer;"></i>
 									</a>
 								</td>
@@ -100,13 +102,38 @@
 	</div>
 {/if}
 
-<!-- <div class="row">
-		<div class="col-6 offset-6">
-			<app-order-totals></app-order-totals>
-			<div class="d-grid">
-				<a href="/checkout" class="btn btn-outline-primary py-2">
-					Proceed to checkout
-				</a>
-			</div>
+<div class="row">
+	<div class="col-6 offset-6">
+		<OrderTotals></OrderTotals>
+		<div class="d-grid">
+			<a
+				href="/checkout"
+				class="btn btn-outline-primary py-2"
+				class:disabled={!basket || (basket && !basket.items.length)}
+			>
+				Proceed to checkout
+			</a>
 		</div>
-	</div> -->
+	</div>
+</div>
+
+<style lang="scss">
+	.quantity-btn {
+		--bs-text-opacity: 1;
+		color: rgba(var(--bs-warning-rgb), var(--bs-text-opacity));
+		background-color: transparent;
+	}
+
+	.quantity-btn:hover i {
+		color: rgba(245, 197, 53, 0.8);
+	}
+
+	.quantity-btn:active i {
+		color: rgb(185, 143, 18);
+	}
+
+	.quantity-btn:disabled i {
+		color: rgb(207, 183, 109, 0.65);
+		pointer-events: none;
+	}
+</style>

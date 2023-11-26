@@ -5,7 +5,7 @@
 		>
 			<nav class="nav bg-transparent">
 				<a class="navbar-brand" href="/">
-					<img src="images/logo.png" alt="Skinet" width="200" height="72"/>
+					<img src="/images/logo.png" alt="Skinet" width="200" height="72"/>
 				</a>
 			</nav>
 			<slot />

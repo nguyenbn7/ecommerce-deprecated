@@ -52,3 +52,9 @@ type BasketItem = {
     brand: string
     type: string
 }
+
+type BasketTotals = {
+    shipping: number;
+    subtotal: number;
+    total: number;
+}

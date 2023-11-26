@@ -12,6 +12,7 @@
 <script>
 	import { page } from '$app/stores';
 	import { PUBLIC_BASE_API_URL } from '$env/static/public';
+	import { addItemToBasket, basketSource, loadBasket, removeItemFromBasket } from '$lib/basket';
 	import { ECOMMERCE_NAME } from '$lib/constants';
 	import { formatAsUSD } from '$lib/helpers';
 	import { breadcrumb } from '$lib/shares/breadcrumb.svelte';
@@ -22,9 +23,19 @@
 	 */
 	let product;
 	let productName = '';
-	let buttonText = 'Add to cart';
-	let quantity = 1;
 	let quantityInBasket = 0;
+	let quantity = 1;
+
+	$: buttonText = quantityInBasket === 0 ? 'Add to basket' : 'Update basket';
+	$: basket = $basketSource;
+	$: if (basket && product) {
+		const item = $basketSource?.items.find((i) => i.id === product.id);
+
+		if (item) {
+			quantity = item.quantity;
+			quantityInBasket = item.quantity;
+		}
+	}
 
 	onMount(async () => {
 		const productId = $page.params.productId;
@@ -40,6 +51,20 @@
 	function decrementQuantity() {
 		if (quantity < 1) return;
 		quantity--;
+	}
+
+	function updateBasket() {
+		if (product) {
+			if (quantity > quantityInBasket) {
+				const itemToAdd = quantity - quantityInBasket;
+				quantityInBasket += itemToAdd;
+				addItemToBasket(product, itemToAdd);
+			} else {
+				const itemToRemove = quantityInBasket - quantity;
+				quantityInBasket -= itemToRemove;
+				removeItemFromBasket(product.id, itemToRemove);
+			}
+		}
 	}
 </script>
 
@@ -77,7 +102,11 @@
 					<button class="p-0 m-0 ms-2 border-0 quantity-btn" on:click={incrementQuantity}>
 						<i class="bi bi-plus-circle" style="font-size: 2em;"></i>
 					</button>
-					<button class="btn btn-danger ms-4">{buttonText}</button>
+					<button
+						class="btn btn-danger ms-4"
+						on:click={updateBasket}
+						disabled={quantity === quantityInBasket}>{buttonText}</button
+					>
 				</div>
 				<div class="row mt-4">
 					<h4>Description</h4>

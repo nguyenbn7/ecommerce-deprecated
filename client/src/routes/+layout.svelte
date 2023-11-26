@@ -1,11 +1,6 @@
 <script>
-	import { getBasket } from '$lib/request/cart';
+	import { loadBasket } from '$lib/basket';
 	import { onMount } from 'svelte';
-
-	async function loadBasket() {
-		const basketId = localStorage.getItem('basket_id');
-		if (basketId) await getBasket(basketId);
-	}
 
 	onMount(async () => await loadBasket());
 </script>

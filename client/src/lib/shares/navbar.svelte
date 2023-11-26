@@ -8,6 +8,9 @@
 		{ link: '/blog', name: 'Blog' }
 	];
 
+	/**
+	 * @type {Basket | null}
+	 */
 	$: basket = $basketSource;
 
 	/**
@@ -24,7 +27,7 @@
 	>
 		<div class="col-md-3 mb-2 mb-md-0">
 			<a href="/" class="text-decoration-none">
-				<img src="images/logo.png" alt="logo" style="max-height: 45px;" class="logo" />
+				<img src="/images/logo.png" alt="logo" style="max-height: 45px;" class="logo" />
 			</a>
 		</div>
 
@@ -56,7 +59,7 @@
 			</a>
 			<a class="nav-btn text-secondary position-relative" href="/cart" title="Cart">
 				<i class="bi bi-cart"></i>
-				{#if basket}
+				{#if basket && basket.items.length}
 					<span
 						class="position-absolute start-100 translate-middle p-2 bg-primary badge rounded-pill text-white cart-no"
 					>
