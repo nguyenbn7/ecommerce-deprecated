@@ -13,13 +13,13 @@
 
 <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
 	<div class="carousel-inner">
-		<div class="carousel-item active">
+		<div class="carousel-item active" data-bs-slide="1000">
 			<img src="/images/hero1.jpg" class="d-block w-100" alt="slide" />
 		</div>
-		<div class="carousel-item">
+		<div class="carousel-item" data-bs-slide="1000">
 			<img src="/images/hero2.jpg" class="d-block w-100" alt="slide" />
 		</div>
-		<div class="carousel-item">
+		<div class="carousel-item" data-bs-slide="1000">
 			<img src="/images/hero3.jpg" class="d-block w-100" alt="slide" />
 		</div>
 	</div>

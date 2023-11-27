@@ -1,5 +1,9 @@
+<script>
+	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
+</script>
+
 <svelte:head>
-	<title>Ecommerce - Sign Up</title>
+	<title>{ECOMMERCE_NAME} - Sign Up</title>
 </svelte:head>
 
 <form class="container">
