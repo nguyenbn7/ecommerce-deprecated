@@ -1,5 +1,5 @@
 <script>
-	import OrderTotals from '$lib/components/order-totals.svelte';
+	import OrderTotals from '$lib/components/shop/order-totals.svelte';
 	import { addItemToBasket, basket, removeItemFromBasket } from '$lib/service/basket.service';
 	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
 	import { formatAsUSD } from '$lib/util/helper.function';

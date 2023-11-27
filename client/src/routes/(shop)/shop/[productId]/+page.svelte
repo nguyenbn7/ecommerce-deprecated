@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
 	import { formatAsUSD } from '$lib/util/helper.function';
-	import { breadcrumb } from '$lib/components/breadcrumb.svelte';
+	import { breadcrumb } from '$lib/components/share/breadcrumb.svelte';
 	import { onMount } from 'svelte';
 	import { addItemToBasket, basket, removeItemFromBasket } from '$lib/service/basket.service';
 	import { getProduct } from '$lib/service/product.service';

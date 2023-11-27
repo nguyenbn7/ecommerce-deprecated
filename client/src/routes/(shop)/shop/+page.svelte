@@ -1,7 +1,7 @@
 <script>
-	import Pagination from '$lib/components/pagination.svelte';
-	import ProductItem from '$lib/components/product-item.svelte';
-	import PagingHeader from '$lib/components/paging-header.svelte';
+	import Pagination from '$lib/components/share/pagination.svelte';
+	import ProductItem from '$lib/components/shop/product-item.svelte';
+	import PagingHeader from '$lib/components/share/paging-header.svelte';
 	import { onMount } from 'svelte';
 	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
 	import { getProductBrands } from '$lib/service/product-brand.service';
