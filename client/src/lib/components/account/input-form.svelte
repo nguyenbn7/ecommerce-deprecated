@@ -12,12 +12,6 @@
 	 */
 	export let inputField;
 
-	/**
-	 * @type {number | undefined}
-	 */
-	let delayValidateAfterKeyUp;
-	let timer = 250; // 0.25 sec
-
 	function onFocus() {
 		if (!inputField.dirty) {
 			inputField.dirty = true;
@@ -53,13 +47,7 @@
 
 	function onKeyUp() {
 		if (!inputField.dirty) return;
-		clearTimeout(delayValidateAfterKeyUp);
-		delayValidateAfterKeyUp = setTimeout(validate, timer);
-	}
-
-	function onKeyDown() {
-		if (!inputField.dirty) return;
-		clearTimeout(delayValidateAfterKeyUp);
+		validate();
 	}
 </script>
 
@@ -72,7 +60,6 @@
 		on:focusout={onFocus}
 		on:input={handleInput}
 		on:keyup={onKeyUp}
-		on:keydown={onKeyDown}
 		class:is-invalid={inputField.dirty && !inputField.valid}
 		class:is-valid={inputField.dirty && inputField.valid}
 	/>

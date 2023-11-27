@@ -23,6 +23,8 @@
 		errorMessage: 'Password is required'
 	});
 
+	$: isValid = emailField.valid && passwordField.valid;
+
 	async function onSubmitForm() {
 		/**
 		 * @type {LoginSuccess}
@@ -33,7 +35,6 @@
 			console.error(errorResponse);
 			return;
 		}
-		
 	}
 </script>
 
@@ -80,7 +81,7 @@
 		<button
 			class="btn btn-primary w-100 py-2 mt-2 mb-3 rounded-5"
 			type="submit"
-			disabled={!emailField.valid || !passwordField.valid}
+			disabled={!isValid}
 		>
 			Login
 		</button>
