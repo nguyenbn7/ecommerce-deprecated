@@ -70,18 +70,9 @@ type LoginSuccess = {
 	token: string;
 };
 
-type TextFieldValidation = {
-	dirty: boolean;
-	valid: boolean;
-	value: string;
-	validationMessage: string | null | undefined;
-	successMessage: string | null | undefined;
-	validation: Validation[]
-};
-
 type Validation = {
 	validator: Validator;
-	errorMessage: string | null | undefined;
+	errorMessage: string | undefined;
 };
 
 type Validator = (inputField: TextFieldValidation) => boolean;

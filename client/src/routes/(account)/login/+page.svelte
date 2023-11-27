@@ -3,54 +3,37 @@
 	import { loginAs } from '$lib/service/account.service';
 	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
 	import { checkEmailFormat, checkFieldRequired } from '$lib/util/helper.function';
+	import { TextFieldValidation } from '$lib/util/model';
 
-	/**
-	 * @type {TextFieldValidation}
-	 */
-	let emailField = {
-		dirty: false,
-		valid: false,
-		value: '',
-		validationMessage: '',
-		successMessage: undefined,
-		validation: [
-			{
-				validator: checkFieldRequired,
-				errorMessage: 'Email is required',
-			},
-			{
-				validator: checkEmailFormat,
-				errorMessage: 'Incorrect email format, It should like: bob@test.com',
-			}
-		]
-	};
+	let emailField = new TextFieldValidation();
+	emailField.validation.push(
+		{
+			validator: checkFieldRequired,
+			errorMessage: 'Email is required'
+		},
+		{
+			validator: checkEmailFormat,
+			errorMessage: 'Incorrect email. Example: bob@test.com'
+		}
+	);
 
-	/**
-	 * @type {TextFieldValidation}
-	 */
-	let passwordField = {
-		dirty: false,
-		valid: false,
-		value: '',
-		validationMessage: '',
-		successMessage: undefined,
-		validation: [
-			{
-				validator: checkFieldRequired,
-				errorMessage: 'Password is required',
-			}
-		]
-	};
+	let passwordField = new TextFieldValidation();
+	passwordField.validation.push({
+		validator: checkFieldRequired,
+		errorMessage: 'Password is required'
+	});
 
 	async function onSubmitForm() {
 		/**
 		 * @type {LoginSuccess}
 		 */
 		const data = await loginAs({ email: emailField.value, password: passwordField.value });
-		if(data instanceof Response) {
+		if (data instanceof Response) {
 			const errorResponse = await data.json();
 			console.error(errorResponse);
+			return;
 		}
+		
 	}
 </script>
 
@@ -70,13 +53,16 @@
 		<InputForm
 			class="form-floating mt-2 mb-3"
 			bind:inputField={emailField}
+			id="Email"
 			type="email"
 			label="Email"
 			placeholder="name@example.com"
 		></InputForm>
+
 		<InputForm
 			class="form-floating mt-2 mb-3"
 			bind:inputField={passwordField}
+			id="Password"
 			type="password"
 			label="Password"
 			placeholder="Password"
