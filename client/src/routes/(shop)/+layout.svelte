@@ -1,7 +1,7 @@
 <script>
-	import Breadcrumb from '$lib/shares/breadcrumb.svelte';
-	import Footer from '$lib/shares/footer.svelte';
-	import Navbar from '$lib/shares/navbar.svelte';
+	import Breadcrumb from '$lib/components/breadcrumb.svelte';
+	import Footer from '$lib/components/footer.svelte';
+	import Navbar from '$lib/components/navbar.svelte';
 </script>
 
 <Navbar></Navbar>

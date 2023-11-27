@@ -1,22 +1,11 @@
-<script context="module">
-	/**
-	 * @param {string} productId
-	 * @returns {Promise<Product>}
-	 */
-	async function getProduct(productId) {
-		const response = await fetch(`${PUBLIC_BASE_API_URL}/products/${productId}`);
-		return await response.json();
-	}
-</script>
-
 <script>
 	import { page } from '$app/stores';
-	import { PUBLIC_BASE_API_URL } from '$env/static/public';
-	import { addItemToBasket, basketSource, loadBasket, removeItemFromBasket } from '$lib/basket';
-	import { ECOMMERCE_NAME } from '$lib/constants';
-	import { formatAsUSD } from '$lib/helpers';
-	import { breadcrumb } from '$lib/shares/breadcrumb.svelte';
+	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
+	import { formatAsUSD } from '$lib/util/helper.function';
+	import { breadcrumb } from '$lib/components/breadcrumb.svelte';
 	import { onMount } from 'svelte';
+	import { addItemToBasket, basket, removeItemFromBasket } from '$lib/service/basket.service';
+	import { getProduct } from '$lib/service/product.service';
 
 	/**
 	 * @type {Product}
@@ -27,9 +16,9 @@
 	let quantity = 1;
 
 	$: buttonText = quantityInBasket === 0 ? 'Add to basket' : 'Update basket';
-	$: basket = $basketSource;
-	$: if (basket && product) {
-		const item = $basketSource?.items.find((i) => i.id === product.id);
+
+	$: if ($basket && product) {
+		const item = $basket?.items.find((i) => i.id === product.id);
 
 		if (item) {
 			quantity = item.quantity;

@@ -1,17 +1,15 @@
 <script>
-	import OrderTotals from '$lib/shares/order-totals.svelte';
-	import { addItemToBasket, basketSource, removeItemFromBasket } from '$lib/basket';
-	import { ECOMMERCE_NAME } from '$lib/constants';
-	import { formatAsUSD } from '$lib/helpers';
-
-	$: basket = $basketSource;
+	import OrderTotals from '$lib/components/order-totals.svelte';
+	import { addItemToBasket, basket, removeItemFromBasket } from '$lib/service/basket.service';
+	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
+	import { formatAsUSD } from '$lib/util/helper.function';
 </script>
 
 <svelte:head>
 	<title>{ECOMMERCE_NAME} - Cart</title>
 </svelte:head>
 
-{#if !basket?.items.length}
+{#if !$basket?.items.length}
 	<div>
 		<p>There are no items in your basket</p>
 	</div>
@@ -40,7 +38,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						{#each basket.items as item}
+						{#each $basket.items as item}
 							<tr>
 								<th>
 									<div class="p-2 d-inline-block">
@@ -109,7 +107,7 @@
 			<a
 				href="/checkout"
 				class="btn btn-outline-primary py-2"
-				class:disabled={!basket || (basket && !basket.items.length)}
+				class:disabled={!$basket || ($basket && !$basket.items.length)}
 			>
 				Proceed to checkout
 			</a>

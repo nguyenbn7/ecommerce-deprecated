@@ -23,7 +23,7 @@
 
 <script>
 	import { page } from '$app/stores';
-	import { titleCase } from '$lib/helpers';
+	import { titleCase } from '$lib/util/helper.function';
 
 	export { styleClasses as class };
 	let styleClasses = '';

@@ -1,10 +1,12 @@
 <script>
-	import Pagination from '$lib/shares/pagination.svelte';
-	import ProductItem from '$lib/shares/product-item.svelte';
-	import PagingHeader from '$lib/shares/paging-header.svelte';
+	import Pagination from '$lib/components/pagination.svelte';
+	import ProductItem from '$lib/components/product-item.svelte';
+	import PagingHeader from '$lib/components/paging-header.svelte';
 	import { onMount } from 'svelte';
-	import { ECOMMERCE_NAME } from '$lib/constants';
-	import { getPageProduct, getProductBrands, getProductTypes } from '$lib/request/product';
+	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
+	import { getProductBrands } from '$lib/service/product-brand.service';
+	import { getProductTypes } from '$lib/service/product-type.service';
+	import { getPageProduct } from '$lib/service/product.service';
 
 	/**
 	 * @type {Product[]}

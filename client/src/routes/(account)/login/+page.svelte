@@ -49,6 +49,6 @@
 
 <style>
 	hr {
-		margin: 0.90rem 0;
+		margin: 0.9rem 0;
 	}
 </style>

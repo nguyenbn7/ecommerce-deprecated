@@ -1,17 +1,13 @@
 <script>
 	import { page } from '$app/stores';
-	import { basketSource } from '$lib/basket';
+	import { basket } from '$lib/service/basket.service';
+
 	const paths = [
 		{ link: '/', name: 'Home' },
 		{ link: '/shop', name: 'Shop' },
 		{ link: '/about', name: 'About' },
 		{ link: '/blog', name: 'Blog' }
 	];
-
-	/**
-	 * @type {Basket | null}
-	 */
-	$: basket = $basketSource;
 
 	/**
 	 * @param {BasketItem[]} items
@@ -57,13 +53,13 @@
 			<a class="nav-btn text-secondary" href="/login" title="Login">
 				<i class="bi bi-person"></i>
 			</a>
-			<a class="nav-btn text-secondary position-relative" href="/cart" title="Cart">
+			<a class="nav-btn text-secondary position-relative" href="/basket" title="Basket">
 				<i class="bi bi-cart"></i>
-				{#if basket && basket.items.length}
+				{#if $basket && $basket.items.length}
 					<span
 						class="position-absolute start-100 translate-middle p-2 bg-primary badge rounded-pill text-white cart-no"
 					>
-						{getCount(basket.items)}
+						{getCount($basket.items)}
 					</span>
 				{/if}
 			</a>

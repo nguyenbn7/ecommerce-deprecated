@@ -1,7 +1,7 @@
 <script>
-	import { ECOMMERCE_NAME } from '$lib/constants';
+	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
 	import { onMount } from 'svelte';
-	
+
 	onMount(async () => {
 		(await import('bootstrap')).Carousel;
 	});

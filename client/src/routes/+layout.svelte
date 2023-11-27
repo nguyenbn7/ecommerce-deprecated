@@ -1,5 +1,5 @@
 <script>
-	import { loadBasket } from '$lib/basket';
+	import { loadBasket } from '$lib/service/basket.service';
 	import { onMount } from 'svelte';
 
 	onMount(async () => await loadBasket());

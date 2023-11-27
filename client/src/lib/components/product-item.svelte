@@ -1,19 +1,22 @@
 <script>
-	import { addItemToBasket } from '$lib/basket';
-	import { formatAsUSD } from '$lib/helpers';
+	import { addItemToBasket } from '$lib/service/basket.service';
+	import { formatAsUSD } from '$lib/util/helper.function';
 
 	/**
 	 * @type {Product}
 	 */
 	export let product;
-
 </script>
 
 <div class="card shadow-sm">
 	<div class="image position-relative">
 		<img src={product.picture_url} alt={product.name} class="img-fluid bg-info" />
 		<div class="d-flex align-items-center justify-content-center hover-overlay">
-			<button class="btn btn-success bi bi-cart me-2" title="Add to cart" on:click={() => addItemToBasket(product)}></button>
+			<button
+				class="btn btn-success bi bi-cart me-2"
+				title="Add to cart"
+				on:click={() => addItemToBasket(product)}
+			></button>
 			<a class="btn btn-primary" href="/shop/{product.id}" title="Detail">
 				<i class="bi bi-info-circle"></i>
 			</a>
