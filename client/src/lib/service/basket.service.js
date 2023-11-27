@@ -2,13 +2,13 @@ import { PUBLIC_BASE_API_URL } from '$env/static/public';
 import { get, readonly, writable } from 'svelte/store';
 
 /**
- * @type {import("svelte/store").Writable<Basket | null>}
+ * @type {import("svelte/store").Writable<Basket | undefined>}
  */
-const _basket = writable(null);
+const _basket = writable(undefined);
 /**
- * @type {import("svelte/store").Writable<BasketTotals | null>}
+ * @type {import("svelte/store").Writable<BasketTotals | undefined>}
  */
-const _basketTotals = writable(null);
+const _basketTotals = writable(undefined);
 const BASKET_KEY_NAME = 'basket_id';
 
 export const basketTotals = readonly(_basketTotals);
@@ -52,8 +52,8 @@ async function deleteBasket(basket) {
 	});
 
 	if (response.status === 200) {
-		_basket.update(() => null);
-		_basketTotals.update(() => null);
+		_basket.update(() => undefined);
+		_basketTotals.update(() => undefined);
 		return;
 	}
 	console.error('Error: ', response.status);

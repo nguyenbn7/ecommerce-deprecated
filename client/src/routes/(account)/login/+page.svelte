@@ -1,4 +1,5 @@
 <script>
+	import { goto } from '$app/navigation';
 	import InputForm from '$lib/components/account/input-form.svelte';
 	import { loginAs } from '$lib/service/account.service';
 	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
@@ -35,6 +36,8 @@
 			console.error(errorResponse);
 			return;
 		}
+
+		return goto('/');
 	}
 </script>
 

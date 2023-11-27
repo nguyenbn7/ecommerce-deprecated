@@ -1,5 +1,7 @@
 <script>
+	import { goto } from '$app/navigation';
 	import InputForm from '$lib/components/account/input-form.svelte';
+	import { registerAs } from '$lib/service/account.service';
 	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
 	import {
 		checkEmailFormat,
@@ -54,7 +56,21 @@
 	$: isValid =
 		nameField.valid && emailField.valid && passwordField.valid && confirmPasswordField.valid;
 
-	function onSubmitForm() {}
+	async function onSubmitForm() {
+		const data = await registerAs({
+			email: emailField.value,
+			display_name: nameField.value,
+			password: passwordField.value,
+			confirm_password: confirmPasswordField.value
+		});
+
+		if (data instanceof Response) {
+			console.error(await data.json());
+			return;
+		}
+
+		return goto("/");
+	}
 </script>
 
 <svelte:head>

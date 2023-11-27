@@ -1,8 +1,12 @@
 <script>
+	import { loadUser } from '$lib/service/account.service';
 	import { loadBasket } from '$lib/service/basket.service';
 	import { onMount } from 'svelte';
 
-	onMount(async () => await loadBasket());
+	onMount(async () => {
+		await loadBasket();
+		await loadUser();
+	});
 </script>
 
 <slot />

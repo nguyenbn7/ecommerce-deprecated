@@ -46,7 +46,8 @@ export function checkEmailFormat(field) {
 }
 
 export function checkNameMaxLength(max_length = 256) {
-	return (/** @type {import("./model").TextFieldValidation} */ field) => field.value.length <= max_length;
+	return (/** @type {import("./model").TextFieldValidation} */ field) =>
+		field.value.length <= max_length;
 }
 
 /**
