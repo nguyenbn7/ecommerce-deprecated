@@ -1,12 +1,64 @@
 <script>
+	import InputForm from '$lib/components/account/input-form.svelte';
+	import { loginAs } from '$lib/service/account.service';
 	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
+	import { checkEmailFormat, checkFieldRequired } from '$lib/util/helper.function';
+
+	/**
+	 * @type {TextFieldValidation}
+	 */
+	let emailField = {
+		dirty: false,
+		valid: false,
+		value: '',
+		validationMessage: '',
+		successMessage: undefined,
+		validation: [
+			{
+				validator: checkFieldRequired,
+				errorMessage: 'Email is required',
+			},
+			{
+				validator: checkEmailFormat,
+				errorMessage: 'Incorrect email format, It should like: bob@test.com',
+			}
+		]
+	};
+
+	/**
+	 * @type {TextFieldValidation}
+	 */
+	let passwordField = {
+		dirty: false,
+		valid: false,
+		value: '',
+		validationMessage: '',
+		successMessage: undefined,
+		validation: [
+			{
+				validator: checkFieldRequired,
+				errorMessage: 'Password is required',
+			}
+		]
+	};
+
+	async function onSubmitForm() {
+		/**
+		 * @type {LoginSuccess}
+		 */
+		const data = await loginAs({ email: emailField.value, password: passwordField.value });
+		if(data instanceof Response) {
+			const errorResponse = await data.json();
+			console.error(errorResponse);
+		}
+	}
 </script>
 
 <svelte:head>
 	<title>{ECOMMERCE_NAME} - Sign In</title>
 </svelte:head>
 
-<form class="container">
+<div class="container">
 	<div class="p-3 mb-2">
 		<h3 class="text-uppercase text-center fw-bold">sign in</h3>
 		<p class="text-center">
@@ -14,24 +66,39 @@
 		</p>
 	</div>
 
-	<div class="form-floating mt-2 mb-3">
-		<input type="email" class="form-control rounded-5" id="email" placeholder="name@example.com" />
-		<label for="email">Email</label>
-	</div>
-	<div class="form-floating mt-2 mb-3">
-		<input type="password" class="form-control rounded-5" id="password" placeholder="Password" />
-		<label for="password">Password</label>
-	</div>
+	<form on:submit={onSubmitForm}>
+		<InputForm
+			class="form-floating mt-2 mb-3"
+			bind:inputField={emailField}
+			type="email"
+			label="Email"
+			placeholder="name@example.com"
+		></InputForm>
+		<InputForm
+			class="form-floating mt-2 mb-3"
+			bind:inputField={passwordField}
+			type="password"
+			label="Password"
+			placeholder="Password"
+		></InputForm>
 
-	<div class="d-flex justify-content-between my-3">
-		<div class="form-check text-start">
-			<input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault" />
-			<label class="form-check-label" for="flexCheckDefault"> Remember me </label>
+		<div class="d-flex justify-content-between my-3">
+			<div class="form-check text-start">
+				<input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault" />
+				<label class="form-check-label" for="flexCheckDefault"> Remember me </label>
+			</div>
+			<div class="text-end">
+				<a href={'#'} class="text-decoration-none">Forgot password?</a>
+			</div>
 		</div>
-		<div class="text-end">
-			<a href={'#'} class="text-decoration-none">Forgot password?</a>
-		</div>
-	</div>
+		<button
+			class="btn btn-primary w-100 py-2 mt-2 mb-3 rounded-5"
+			type="submit"
+			disabled={!emailField.valid || !passwordField.valid}
+		>
+			Login
+		</button>
+	</form>
 	<div class="d-flex mt-3 mb-4">
 		<div class="border-secondary-subtle w-100 flex-shrink-1">
 			<hr />
@@ -49,7 +116,7 @@
 			<button class="btn btn-outline-info rounded-5" type="submit"> Demo Customer1 </button>
 		</div>
 	</div>
-</form>
+</div>
 
 <style>
 	hr {

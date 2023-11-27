@@ -22,3 +22,25 @@ export function formatAsUSD(amount) {
 		currency: 'USD'
 	}).format(amount);
 }
+
+/**
+ * @param {string} email
+ */
+export function validateEmailPattern(email) {
+	const regex = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+	return regex.test(email);
+}
+
+/**
+ * @param {TextFieldValidation} field
+ */
+export function checkFieldRequired(field) {
+	return field.value.trim().length >= 1;
+}
+
+/**
+ * @param {TextFieldValidation} field
+ */
+export function checkEmailFormat(field) {
+	return validateEmailPattern(field.value);
+}

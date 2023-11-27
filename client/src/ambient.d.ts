@@ -58,3 +58,30 @@ type BasketTotals = {
 	subtotal: number;
 	total: number;
 };
+
+type Login = {
+	email: string;
+	password: string;
+};
+
+type LoginSuccess = {
+	display_name: string;
+	email: string;
+	token: string;
+};
+
+type TextFieldValidation = {
+	dirty: boolean;
+	valid: boolean;
+	value: string;
+	validationMessage: string | null | undefined;
+	successMessage: string | null | undefined;
+	validation: Validation[]
+};
+
+type Validation = {
+	validator: Validator;
+	errorMessage: string | null | undefined;
+};
+
+type Validator = (inputField: TextFieldValidation) => boolean;
