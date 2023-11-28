@@ -57,7 +57,7 @@
 		class="form-control rounded-5"
 		{id}
 		{placeholder}
-		on:focusout={onFocus}
+		on:focusin={onFocus}
 		on:input={handleInput}
 		on:keyup={onKeyUp}
 		class:is-invalid={inputField.dirty && !inputField.valid}

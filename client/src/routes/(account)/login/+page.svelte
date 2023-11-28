@@ -1,6 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import InputForm from '$lib/components/account/input-form.svelte';
+	import { notiftSuccess, notifyError } from '$lib/components/share/toast.svelte';
 	import { loginAs } from '$lib/service/account.service';
 	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
 	import { checkEmailFormat, checkFieldRequired } from '$lib/util/helper.function';
@@ -27,16 +28,20 @@
 	$: isValid = emailField.valid && passwordField.valid;
 
 	async function onSubmitForm() {
-		/**
-		 * @type {LoginSuccess}
-		 */
-		const data = await loginAs({ email: emailField.value, password: passwordField.value });
-		if (data instanceof Response) {
-			const errorResponse = await data.json();
-			console.error(errorResponse);
+		const result = await loginAs({ email: emailField.value, password: passwordField.value });
+		if (result instanceof Response) {
+			/**
+			 * @type {ErrorResponse}
+			 */
+			const errorResponse = await result.json();
+			console.log(errorResponse);
+			if (errorResponse.message) {
+				notifyError(errorResponse.message);
+			}
 			return;
 		}
 
+		notiftSuccess(`Welcome back ${result.display_name}`);
 		return goto('/');
 	}
 </script>

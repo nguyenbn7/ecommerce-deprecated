@@ -1,5 +1,6 @@
 import { PUBLIC_BASE_API_URL } from '$env/static/public';
-import { readonly, writable } from 'svelte/store';
+import { notifyError } from '$lib/components/share/toast.svelte';
+import { get, readonly, writable } from 'svelte/store';
 
 /**
  * @type {import("svelte/store").Writable<UserInfo | undefined>}
@@ -38,7 +39,9 @@ export async function loadUser() {
 
 export function logout() {
 	localStorage.removeItem(TOKEN_KEY_NAME);
+	const display_name = get(_user)?.display_name;
 	_user.update(() => undefined);
+	notifyError(`Goodbye ${display_name}`);
 }
 
 /**
@@ -61,7 +64,7 @@ export async function loginAs(loginForm) {
 	localStorage.setItem(TOKEN_KEY_NAME, data.token);
 	_user.update(() => ({ email: data.email, display_name: data.display_name }));
 
-	return;
+	return data;
 }
 
 /**
@@ -84,5 +87,5 @@ export async function registerAs(registerForm) {
 	localStorage.setItem(TOKEN_KEY_NAME, data.token);
 	_user.update(() => ({ email: data.email, display_name: data.display_name }));
 
-	return;
+	return data;
 }

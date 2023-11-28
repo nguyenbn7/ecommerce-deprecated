@@ -94,3 +94,28 @@ type SuccessResponse = {
 	email: string;
 	display_name: string;
 };
+
+declare namespace Toastr {
+	type Type = 'ERROR' | 'SUCCESS' | 'INFO' | 'WARNING';
+
+	type Configuration = {
+		/** apply animation fly in and fade out. Default true */
+		animation: boolean
+		/** auto hide after show toast. Default true */
+		autohide: boolean,
+		/** Delay hidden time in (ms). Default 5000 ms */
+		delay: number,
+		/** Auto remove after hide. Default true */
+		autodispose: boolean,
+		/** Enable click on toast which make it hidden and removed from container. Default true */
+		enableClickToastDispose: boolean;
+		/** Enable click on toast which make it hidden. Default false */
+		enableClickToastHide: boolean;
+	};
+}
+
+type ErrorResponse = {
+	message: string;
+	error: any | undefined | null;
+	errors: any | Array | undefined | null;
+}

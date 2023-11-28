@@ -6,8 +6,8 @@
 
 <Navbar></Navbar>
 
-<div class="d-flex flex-column">
-	<main class="flex-grow-1 mb-3 mt-5">
+<div class="d-flex flex-column" style="min-height: 100vh;">
+	<main class="flex-grow-1 mb-4 mt-5">
 		<div class="container">
 			<Breadcrumb class="breadcrumb-chevron ps-1 pb-3"></Breadcrumb>
 			<slot />

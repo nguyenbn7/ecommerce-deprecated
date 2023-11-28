@@ -1,6 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import InputForm from '$lib/components/account/input-form.svelte';
+	import { notiftSuccess, notifyError } from '$lib/components/share/toast.svelte';
 	import { registerAs } from '$lib/service/account.service';
 	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
 	import {
@@ -57,19 +58,26 @@
 		nameField.valid && emailField.valid && passwordField.valid && confirmPasswordField.valid;
 
 	async function onSubmitForm() {
-		const data = await registerAs({
+		const result = await registerAs({
 			email: emailField.value,
 			display_name: nameField.value,
 			password: passwordField.value,
 			confirm_password: confirmPasswordField.value
 		});
 
-		if (data instanceof Response) {
-			console.error(await data.json());
+		if (result instanceof Response) {
+			/**
+			 * @type {ErrorResponse}
+			 */
+			const errorResponse = await result.json();
+			if (errorResponse.error) {
+				notifyError(errorResponse.error);
+			}
 			return;
 		}
 
-		return goto("/");
+		notiftSuccess(`Welcome ${result.display_name}`);
+		return goto('/');
 	}
 </script>
 
