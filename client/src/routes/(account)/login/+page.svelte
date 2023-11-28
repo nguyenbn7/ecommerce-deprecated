@@ -44,6 +44,42 @@
 		notiftSuccess(`Welcome back ${result.display_name}`);
 		return goto('/');
 	}
+
+	async function onLoginCustomer() {
+		const result = await loginAs({ email: 'customer@test.com', password: 'Pa$$w0rd' });
+		if (result instanceof Response) {
+			/**
+			 * @type {ErrorResponse}
+			 */
+			const errorResponse = await result.json();
+			console.log(errorResponse);
+			if (errorResponse.message) {
+				notifyError(errorResponse.message);
+			}
+			return;
+		}
+
+		notiftSuccess(`Welcome back ${result.display_name}`);
+		return goto('/');
+	}
+
+	async function onLoginCustomer1() {
+		const result = await loginAs({ email: 'customer1@test.com', password: 'Pa$$w0rd' });
+		if (result instanceof Response) {
+			/**
+			 * @type {ErrorResponse}
+			 */
+			const errorResponse = await result.json();
+			console.log(errorResponse);
+			if (errorResponse.message) {
+				notifyError(errorResponse.message);
+			}
+			return;
+		}
+
+		notiftSuccess(`Welcome back ${result.display_name}`);
+		return goto('/');
+	}
 </script>
 
 <svelte:head>
@@ -105,10 +141,14 @@
 	</div>
 	<div class="row row-cols-2 g-2 mt-2">
 		<div class="col d-flex justify-content-center">
-			<button class="btn btn-outline-info rounded-5" type="submit"> Demo Customer </button>
+			<button class="btn btn-outline-info rounded-5" type="submit" on:click={onLoginCustomer}>
+				Demo Customer
+			</button>
 		</div>
 		<div class="col d-flex justify-content-center">
-			<button class="btn btn-outline-info rounded-5" type="submit"> Demo Customer1 </button>
+			<button class="btn btn-outline-info rounded-5" type="submit" on:click={onLoginCustomer1}>
+				Demo Customer1
+			</button>
 		</div>
 	</div>
 </div>

@@ -53,6 +53,13 @@ export function checkNameMaxLength(max_length = 256) {
 /**
  * @param {import("./model").TextFieldValidation} field
  */
-export function checkNameContainsLettersAndWhiteSpace(field) {
-	return /^[a-zA-Z\s]+$/.test(field.value);
+export function checkNameContainsLettersNumbersAndWhiteSpace(field) {
+	return /^[a-zA-Z\s\d]+$/.test(field.value);
+}
+
+/**
+ * @param {string} str
+ */
+export function readMoreString(str, max_length = 50) {
+	return str.length > max_length ? `${str.substring(0, max_length)}...` : str;
 }

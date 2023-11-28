@@ -7,7 +7,7 @@
 	import {
 		checkEmailFormat,
 		checkFieldRequired,
-		checkNameContainsLettersAndWhiteSpace,
+		checkNameContainsLettersNumbersAndWhiteSpace,
 		checkNameMaxLength
 	} from '$lib/util/helper.function';
 	import { TextFieldValidation } from '$lib/util/model';
@@ -21,7 +21,7 @@
 			errorMessage: 'Name is required'
 		},
 		{
-			validator: checkNameContainsLettersAndWhiteSpace,
+			validator: checkNameContainsLettersNumbersAndWhiteSpace,
 			errorMessage: 'Name contains only letters and spaces'
 		},
 		{

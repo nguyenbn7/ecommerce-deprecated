@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { currentUser, logout } from '$lib/service/account.service';
 	import { basket } from '$lib/service/basket.service';
+	import { readMoreString } from '$lib/util/helper.function';
 	import { Dropdown } from 'bootstrap';
 
 	const paths = [
@@ -63,6 +64,11 @@
 					<i class="bi bi-person-circle"></i>
 				</a>
 				<ul class="dropdown-menu dropdown-menu-end">
+					<li>
+						<h2 class="dropdown-header" title={$currentUser.display_name}>
+							{readMoreString($currentUser.display_name, 25)}
+						</h2>
+					</li>
 					<li>
 						<a class="dropdown-item" href={'#'}>
 							<i class="bi bi-card-checklist"></i> View Order
