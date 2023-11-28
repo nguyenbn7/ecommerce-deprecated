@@ -83,3 +83,14 @@ type Register = {
 	password: string;
 	confirm_password: string;
 };
+
+type UserInfo = {
+	email: string;
+	display_name: string;
+};
+
+type SuccessResponse = {
+	token: string;
+	email: string;
+	display_name: string;
+};

@@ -1,10 +1,16 @@
 from dataclasses import dataclass
 import re
-from pydantic import BaseModel, EmailStr, model_validator
+from pydantic import BaseModel, EmailStr, Field, model_validator
 from sqlalchemy import BigInteger, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from share.model import BaseORM
+
+
+@dataclass(frozen=True)
+class UserInfo:
+    email: str
+    display_name: str
 
 
 @dataclass(frozen=True)
@@ -15,8 +21,8 @@ class SuccessResponse:
 
 
 class LoginDTO(BaseModel):
-    email: EmailStr
-    password: str
+    email: EmailStr = Field(examples=["tom@test.com"])
+    password: str = Field(examples=["Pa$$w0rd"])
 
 
 password_pattern = re.compile(
@@ -25,10 +31,10 @@ password_pattern = re.compile(
 
 
 class RegisterDTO(BaseModel):
-    email: EmailStr
+    email: EmailStr = Field(examples=["tom@test.com"])
     display_name: str
-    password: str
-    confirm_password: str
+    password: str = Field(examples=["Pa$$w0rd"])
+    confirm_password: str = Field(examples=["Pa$$w0rd"])
 
     @model_validator(mode="after")
     def check_passwords_match(self):

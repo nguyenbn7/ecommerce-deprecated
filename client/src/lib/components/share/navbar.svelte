@@ -1,6 +1,8 @@
 <script>
 	import { page } from '$app/stores';
+	import { currentUser, logout } from '$lib/service/account.service';
 	import { basket } from '$lib/service/basket.service';
+	import { Dropdown } from 'bootstrap';
 
 	const paths = [
 		{ link: '/', name: 'Home' },
@@ -50,17 +52,55 @@
 			<a class="nav-btn text-secondary" href="/favorites" title="Wish list">
 				<i class="bi bi-heart"></i>
 			</a>
-			<a class="nav-btn text-secondary" href="/login" title="Login">
-				<i class="bi bi-person"></i>
-			</a>
-			<a class="nav-btn text-secondary position-relative" href="/basket" title="Basket">
-				<i class="bi bi-cart"></i>
+			{#if $currentUser}
+				<a
+					class="nav-btn text-info"
+					data-bs-toggle="dropdown"
+					aria-expanded="false"
+					href={'#'}
+					title="Profile"
+				>
+					<i class="bi bi-person-circle"></i>
+				</a>
+				<ul class="dropdown-menu dropdown-menu-end">
+					<li>
+						<a class="dropdown-item" href={'#'}>
+							<i class="bi bi-card-checklist"></i> View Order
+						</a>
+					</li>
+					<li>
+						<a class="dropdown-item" href={'#'}>
+							<i class="bi bi-person-fill-gear"></i> View Profile
+						</a>
+					</li>
+					<li><hr class="dropdown-divider" /></li>
+					<li>
+						<a class="dropdown-item" href={'#'} on:click={logout}>
+							<i class="bi bi-box-arrow-in-right"></i> Logout
+						</a>
+					</li>
+				</ul>
+			{:else}
+				<a class="nav-btn text-secondary" href="/login" title="Login">
+					<i class="bi bi-person"></i>
+				</a>
+			{/if}
+			<a
+				class="nav-btn position-relative"
+				class:text-secondary={!$basket || !$basket.items.length}
+				class:text-info={$basket && $basket.items.length}
+				href="/basket"
+				title="Basket"
+			>
 				{#if $basket && $basket.items.length}
+					<i class="bi bi-basket-fill"></i>
 					<span
-						class="position-absolute start-100 translate-middle p-2 bg-primary badge rounded-pill text-white cart-no"
+						class="position-absolute translate-middle p-2 bg-transparent badge rounded-pill text-danger fs-5 cart-no"
 					>
 						{getCount($basket.items)}
 					</span>
+				{:else}
+					<i class="bi bi-basket"></i>
 				{/if}
 			</a>
 		</div>
@@ -80,6 +120,7 @@
 
 	.cart-no {
 		top: 20%;
+		left: 100%;
 	}
 
 	.logo {
