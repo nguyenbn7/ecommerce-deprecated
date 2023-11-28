@@ -27,58 +27,73 @@
 
 	$: isValid = emailField.valid && passwordField.valid;
 
-	async function onSubmitForm() {
-		const result = await loginAs({ email: emailField.value, password: passwordField.value });
-		if (result instanceof Response) {
-			/**
-			 * @type {ErrorResponse}
-			 */
-			const errorResponse = await result.json();
-			console.log(errorResponse);
-			if (errorResponse.message) {
-				notifyError(errorResponse.message);
-			}
-			return;
-		}
+	let isLocked = false;
+	let isDemoAccountLogin = false;
+	let isAccounts = [false, false];
 
-		notiftSuccess(`Welcome back ${result.display_name}`);
-		return goto('/');
+	async function onSubmitForm() {
+		try {
+			isLocked = true;
+			const result = await loginAs({ email: emailField.value, password: passwordField.value });
+			if (result instanceof Response) {
+				/**
+				 * @type {ErrorResponse}
+				 */
+				const errorResponse = await result.json();
+				if (errorResponse.message) {
+					notifyError(errorResponse.message);
+				}
+				return;
+			}
+
+			notiftSuccess(`Welcome back ${result.display_name}`);
+			return goto('/');
+		} catch (error) {
+			// @ts-ignore
+			notifyError(error.message);
+		} finally {
+			isLocked = false;
+		}
+	}
+
+	/**
+	 * @param {string} email
+	 * @param {string} password
+	 * @param {number} id
+	 */
+	async function onLoginDemoAccount(email, password, id) {
+		try {
+			isDemoAccountLogin = true;
+			isAccounts[id] = true;
+			const result = await loginAs({ email, password });
+			if (result instanceof Response) {
+				/**
+				 * @type {ErrorResponse}
+				 */
+				const errorResponse = await result.json();
+				if (errorResponse.message) {
+					notifyError(errorResponse.message);
+				}
+				return;
+			}
+
+			notiftSuccess(`Welcome back ${result.display_name}`);
+			return goto('/');
+		} catch (error) {
+			// @ts-ignore
+			notifyError(error.message);
+		} finally {
+			isDemoAccountLogin = false;
+			isAccounts[id] = false;
+		}
 	}
 
 	async function onLoginCustomer() {
-		const result = await loginAs({ email: 'customer@test.com', password: 'Pa$$w0rd' });
-		if (result instanceof Response) {
-			/**
-			 * @type {ErrorResponse}
-			 */
-			const errorResponse = await result.json();
-			console.log(errorResponse);
-			if (errorResponse.message) {
-				notifyError(errorResponse.message);
-			}
-			return;
-		}
-
-		notiftSuccess(`Welcome back ${result.display_name}`);
-		return goto('/');
+		await onLoginDemoAccount('customer@test.com', 'Pa$$w0rd', 0);
 	}
 
 	async function onLoginCustomer1() {
-		const result = await loginAs({ email: 'customer1@test.com', password: 'Pa$$w0rd' });
-		if (result instanceof Response) {
-			/**
-			 * @type {ErrorResponse}
-			 */
-			const errorResponse = await result.json();
-			console.log(errorResponse);
-			if (errorResponse.message) {
-				notifyError(errorResponse.message);
-			}
-			return;
-		}
-
-		notiftSuccess(`Welcome back ${result.display_name}`);
-		return goto('/');
+		await onLoginDemoAccount('customer1@test.com', 'Pa$$w0rd', 1);
 	}
 </script>
 
@@ -102,6 +117,7 @@
 			type="email"
 			label="Email"
 			placeholder="name@example.com"
+			disabled={isLocked}
 		></InputForm>
 
 		<InputForm
@@ -111,6 +127,7 @@
 			type="password"
 			label="Password"
 			placeholder="Password"
+			disabled={isLocked}
 		></InputForm>
 
 		<div class="d-flex justify-content-between my-3">
@@ -125,9 +142,13 @@
 		<button
 			class="btn btn-primary w-100 py-2 mt-2 mb-3 rounded-5"
 			type="submit"
-			disabled={!isValid}
+			disabled={!isValid || isLocked}
 		>
 			Login
+			{#if isLocked}
+				<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+				<span class="visually-hidden" role="status">Loading...</span>
+			{/if}
 		</button>
 	</form>
 	<div class="d-flex mt-3 mb-4">
@@ -141,13 +162,31 @@
 	</div>
 	<div class="row row-cols-2 g-2 mt-2">
 		<div class="col d-flex justify-content-center">
-			<button class="btn btn-outline-info rounded-5" type="submit" on:click={onLoginCustomer}>
+			<button
+				class="btn btn-outline-info rounded-5"
+				type="submit"
+				on:click={onLoginCustomer}
+				disabled={isDemoAccountLogin}
+			>
 				Demo Customer
+				{#if isDemoAccountLogin && isAccounts[0]}
+					<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+					<span class="visually-hidden" role="status">Loading...</span>
+				{/if}
 			</button>
 		</div>
 		<div class="col d-flex justify-content-center">
-			<button class="btn btn-outline-info rounded-5" type="submit" on:click={onLoginCustomer1}>
+			<button
+				class="btn btn-outline-info rounded-5"
+				type="submit"
+				on:click={onLoginCustomer1}
+				disabled={isDemoAccountLogin}
+			>
 				Demo Customer1
+				{#if isDemoAccountLogin && isAccounts[1]}
+					<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+					<span class="visually-hidden" role="status">Loading...</span>
+				{/if}
 			</button>
 		</div>
 	</div>

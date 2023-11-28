@@ -1,16 +1,30 @@
 <!doctype html>
 <html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		%sveltekit.head%
+	</head>
 
-<head>
-	<meta charset="utf-8" />
-	<link rel="icon" href="%sveltekit.assets%/favicon.png" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	%sveltekit.head%
-</head>
-
-<body data-sveltekit-preload-data="hover">
-	<div class="toast-container position-fixed top-0 end-0 p-4 mt-5 me-5" id="toast-container"></div>
-	<div style="display: contents">%sveltekit.body%</div>
-</body>
-
+	<body data-sveltekit-preload-data="hover">
+		<div
+			class="toast-container position-fixed top-0 end-0 p-4 mt-5 me-5"
+			id="toast-container"
+		></div>
+		<div
+			class="modal fade"
+			tabindex="-1"
+			id="appSpinner"
+			aria-hidden="true"
+			data-bs-backdrop="static"
+			data-bs-keyboard="false"
+			tabindex="-1"
+		>
+			<div class="modal-dialog modal-dialog-centered justify-content-center">
+				<div class="spinner-custom"></div>
+			</div>
+		</div>
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
 </html>

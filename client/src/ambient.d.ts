@@ -100,13 +100,13 @@ declare namespace Toastr {
 
 	type Configuration = {
 		/** apply animation fly in and fade out. Default true */
-		animation: boolean
+		animation: boolean;
 		/** auto hide after show toast. Default true */
-		autohide: boolean,
+		autohide: boolean;
 		/** Delay hidden time in (ms). Default 5000 ms */
-		delay: number,
+		delay: number;
 		/** Auto remove after hide. Default true */
-		autodispose: boolean,
+		autodispose: boolean;
 		/** Enable click on toast which make it hidden and removed from container. Default true */
 		enableClickToastDispose: boolean;
 		/** Enable click on toast which make it hidden. Default false */
@@ -118,4 +118,4 @@ type ErrorResponse = {
 	message: string;
 	error: any | undefined | null;
 	errors: any | Array | undefined | null;
-}
+};

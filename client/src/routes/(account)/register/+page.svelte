@@ -57,27 +57,37 @@
 	$: isValid =
 		nameField.valid && emailField.valid && passwordField.valid && confirmPasswordField.valid;
 
+	let isLocked = false;
+
 	async function onSubmitForm() {
-		const result = await registerAs({
-			email: emailField.value,
-			display_name: nameField.value,
-			password: passwordField.value,
-			confirm_password: confirmPasswordField.value
-		});
+		try {
+			isLocked = true;
+			const result = await registerAs({
+				email: emailField.value,
+				display_name: nameField.value,
+				password: passwordField.value,
+				confirm_password: confirmPasswordField.value
+			});
 
-		if (result instanceof Response) {
-			/**
-			 * @type {ErrorResponse}
-			 */
-			const errorResponse = await result.json();
-			if (errorResponse.error) {
-				notifyError(errorResponse.error);
+			if (result instanceof Response) {
+				/**
+				 * @type {ErrorResponse}
+				 */
+				const errorResponse = await result.json();
+				if (errorResponse.error) {
+					notifyError(errorResponse.error);
+				}
+				return;
 			}
-			return;
-		}
 
-		notiftSuccess(`Welcome ${result.display_name}`);
-		return goto('/');
+			notiftSuccess(`Welcome ${result.display_name}`);
+			return goto('/');
+		} catch (error) {
+			// @ts-ignore
+			notifyError(error.message);
+		} finally {
+			isLocked = false;
+		}
 	}
 </script>
 
@@ -128,7 +138,15 @@
 		placeholder="Confirm Password"
 	></InputForm>
 
-	<button class="btn btn-primary w-100 py-2 mt-2 mb-3 rounded-5" type="submit" disabled={!isValid}>
+	<button
+		class="btn btn-primary w-100 py-2 mt-2 mb-3 rounded-5"
+		type="submit"
+		disabled={!isValid || isLocked}
+	>
 		Register
+		{#if isLocked}
+			<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+			<span class="visually-hidden" role="status">Loading...</span>
+		{/if}
 	</button>
 </form>

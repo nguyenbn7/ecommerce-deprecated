@@ -7,7 +7,7 @@ import { get, readonly, writable } from 'svelte/store';
  */
 const _user = writable(undefined);
 
-const TOKEN_KEY_NAME = "token";
+const TOKEN_KEY_NAME = 'token';
 
 export const currentUser = readonly(_user);
 
@@ -21,13 +21,13 @@ export async function loadUser() {
 	const response = await fetch(`${PUBLIC_BASE_API_URL}/account/info`, {
 		headers: {
 			'Content-Type': 'application/json',
-			"Authorization": `Bearer ${accessToken}`
-		},
+			Authorization: `Bearer ${accessToken}`
+		}
 	});
 
 	if (!response.ok) {
 		_user.update(() => undefined);
-		return
+		return;
 	}
 
 	/**

@@ -6,6 +6,7 @@
 	export let label = 'Text';
 	export let placeholder = 'text';
 	export let id = 'text';
+	export let disabled = false;
 
 	/**
 	 * @type {import('$lib/util/model').TextFieldValidation}
@@ -62,6 +63,7 @@
 		on:keyup={onKeyUp}
 		class:is-invalid={inputField.dirty && !inputField.valid}
 		class:is-valid={inputField.dirty && inputField.valid}
+		{disabled}
 	/>
 	<label for={id}>{label}</label>
 	<div
