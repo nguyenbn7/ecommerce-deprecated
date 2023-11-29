@@ -1,9 +1,9 @@
 <script>
-	import { registerSpinnerId } from '$lib/components/share/spinner.svelte';
+	import Spinner from '$lib/components/share/spinner.svelte';
 	import '$lib/style/spinner.custom.scss';
-	registerSpinnerId('appSpinner');
 </script>
 
+<Spinner></Spinner>
 <slot />
 
 <style lang="scss">

@@ -1,35 +1,46 @@
 <script context="module">
 	import { Modal } from 'bootstrap';
 
-	/**
-	 * @type {string | undefined}
-	 */
-	let spinnerId = undefined;
-	/**
-	 * @type {import("bootstrap").Modal}
-	 */
-	let spinerInstance;
+	class SpinnerService {
+		static #spinnerModalId = 'spinnerModal';
+		static #modalInstance() {
+			/**
+			 * @type {import("bootstrap").Modal}
+			 */
+			let instance = Modal.getOrCreateInstance(document.getElementById(this.#spinnerModalId));
 
-	/**
-	 * @param {string | undefined} id
-	 */
-	export function registerSpinnerId(id = 'spinnerId') {
-		spinnerId = id;
-		spinerInstance = new Modal(document.getElementById(spinnerId));
-	}
-
-	export function getSpinnerInstance() {
-		if (!spinnerId) {
-			throw Error('Spinner id is null or not found');
+			return {
+				get: () => {
+					if (!instance)
+						instance = Modal.getOrCreateInstance(document.getElementById(this.#spinnerModalId));
+					return instance;
+				}
+			};
 		}
 
-		if (!spinerInstance) {
-			throw Error('Can not create spinner instanceFF');
+		static show() {
+			const modal = this.#modalInstance().get();
+			modal.show();
 		}
 
-		return {
-			show: () => spinerInstance.show(),
-			hide: () => spinerInstance.hide()
-		};
+		static hide() {
+			const modal = this.#modalInstance().get();
+			modal.hide();
+		}
 	}
+
+	export { SpinnerService };
 </script>
+
+<div
+	class="modal fade"
+	tabindex="-1"
+	aria-hidden="true"
+	data-bs-backdrop="static"
+	data-bs-keyboard="false"
+	id="spinnerModal"
+>
+	<div class="modal-dialog modal-dialog-centered justify-content-center">
+		<div class="spinner-custom"></div>
+	</div>
+</div>

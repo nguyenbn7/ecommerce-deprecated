@@ -7,8 +7,8 @@
 	import { getProductBrands } from '$lib/service/product-brand.service';
 	import { getProductTypes } from '$lib/service/product-type.service';
 	import { getPageProduct } from '$lib/service/product.service';
-	import { getSpinnerInstance } from '$lib/components/share/spinner.svelte';
 	import { notifyError } from '$lib/components/share/toast.svelte';
+	import { SpinnerService } from '$lib/components/share/spinner.svelte';
 
 	/**
 	 * @type {Product[]}
@@ -57,12 +57,10 @@
 		type_id: 0
 	};
 
-	const spinner = getSpinnerInstance();
-
 	onMount(async () => {
-		let errorMessage = null;
+		let errorMessage = '';
 		try {
-			spinner.show();
+			SpinnerService.show();
 
 			productBrands = [{ id: 0, name: 'All' }, ...(await getProductBrands())];
 			productTypes = [{ id: 0, name: 'All' }, ...(await getProductTypes())];
@@ -70,9 +68,10 @@
 			await getNewPageProduct(shopParams);
 		} catch (error) {
 			// @ts-ignore
-			errorMessage = error.message;
+			if (error.message === 'Failed to fetch') errorMessage = 'Network Error';
+			notifyError(errorMessage);
 		} finally {
-			spinner.hide();
+			SpinnerService.hide();
 		}
 
 		if (errorMessage) {
