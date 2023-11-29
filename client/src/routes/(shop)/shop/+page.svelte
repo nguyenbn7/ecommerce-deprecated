@@ -7,8 +7,8 @@
 	import { getProductBrands } from '$lib/service/product-brand.service';
 	import { getProductTypes } from '$lib/service/product-type.service';
 	import { getPageProduct } from '$lib/service/product.service';
-	import { notifyError } from '$lib/components/share/toast.svelte';
 	import { SpinnerService } from '$lib/components/share/spinner.svelte';
+	import { ToastService } from '$lib/components/share/toast.svelte';
 
 	/**
 	 * @type {Product[]}
@@ -69,13 +69,12 @@
 		} catch (error) {
 			// @ts-ignore
 			if (error.message === 'Failed to fetch') errorMessage = 'Network Error';
-			notifyError(errorMessage);
 		} finally {
 			SpinnerService.hide();
 		}
 
 		if (errorMessage) {
-			notifyError(errorMessage);
+			ToastService.notifyError(errorMessage);
 		}
 	});
 

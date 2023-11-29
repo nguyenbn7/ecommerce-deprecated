@@ -1,5 +1,5 @@
 import { PUBLIC_BASE_API_URL } from '$env/static/public';
-import { notifyError } from '$lib/components/share/toast.svelte';
+import { ToastService } from '$lib/components/share/toast.svelte';
 import { get, readonly, writable } from 'svelte/store';
 
 /**
@@ -41,7 +41,7 @@ export function logout() {
 	localStorage.removeItem(TOKEN_KEY_NAME);
 	const display_name = get(_user)?.display_name;
 	_user.update(() => undefined);
-	notifyError(`Goodbye ${display_name}`);
+	ToastService.notifyError(`Goodbye ${display_name}`);
 }
 
 /**

@@ -1,7 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import InputForm from '$lib/components/account/input-form.svelte';
-	import { notiftSuccess, notifyError } from '$lib/components/share/toast.svelte';
+	import { ToastService } from '$lib/components/share/toast.svelte';
 	import { registerAs } from '$lib/service/account.service';
 	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
 	import {
@@ -75,16 +75,16 @@
 				 */
 				const errorResponse = await result.json();
 				if (errorResponse.error) {
-					notifyError(errorResponse.error);
+					ToastService.notifyError(errorResponse.error);
 				}
 				return;
 			}
 
-			notiftSuccess(`Welcome ${result.display_name}`);
+			ToastService.notifySuccess(`Welcome ${result.display_name}`);
 			return goto('/');
 		} catch (error) {
 			// @ts-ignore
-			notifyError(error.message);
+			ToastService.notifyError(error.message);
 		} finally {
 			isLocked = false;
 		}

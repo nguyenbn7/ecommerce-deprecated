@@ -1,7 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import InputForm from '$lib/components/account/input-form.svelte';
-	import { notiftSuccess, notifyError } from '$lib/components/share/toast.svelte';
+	import { ToastService } from '$lib/components/share/toast.svelte';
 	import { loginAs } from '$lib/service/account.service';
 	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
 	import { checkEmailFormat, checkFieldRequired } from '$lib/util/helper.function';
@@ -41,16 +41,16 @@
 				 */
 				const errorResponse = await result.json();
 				if (errorResponse.message) {
-					notifyError(errorResponse.message);
+					ToastService.notifyError(errorResponse.message);
 				}
 				return;
 			}
 
-			notiftSuccess(`Welcome back ${result.display_name}`);
+			ToastService.notifySuccess(`Welcome back ${result.display_name}`);
 			return goto('/');
 		} catch (error) {
 			// @ts-ignore
-			notifyError(error.message);
+			ToastService.notifyError(error.message);
 		} finally {
 			isLocked = false;
 		}
@@ -72,16 +72,16 @@
 				 */
 				const errorResponse = await result.json();
 				if (errorResponse.message) {
-					notifyError(errorResponse.message);
+					ToastService.notifyError(errorResponse.message);
 				}
 				return;
 			}
 
-			notiftSuccess(`Welcome back ${result.display_name}`);
+			ToastService.notifySuccess(`Welcome back ${result.display_name}`);
 			return goto('/');
 		} catch (error) {
 			// @ts-ignore
-			notifyError(error.message);
+			ToastService.notifyError(error.message);
 		} finally {
 			isDemoAccountLogin = false;
 			isAccounts[id] = false;

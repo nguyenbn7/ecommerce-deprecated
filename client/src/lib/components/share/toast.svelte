@@ -1,64 +1,76 @@
 <script context="module">
 	import Toast from './toast.svelte';
 
-	/**
-	 * @type {HTMLElement | null}
-	 */
-	let container;
-	/**
-	 * @type {string}
-	 */
-	let containerId;
+	class ToastService {
+		/**
+		 * @type {string}
+		 */
+		static #containerId;
 
-	export function setToastContainer(toastContainerId = 'toast-container') {
-		containerId = toastContainerId;
-		container = document.getElementById(containerId);
-	}
-
-	/**
-	 * @param {String} message
-	 * @param {Toastr.Type} type
-	 */
-	export function notify(message, type) {
-		if (!container) {
-			throw new DOMException(`Can not find container with id "${containerId}"`);
+		/**
+		 * @param {string} id
+		 */
+		static setToastContainerId(id) {
+			this.#containerId = id;
 		}
 
-		const toast = new Toast({
-			target: container,
-			props: { message, type }
-		});
-		toast.show();
+		static #instance() {
+			let toastContainer = document.getElementById(this.#containerId);
+
+			return {
+				get: () => {
+					if (!toastContainer) {
+						throw Error('Can not get toast container');
+					}
+					return toastContainer;
+				}
+			};
+		}
+
+		/**
+		 * @param {string} message
+		 * @param {Toastr.Type} type
+		 */
+		static notify(message, type) {
+			const container = this.#instance().get();
+
+			const toast = new Toast({
+				target: container,
+				props: { message, type }
+			});
+			toast.show();
+		}
+
+		/**
+		 * @param {string} message
+		 */
+		static notifyError(message) {
+			this.notify(message, 'ERROR');
+		}
+
+		/**
+		 * @param {string} message
+		 */
+		static notifySuccess(message) {
+			this.notify(message, 'SUCCESS');
+		}
+
+		/**
+		 * @param {string} message
+		 */
+		static notifyWarning(message) {
+			this.notify(message, 'WARNING');
+		}
+
+		/**
+		 * @param {string} message
+		 */
+		static notifyInfo(message) {
+			this.notify(message, 'INFO');
+		}
 	}
 
-	/**
-	 * Same as `nofify(message, "ERROR")`
-	 * @param {String} message
-	 */
-	export function notifyError(message) {
-		notify(message, 'ERROR');
-	}
-
-	/**
-	 * @param {String} message
-	 */
-	export function notiftSuccess(message) {
-		notify(message, 'SUCCESS');
-	}
-
-	/**
-	 * @param {String} message
-	 */
-	export function notifyWarning(message) {
-		notify(message, 'WARNING');
-	}
-
-	/**
-	 * @param {String} message
-	 */
-	export function notifyInfo(message) {
-		notify(message, 'INFO');
-	}
+	export { ToastService };
 </script>
 
 <script>
