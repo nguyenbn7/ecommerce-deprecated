@@ -14,11 +14,11 @@
 			this.#containerId = id;
 		}
 
-		static #instance() {
+		static #toastContainer() {
 			let toastContainer = document.getElementById(this.#containerId);
 
 			return {
-				get: () => {
+				getInstance: () => {
 					if (!toastContainer) {
 						throw Error('Can not get toast container');
 					}
@@ -32,7 +32,7 @@
 		 * @param {Toastr.Type} type
 		 */
 		static notify(message, type) {
-			const container = this.#instance().get();
+			const container = this.#toastContainer().getInstance();
 
 			const toast = new Toast({
 				target: container,

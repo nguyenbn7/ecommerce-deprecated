@@ -14,14 +14,14 @@
 			this.#spinnerModalId = id;
 		}
 
-		static #modalInstance() {
+		static #modal() {
 			/**
 			 * @type {import("bootstrap").Modal}
 			 */
 			let instance = Modal.getOrCreateInstance(document.getElementById(this.#spinnerModalId));
 
 			return {
-				get: () => {
+				getInstance: () => {
 					if (!instance)
 						instance = Modal.getOrCreateInstance(document.getElementById(this.#spinnerModalId));
 
@@ -32,12 +32,12 @@
 		}
 
 		static show() {
-			const modal = this.#modalInstance().get();
+			const modal = this.#modal().getInstance();
 			modal.show();
 		}
 
 		static hide() {
-			const modal = this.#modalInstance().get();
+			const modal = this.#modal().getInstance();
 			modal.hide();
 		}
 	}
