@@ -4,7 +4,7 @@ from typing import Annotated
 
 from fastapi import Depends
 from redis import Redis
-from api.basket.model import CustomerBasket
+from routes.basket.model import CustomerBasket
 
 from core.redis import get_redis_context
 

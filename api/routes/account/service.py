@@ -10,8 +10,8 @@ from passlib.context import CryptContext
 
 from jose import JWTError, jwt
 from jose.constants import ALGORITHMS
-from api.account.model import ApplicationUser
-from api.account.repository import UserRepository
+from routes.account.model import ApplicationUser
+from routes.account.repository import UserRepository
 
 from share.setting import get_token_service_settings
 

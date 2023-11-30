@@ -1,15 +1,15 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from api.account.model import (
+from routes.account.model import (
     ApplicationUser,
     LoginDTO,
     RegisterDTO,
     SuccessResponse,
     UserInfo,
 )
-from api.account.repository import UserRepository
-from api.account.service import (
+from routes.account.repository import UserRepository
+from routes.account.service import (
     generate_jwt_token,
     get_current_user,
     hash_password,

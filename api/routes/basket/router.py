@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Response
-from api.basket.model import BasketItem, CustomerBasket, CustomerBasketDTO
-from api.basket.repository import BasketRepository
+from routes.basket.model import BasketItem, CustomerBasket, CustomerBasketDTO
+from routes.basket.repository import BasketRepository
 
 basket_router = APIRouter(prefix="/basket", tags=["Basket"])
 

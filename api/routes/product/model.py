@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from pydantic import BaseModel, Field, ValidationInfo, field_validator
 from sqlalchemy import BigInteger, ForeignKey, Numeric, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship, column_property
-from api.product_brand.model import ProductBrand
-from api.product_type.model import ProductType
+from routes.product_brand.model import ProductBrand
+from routes.product_type.model import ProductType
 
 from share.model import BaseORM
 

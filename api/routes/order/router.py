@@ -1,10 +1,10 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
-from api.basket.model import BasketItem
-from api.basket.repository import BasketRepository
+from routes.basket.model import BasketItem
+from routes.basket.repository import BasketRepository
 
-from api.order.model import Order, OrderDTO, OrderItem
-from api.order.repository import DeliveryMethodRepository, PaymentRepository
+from routes.order.model import Order, OrderDTO, OrderItem
+from routes.order.repository import DeliveryMethodRepository, PaymentRepository
 
 
 order_router = APIRouter(prefix="/orders", tags=["Order"])

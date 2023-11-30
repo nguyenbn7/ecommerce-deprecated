@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends
 from sqlalchemy.orm import Session
-from api.order.model import DeliveryMethod, PaymentMethod
+from routes.order.model import DeliveryMethod, PaymentMethod
 from share.database import Repository, get_db_context
 
 

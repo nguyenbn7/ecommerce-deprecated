@@ -1,10 +1,10 @@
 from fastapi import APIRouter
-from api.product.router import product_router
-from api.product_brand.router import product_brand_router
-from api.product_type.router import product_type_router
-from api.account.router import account_router
-from api.basket.router import basket_router
-from api.order.router import order_router
+from routes.product.router import product_router
+from routes.product_brand.router import product_brand_router
+from routes.product_type.router import product_type_router
+from routes.account.router import account_router
+from routes.basket.router import basket_router
+from routes.order.router import order_router
 
 
 api_router = APIRouter(prefix="/api")
