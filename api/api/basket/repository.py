@@ -13,7 +13,7 @@ class BasketRepository:
     def __init__(self, db: Annotated[Redis, Depends(get_redis_context)]):
         self.db = db
 
-    def get_basket(self, basket_id: str):
+    def get_basket(self, basket_id: str) -> CustomerBasket | None:
         basket = self.db.get(basket_id)
         if basket:
             return json.loads(basket)

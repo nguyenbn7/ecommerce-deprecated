@@ -1,0 +1,15 @@
+from typing import Annotated
+
+from fastapi import Depends
+from sqlalchemy.orm import Session
+from api.order.model import DeliveryMethod, PaymentMethod
+from share.database import Repository, get_db_context
+
+
+class PaymentRepository(Repository[PaymentMethod]):
+    def __init__(self, db: Annotated[Session, Depends(get_db_context)]) -> None:
+        super().__init__(db)
+
+class DeliveryMethodRepository(Repository[DeliveryMethod]):
+    def __init__(self, db: Annotated[Session, Depends(get_db_context)]) -> None:
+        super().__init__(db)

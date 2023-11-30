@@ -1,20 +1,11 @@
 from datetime import datetime
 import enum
-from functools import reduce
 from typing import List
 from sqlalchemy import BigInteger, Integer, String, DateTime, Numeric, Enum, ForeignKey
 from sqlalchemy.orm import mapped_column, Mapped, relationship
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from share.model import BaseORM
-
-
-class OrderItemDTO(BaseModel):
-    product_id: int
-    product_name: str
-    picture_url: str
-    price: float
-    quantity: int
 
 
 class BillingAddressDTO(BaseModel):
@@ -27,6 +18,28 @@ class BillingAddressDTO(BaseModel):
     state: str
     zip_code: str
 
+    def convert_to_billing_address(self):
+        b = BillingAddress()
+        b.full_name = self.full_name
+        b.email = self.email
+        b.phone_number = self.phone_number
+        b.address = self.address
+        b.country = self.country
+        b.state = self.state
+        b.zip_code = self.zip_code
+        return b
+
+    def convert_to_shipping_address(self):
+        b = ShippingAddress()
+        b.full_name = self.full_name
+        b.email = self.email
+        b.phone_number = self.phone_number
+        b.address = self.address
+        b.country = self.country
+        b.state = self.state
+        b.zip_code = self.zip_code
+        return b
+
 
 class ShippingAddressDTO(BaseModel):
     full_name: str
@@ -38,6 +51,17 @@ class ShippingAddressDTO(BaseModel):
     state: str
     zip_code: str
 
+    def convert_to_shipping_address(self):
+        b = ShippingAddress()
+        b.full_name = self.full_name
+        b.email = self.email
+        b.phone_number = self.phone_number
+        b.address = self.address
+        b.country = self.country
+        b.state = self.state
+        b.zip_code = self.zip_code
+        return b
+
 
 class DeliveryMethodDTO(BaseModel):
     id: int
@@ -46,29 +70,24 @@ class DeliveryMethodDTO(BaseModel):
     price: float
 
 
-class PaymentMethodDTO(BaseModel):
-    id: int
-    name: str
-
-
 class OrderDTO(BaseModel):
-    items: List[OrderItemDTO]
+    basket_id: str
     billing_address: BillingAddressDTO
-    shipping_address: ShippingAddressDTO | None
-    delivery_method: DeliveryMethodDTO
-    payment_method: PaymentMethodDTO
+    shipping_address: ShippingAddressDTO | None = Field(default=None)
+    delivery_method_id: int
+    payment_method_id: int
 
 
 class OrderItem(BaseORM):
     __tablename__ = "order_items"
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
-    product_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
     product_name: Mapped[str] = mapped_column(String, nullable=False)
-    picture_url: Mapped[str] = mapped_column(String, nullable=False)
     price: Mapped[float] = mapped_column(Numeric(precision=10, scale=2), nullable=False)
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
-    product_name: Mapped[str] = mapped_column(String, nullable=False)
+    picture_url: Mapped[str] = mapped_column(String, nullable=False)
+    brand: Mapped[str] = mapped_column(String, nullable=False)
+    type: Mapped[str] = mapped_column(String, nullable=False)
 
     order_id: Mapped[int] = mapped_column(ForeignKey("orders.id"))
     order: Mapped["Order"] = relationship(back_populates="items")
@@ -80,8 +99,6 @@ class PaymentMethod(BaseORM):
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
     name: Mapped[str] = mapped_column(String, nullable=False)
 
-    orders: Mapped[List["Order"]] = relationship()
-
 
 class BillingAddress(BaseORM):
     __tablename__ = "billing_addresses"
@@ -91,12 +108,10 @@ class BillingAddress(BaseORM):
     email: Mapped[str] = mapped_column(String, nullable=False)
     phone_number: Mapped[str] = mapped_column(String, nullable=False)
     address: Mapped[str] = mapped_column(String, nullable=False)
-    address2: Mapped[str] = mapped_column(String)
+    address2: Mapped[str | None] = mapped_column(String, nullable=True)
     country: Mapped[str] = mapped_column(String, nullable=False)
     state: Mapped[str] = mapped_column(String, nullable=False)
     zip_code: Mapped[str] = mapped_column(String, nullable=False)
-
-    orders: Mapped[List["Order"]] = relationship()
 
 
 class ShippingAddress(BaseORM):
@@ -107,12 +122,10 @@ class ShippingAddress(BaseORM):
     email: Mapped[str] = mapped_column(String, nullable=False)
     phone_number: Mapped[str] = mapped_column(String, nullable=False)
     address: Mapped[str] = mapped_column(String, nullable=False)
-    address2: Mapped[str] = mapped_column(String)
+    address2: Mapped[str | None] = mapped_column(String, nullable=True)
     country: Mapped[str] = mapped_column(String, nullable=False)
     state: Mapped[str] = mapped_column(String, nullable=False)
     zip_code: Mapped[str] = mapped_column(String, nullable=False)
-
-    orders: Mapped[List["Order"]] = relationship()
 
 
 class DeliveryMethod(BaseORM):
@@ -122,8 +135,6 @@ class DeliveryMethod(BaseORM):
     short_name: Mapped[str] = mapped_column(String, nullable=False)
     delivery_time: Mapped[str] = mapped_column(String, nullable=False)
     price: Mapped[float] = mapped_column(Numeric(precision=10, scale=2), nullable=False)
-
-    orders: Mapped[List["Order"]] = relationship(back_populates="delivery_method")
 
 
 class OrderStatus(enum.Enum):
@@ -136,22 +147,23 @@ class Order(BaseORM):
     __tablename__ = "orders"
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
-    date: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow(), nullable=False
-    )
     status: Mapped[OrderStatus] = mapped_column(
         Enum(OrderStatus), default=OrderStatus.PENDING, nullable=False
     )
+    payment_method: Mapped[str] = mapped_column(String, nullable=False)
+    date: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.utcnow(), nullable=False
+    )
 
+    items: Mapped[List[OrderItem]] = relationship(back_populates="order")
     delivery_method_id: Mapped[int] = mapped_column(ForeignKey("delivery_methods.id"))
-    delivery_method: Mapped["DeliveryMethod"] = relationship(back_populates="orders")
+    delivery_method: Mapped[DeliveryMethod] = relationship()
     billing_address_id: Mapped[int] = mapped_column(ForeignKey("billing_addresses.id"))
+    billing_address: Mapped[BillingAddress] = relationship()
     shipping_address_id: Mapped[int] = mapped_column(
         ForeignKey("shipping_addresses.id")
     )
-    payment_method_id: Mapped[int] = mapped_column(ForeignKey("payment_methods.id"))
-
-    items: Mapped[List[OrderItem]] = relationship(back_populates="order")
+    shipping_address: Mapped[ShippingAddress] = relationship()
 
     def get_total(self):
         return (

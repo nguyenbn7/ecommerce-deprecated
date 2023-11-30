@@ -23,13 +23,13 @@ class CustomerBasket:
 
 
 class BasketItemDTO(BaseModel):
-    id: int = Field()
-    product_name: str = Field()
-    price: float = Field()
-    quantity: int = Field()
-    picture_url: str = Field()
-    brand: str = Field()
-    type: str = Field()
+    id: int
+    product_name: str
+    price: float
+    quantity: int
+    picture_url: str
+    brand: str
+    type: str
 
 
 class CustomerBasketDTO(BaseModel):
