@@ -32,9 +32,12 @@ def create_order(
 ):
     basket = basket_repo.get_basket(order_dto.basket_id)
 
-    if not basket or not len(basket.items):
+    if not basket:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Basket not found")
-
+    
+    if not len(basket.items):
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Basket has no item")
+    
     payment_method = payment_repo.get_by_id(order_dto.payment_method_id)
     if not payment_method:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Invalid payment method")
