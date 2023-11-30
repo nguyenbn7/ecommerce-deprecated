@@ -4,7 +4,7 @@ from routes.basket.model import BasketItem
 from routes.basket.repository import BasketRepository
 
 from routes.order.model import Order, OrderDTO, OrderItem
-from routes.order.repository import DeliveryMethodRepository, PaymentRepository
+from routes.order.repository import DeliveryMethodRepository, OrderRepository, PaymentRepository
 
 
 order_router = APIRouter(prefix="/orders", tags=["Order"])
@@ -30,6 +30,7 @@ def create_order(
     delivery_method_repo: Annotated[
         DeliveryMethodRepository, Depends(DeliveryMethodRepository)
     ],
+    order_repo: Annotated[OrderRepository, Depends(OrderRepository)]
 ):
     basket = basket_repo.get_basket(order_dto.basket_id)
 
@@ -60,5 +61,4 @@ def create_order(
     order.billing_address = billing_address
     order.shipping_address = shipping_address
 
-    
-    return 
+    order_repo.save(order)
