@@ -10,6 +10,7 @@ from api.product.model import Product
 from api.product_brand.model import ProductBrand
 from api.product_type.model import ProductType
 from api.account.model import ApplicationUser, ApplicationUserAddress
+from api.order.model import BillingAddress, ShippingAddress, PaymentMethod, DeliveryMethod, OrderItem, Order
 from share.setting import get_database_settings
 
 # this is the Alembic Config object, which provides
