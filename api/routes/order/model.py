@@ -98,6 +98,7 @@ class PaymentMethod(BaseORM):
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
     name: Mapped[str] = mapped_column(String, nullable=False)
+    code: Mapped[str] = mapped_column(String, nullable=False)
 
 
 class BillingAddress(BaseORM):

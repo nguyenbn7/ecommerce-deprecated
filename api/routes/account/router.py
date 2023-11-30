@@ -58,7 +58,7 @@ def register(
     user.display_name = registerDTO.display_name
     user.password_hash = hash_password(registerDTO.password)
 
-    user_repo.save(user)
+    user_repo.save_user(user)
 
     return SuccessResponse(generate_jwt_token(user), user.email, user.display_name)
 

@@ -4,7 +4,14 @@ from typing import Any, Generic, List, TypeVar, get_args
 from sqlalchemy import func, select, desc
 from sqlalchemy.orm import sessionmaker, Session
 from core.database import engine
-from share.model import BaseORM, Pageable, Page, SortOption, SortDirection, Specification
+from share.model import (
+    BaseORM,
+    Pageable,
+    Page,
+    SortOption,
+    SortDirection,
+    Specification,
+)
 
 _Session = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -26,7 +33,7 @@ TClass = TypeVar("TClass", bound=BaseORM)
 class Repository(Generic[TEntity], ABC):
     @abstractmethod
     def __init__(self, db: Session):
-        self.db: Session = db
+        self.db_session: Session = db
         self.entity: TEntity = get_args(self.__orig_bases__[0])[0]
 
     def get_all(
@@ -37,9 +44,9 @@ class Repository(Generic[TEntity], ABC):
         projected_to: TClass | None = None,
     ) -> Page[TClass | TEntity] | List[TClass | TEntity]:
         new_query = (
-            self.db.query(self.entity)
+            self.db_session.query(self.entity)
             if not projected_to
-            else self.db.query(projected_to)
+            else self.db_session.query(projected_to)
         )
 
         sort_options = None
@@ -64,7 +71,7 @@ class Repository(Generic[TEntity], ABC):
             select(func.count()).select_from(self.entity).filter(specification())
         )
 
-        total_items = self.db.execute(count_statement).scalar()
+        total_items = self.db_session.execute(count_statement).scalar()
 
         page_index, page_size = pageable.page_index, pageable.page_size
 
@@ -93,9 +100,9 @@ class Repository(Generic[TEntity], ABC):
         projected_to: TClass | None = None,
     ) -> TEntity | TClass | None:
         new_query = (
-            self.db.query(self.entity)
+            self.db_session.query(self.entity)
             if not projected_to
-            else self.db.query(projected_to)
+            else self.db_session.query(projected_to)
         )
 
         new_query = new_query.filter(self.entity.__mapper__.primary_key[0] == id)
@@ -103,3 +110,11 @@ class Repository(Generic[TEntity], ABC):
         if specification:
             return new_query.filter(specification()).first()
         return new_query.first()
+
+    def save(self, entity: TEntity):
+        self.db_session.add(entity)
+        self.db_session.commit()
+
+    def save_all(self, entities: List[TEntity]):
+        self.db_session.add_all(entities)
+        self.db_session.commit()

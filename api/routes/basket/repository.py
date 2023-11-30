@@ -14,9 +14,9 @@ class BasketRepository:
         self.db = db
 
     def get_basket(self, basket_id: str) -> CustomerBasket | None:
-        basket = self.db.get(basket_id)
-        if basket:
-            return json.loads(basket)
+        basket_string = self.db.get(basket_id)
+        if basket_string:
+            return CustomerBasket(**json.loads(basket_string))
         return None
 
     def update_basket(self, basket: CustomerBasket):

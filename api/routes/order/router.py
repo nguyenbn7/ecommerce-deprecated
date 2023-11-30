@@ -10,7 +10,8 @@ from routes.order.repository import DeliveryMethodRepository, PaymentRepository
 order_router = APIRouter(prefix="/orders", tags=["Order"])
 
 
-def mapper(basket_item: BasketItem):
+def map_basket_item_to_order_item(basket_item: BasketItem):
+    print(basket_item.product_name)
     order_item = OrderItem()
     order_item.product_name = basket_item.product_name
     order_item.price = basket_item.price
@@ -34,10 +35,10 @@ def create_order(
 
     if not basket:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Basket not found")
-    
+
     if not len(basket.items):
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Basket has no item")
-    
+
     payment_method = payment_repo.get_by_id(order_dto.payment_method_id)
     if not payment_method:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Invalid payment method")
@@ -53,9 +54,9 @@ def create_order(
         shipping_address = order_dto.shipping_address.convert_to_shipping_address()
 
     order = Order()
-    order.payment_method = payment_method.name
-    order.items = map(mapper, basket.items)
+    order.payment_method = payment_method.code
+    order.items = list(map(map_basket_item_to_order_item, basket.items))
     order.delivery_method_id = delivery_method.id
     order.billing_address = billing_address
     order.shipping_address = shipping_address
-    return order
+    return 

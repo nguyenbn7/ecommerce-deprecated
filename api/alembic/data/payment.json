@@ -1,0 +1,14 @@
+[
+    {
+        "name": "cash",
+        "code": "CASH"
+    },
+    {
+        "name": "Credit card",
+        "code": "CREDIT_CARD"
+    },
+    {
+        "name": "Debit card",
+        "code": "DEBIT_CARD"
+    }
+]

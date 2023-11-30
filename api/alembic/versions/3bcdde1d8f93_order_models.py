@@ -5,6 +5,7 @@ Revises: 4899a7d9d376
 Create Date: 2023-11-30 17:18:41.058754
 
 """
+import json
 from typing import Sequence, Union
 
 from alembic import op
@@ -32,7 +33,7 @@ def upgrade() -> None:
     sa.Column('zip_code', sa.String(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('delivery_methods',
+    delivery_methods_tbl = op.create_table('delivery_methods',
     sa.Column('id', sa.BigInteger(), nullable=False),
     sa.Column('short_name', sa.String(), nullable=False),
     sa.Column('delivery_time', sa.String(), nullable=False),
@@ -82,6 +83,10 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
+
+    with open("alembic/data/delivery.json") as json_file:
+        json_data = json.load(json_file)
+        op.bulk_insert(delivery_methods_tbl, json_data)
 
 
 def downgrade() -> None:
