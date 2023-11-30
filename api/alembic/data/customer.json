@@ -1,0 +1,18 @@
+[
+    {
+        "user_name": "customer@test.com",
+        "email": "customer@test.com",
+        "display_name": "Demo Customer",
+        "password_hash": "$2b$12$NygJo9SB5lysDuV75fw2a.TXBT4dyZcoAU16vSV55EVar7Gcgm.A6",
+        "normalized_email": "CUSTOMER@TEST.COM",
+        "normalized_user_name": "CUSTOMER@TEST.COM"
+    },
+    {
+        "user_name": "customer1@test.com",
+        "email": "customer1@test.com",
+        "display_name": "Demo Customer1",
+        "password_hash": "$2b$12$NygJo9SB5lysDuV75fw2a.TXBT4dyZcoAU16vSV55EVar7Gcgm.A6",
+        "normalized_email": "CUSTOMER1@TEST.COM",
+        "normalized_user_name": "CUSTOMER1@TEST.COM"
+    }
+]

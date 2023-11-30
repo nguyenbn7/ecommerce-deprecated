@@ -59,4 +59,6 @@ def create_order(
     order.delivery_method_id = delivery_method.id
     order.billing_address = billing_address
     order.shipping_address = shipping_address
+
+    
     return 
