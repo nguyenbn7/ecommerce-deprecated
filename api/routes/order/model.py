@@ -155,10 +155,14 @@ class Order(BaseORM):
     date: Mapped[datetime] = mapped_column(
         DateTime, default=datetime.utcnow(), nullable=False
     )
+    buyer_email: Mapped[str] = mapped_column(String, nullable=False)
+    delivery_method_short_name: Mapped[str] = mapped_column(String, nullable=False)
+    delivery_method_delivery_time: Mapped[str] = mapped_column(String, nullable=False)
+    delivery_method_price: Mapped[float] = mapped_column(
+        Numeric(precision=10, scale=2), nullable=False
+    )
 
     items: Mapped[List[OrderItem]] = relationship(back_populates="order")
-    delivery_method_id: Mapped[int] = mapped_column(ForeignKey("delivery_methods.id"))
-    delivery_method: Mapped[DeliveryMethod] = relationship()
     billing_address_id: Mapped[int] = mapped_column(ForeignKey("billing_addresses.id"))
     billing_address: Mapped[BillingAddress] = relationship()
     shipping_address_id: Mapped[int] = mapped_column(

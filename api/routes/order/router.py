@@ -1,17 +1,22 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
+from routes.account.model import ApplicationUser
+from routes.account.service import get_current_user
 from routes.basket.model import BasketItem
 from routes.basket.repository import BasketRepository
 
 from routes.order.model import Order, OrderDTO, OrderItem
-from routes.order.repository import DeliveryMethodRepository, OrderRepository, PaymentRepository
+from routes.order.repository import (
+    DeliveryMethodRepository,
+    OrderRepository,
+    PaymentRepository,
+)
 
 
 order_router = APIRouter(prefix="/orders", tags=["Order"])
 
 
 def map_basket_item_to_order_item(basket_item: BasketItem):
-    print(basket_item.product_name)
     order_item = OrderItem()
     order_item.product_name = basket_item.product_name
     order_item.price = basket_item.price
@@ -25,12 +30,13 @@ def map_basket_item_to_order_item(basket_item: BasketItem):
 @order_router.post("")
 def create_order(
     order_dto: OrderDTO,
+    current_user: Annotated[ApplicationUser, Depends(get_current_user)],
     basket_repo: Annotated[BasketRepository, Depends(BasketRepository)],
     payment_repo: Annotated[PaymentRepository, Depends(PaymentRepository)],
     delivery_method_repo: Annotated[
         DeliveryMethodRepository, Depends(DeliveryMethodRepository)
     ],
-    order_repo: Annotated[OrderRepository, Depends(OrderRepository)]
+    order_repo: Annotated[OrderRepository, Depends(OrderRepository)],
 ):
     basket = basket_repo.get_basket(order_dto.basket_id)
 
@@ -55,10 +61,18 @@ def create_order(
         shipping_address = order_dto.shipping_address.convert_to_shipping_address()
 
     order = Order()
+    order.buyer_email = current_user.email
     order.payment_method = payment_method.code
     order.items = list(map(map_basket_item_to_order_item, basket.items))
-    order.delivery_method_id = delivery_method.id
+    order.delivery_method_short_name = delivery_method.short_name
+    order.delivery_method_delivery_time = delivery_method.delivery_time
+    order.delivery_method_price = delivery_method.price
     order.billing_address = billing_address
     order.shipping_address = shipping_address
 
     order_repo.save(order)
+
+    # TODO: delete basket after done
+    # basket_repo.delete_basket(order_dto.basket_id)
+
+    return {"order_id": order.id}
