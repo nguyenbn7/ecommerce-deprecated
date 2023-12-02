@@ -1,5 +1,7 @@
 <script>
+	import { basket, basketTotals } from '$lib/service/basket.service';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
+	import { currency } from '$lib/share/functions';
 </script>
 
 <svelte:head>
@@ -22,37 +24,36 @@
 					<a href="/basket" class="fs-5">Edit</a>
 				</h4>
 				<ul class="list-group mb-3">
-					<li class="list-group-item d-flex justify-content-between lh-sm">
-						<div>
-							<h6 class="my-0">Product name</h6>
-							<small class="text-body-secondary">Brief description</small>
-						</div>
-						<span class="text-body-secondary">$12</span>
-					</li>
-					<li class="list-group-item d-flex justify-content-between lh-sm">
-						<div>
-							<h6 class="my-0">Second product</h6>
-							<small class="text-body-secondary">Brief description</small>
-						</div>
-						<span class="text-body-secondary">$8</span>
-					</li>
-					<li class="list-group-item d-flex justify-content-between lh-sm">
-						<div>
-							<h6 class="my-0">Third item</h6>
-							<small class="text-body-secondary">Brief description</small>
-						</div>
-						<span class="text-body-secondary">$5</span>
-					</li>
-					<li class="list-group-item d-flex justify-content-between bg-body-tertiary">
+					{#if $basket}
+						{#each $basket.items as item}
+							<li class="list-group-item d-flex justify-content-between align-items-center lh-sm">
+								<div class="row align-items-center">
+									<div class="col-3 p-1 position-relative">
+										<img src={item.picture_url} class="img-thumbnail" alt={item.product_name} />
+										<span
+											class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"
+										>
+											{item.quantity}
+										</span>
+									</div>
+									<div class="col-8 ms-1">
+										<h5 class="my-0">{item.product_name}</h5>
+									</div>
+								</div>
+								<span class="text-body-secondary">{currency(item.price * item.quantity)}</span>
+							</li>
+						{/each}
+					{/if}
+					<!-- <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
 						<div class="text-success">
 							<h6 class="my-0">Promo code</h6>
 							<small>EXAMPLECODE</small>
 						</div>
 						<span class="text-success">−$5</span>
-					</li>
+					</li> -->
 					<li class="list-group-item d-flex justify-content-between">
 						<span>Total (USD)</span>
-						<strong>$20</strong>
+						<strong>{currency($basketTotals?.total ?? 0)}</strong>
 					</li>
 				</ul>
 
@@ -65,7 +66,7 @@
 			</div>
 			<div class="col-md-7 col-lg-8">
 				<h4 class="mb-3">Billing address</h4>
-				<form class="needs-validation" novalidate="">
+				<form class="needs-validation">
 					<div class="row g-3">
 						<div class="col-sm-6">
 							<label for="firstName" class="form-label">First name</label>
@@ -94,24 +95,7 @@
 						</div>
 
 						<div class="col-12">
-							<label for="username" class="form-label">Username</label>
-							<div class="input-group has-validation">
-								<span class="input-group-text">@</span>
-								<input
-									type="text"
-									class="form-control"
-									id="username"
-									placeholder="Username"
-									required=""
-								/>
-								<div class="invalid-feedback">Your username is required.</div>
-							</div>
-						</div>
-
-						<div class="col-12">
-							<label for="email" class="form-label"
-								>Email <span class="text-body-secondary">(Optional)</span></label
-							>
+							<label for="email" class="form-label"> Email </label>
 							<input type="email" class="form-control" id="email" placeholder="you@example.com" />
 							<div class="invalid-feedback">
 								Please enter a valid email address for shipping updates.
@@ -170,16 +154,9 @@
 					<hr class="my-4" />
 
 					<div class="form-check">
-						<input type="checkbox" class="form-check-input" id="same-address" />
+						<input type="checkbox" class="form-check-input" id="same-address" checked/>
 						<label class="form-check-label" for="same-address">
 							Shipping address is the same as my billing address
-						</label>
-					</div>
-
-					<div class="form-check">
-						<input type="checkbox" class="form-check-input" id="save-info" />
-						<label class="form-check-label" for="save-info">
-							Save this information for next time
 						</label>
 					</div>
 
@@ -194,8 +171,6 @@
 								name="paymentMethod"
 								type="radio"
 								class="form-check-input"
-								checked=""
-								required=""
 							/>
 							<label class="form-check-label" for="credit">Credit card</label>
 						</div>
@@ -215,16 +190,15 @@
 								name="paymentMethod"
 								type="radio"
 								class="form-check-input"
-								required=""
 							/>
-							<label class="form-check-label" for="paypal">PayPal</label>
+							<label class="form-check-label" for="paypal">Cash</label>
 						</div>
 					</div>
 
 					<div class="row gy-3">
 						<div class="col-md-6">
 							<label for="cc-name" class="form-label">Name on card</label>
-							<input type="text" class="form-control" id="cc-name" placeholder="" required="" />
+							<input type="text" class="form-control" id="cc-name" placeholder=""/>
 							<small class="text-body-secondary">Full name as displayed on card</small>
 							<div class="invalid-feedback">Name on card is required</div>
 						</div>
