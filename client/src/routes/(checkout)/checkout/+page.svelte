@@ -56,12 +56,12 @@
 					</li>
 				</ul>
 
-				<form class="card p-2">
+				<!-- <form class="card p-2">
 					<div class="input-group">
 						<input type="text" class="form-control" placeholder="Promo code" />
 						<button type="submit" class="btn btn-secondary">Redeem</button>
 					</div>
-				</form>
+				</form> -->
 			</div>
 			<div class="col-md-7 col-lg-8">
 				<h4 class="mb-3">Billing address</h4>

@@ -1,5 +1,6 @@
 <script>
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import InputForm from '$lib/account/input-form.svelte';
 	import { ToastService } from '$lib/components/share/toast.svelte';
 	import { registerAs } from '$lib/service/account.service';
@@ -56,6 +57,8 @@
 			}
 
 			ToastService.notifySuccess(`Welcome ${result.display_name}`);
+			const returnUrl = $page.url.searchParams.get('returnUrl');
+			if (returnUrl) return goto(returnUrl);
 			return goto('/');
 		} catch (error) {
 			// @ts-ignore

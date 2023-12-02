@@ -1,8 +1,13 @@
-import { PUBLIC_BASE_API_URL } from '$env/static/public';
-import axios from 'axios';
+import { getAccessToken } from '$lib/service/account.service';
+import httpClientWithSpinner from '$lib/share/httpClient';
 
-async function createOrder() {
-	try {
-		// axios.post()
-	} catch (error) {}
+/**
+ * @param {Order} data
+ */
+async function createOrder(data) {
+	return await httpClientWithSpinner.post("/orders/", data, {
+		headers: {
+			Authorization: `Bearer ${getAccessToken() ?? ""}`
+		}
+	})
 }

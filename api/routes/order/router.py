@@ -27,7 +27,7 @@ def map_basket_item_to_order_item(basket_item: BasketItem):
     return order_item
 
 
-@order_router.post("")
+@order_router.post("/")
 def create_order(
     order_dto: OrderDTO,
     current_user: Annotated[ApplicationUser, Depends(get_current_user)],

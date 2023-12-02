@@ -70,7 +70,7 @@ type LoginSuccess = {
 	token: string;
 };
 
-type Validator = { check: (inputField: InputFieldType) => boolean; errorMessage: string? };
+type Validator = { check: (inputField: InputFieldType) => boolean; errorMessage: string?};
 type Validators = Validator[];
 
 type InputFieldType = {
@@ -124,3 +124,23 @@ type ErrorResponse = {
 	error: any | undefined | null;
 	errors: any | Array | undefined | null;
 };
+
+type Order = {
+	basket_id: string,
+	billing_address: OrderAddress,
+	shipping_address: OrderAddress?,
+	delivery_method_id: number
+	payment_method_id: number
+}
+
+type OrderAddress = {
+	full_name: string
+	email: string
+	phone_number: string
+	address: string
+	address2: string
+	country: string
+	state: string
+	zip_code: string
+}
+
