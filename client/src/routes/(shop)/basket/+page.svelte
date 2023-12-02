@@ -1,8 +1,8 @@
 <script>
 	import OrderTotals from '$lib/components/shop/order-totals.svelte';
 	import { addItemToBasket, basket, removeItemFromBasket } from '$lib/service/basket.service';
-	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
-	import { formatAsUSD } from '$lib/util/helper.function';
+	import { ECOMMERCE_NAME } from '$lib/util/constant';
+	import { currency } from '$lib/util/functions';
 </script>
 
 <svelte:head>
@@ -59,7 +59,7 @@
 									</div>
 								</th>
 								<td class="align-middle">
-									<strong>{formatAsUSD(item.price)}</strong>
+									<strong>{currency(item.price)}</strong>
 								</td>
 								<td class="align-middle">
 									<div class="d-flex align-items-center">
@@ -80,7 +80,7 @@
 									</div>
 								</td>
 								<td class="align-middle">
-									<strong>{formatAsUSD(item.price * item.quantity)}</strong>
+									<strong>{currency(item.price * item.quantity)}</strong>
 								</td>
 								<td class="align-middle">
 									<a

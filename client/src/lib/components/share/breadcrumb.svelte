@@ -23,8 +23,7 @@
 
 <script>
 	import { page } from '$app/stores';
-	import { titleCase } from '$lib/util/helper.function';
-
+	import _ from 'lodash';
 	export { styleClasses as class };
 	let styleClasses = '';
 
@@ -39,7 +38,7 @@
 		const pathParams = pageStore.params;
 		const mapper = breadcrumbStore;
 
-		const builtPaths = [{ alias: titleCase('home'), href: paths.length ? '/' : null }];
+		const builtPaths = [{ alias: _.capitalize('home'), href: paths.length ? '/' : null }];
 
 		for (let idx = 0; idx < paths.length; idx++) {
 			let alias = null;
@@ -51,7 +50,7 @@
 				if (mapper && mapper[paths[idx]]) alias = titleCase(mapper[paths[idx]]);
 				else alias = pathParams[paths[idx].slice(1, -1)];
 			} else {
-				alias = titleCase(paths[idx]);
+				alias = _.capitalize(paths[idx]);
 			}
 
 			if (idx < paths.length - 1) {

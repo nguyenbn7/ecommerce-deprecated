@@ -3,7 +3,7 @@
 	import ProductItem from '$lib/components/shop/product-item.svelte';
 	import PagingHeader from '$lib/components/share/paging-header.svelte';
 	import { onMount } from 'svelte';
-	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
+	import { ECOMMERCE_NAME } from '$lib/util/constant';
 	import { getProductBrands } from '$lib/service/product-brand.service';
 	import { getProductTypes } from '$lib/service/product-type.service';
 	import { getPageProduct } from '$lib/service/product.service';

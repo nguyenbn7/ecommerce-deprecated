@@ -1,5 +1,5 @@
 <script>
-	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
+	import { ECOMMERCE_NAME } from '$lib/util/constant';
 	import { onMount } from 'svelte';
 
 	onMount(async () => {

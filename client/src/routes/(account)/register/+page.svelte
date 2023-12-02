@@ -3,56 +3,31 @@
 	import InputForm from '$lib/components/account/input-form.svelte';
 	import { ToastService } from '$lib/components/share/toast.svelte';
 	import { registerAs } from '$lib/service/account.service';
-	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
+	import { ECOMMERCE_NAME } from '$lib/util/constant';
+	import { InputField } from '$lib/util/model';
 	import {
-		checkEmailFormat,
-		checkFieldRequired,
-		checkNameContainsLettersNumbersAndWhiteSpace,
-		checkNameMaxLength
-	} from '$lib/util/helper.function';
-	import { TextFieldValidation } from '$lib/util/model';
+		hasAlnumAndSpace,
+		hasCorrectEmailFormat,
+		hasMaxLength,
+		requireField
+	} from '$lib/util/validator';
 
 	const name_max_len = 70;
 
-	let nameField = new TextFieldValidation();
-	nameField.validation.push(
-		{
-			validator: checkFieldRequired,
-			errorMessage: 'Name is required'
-		},
-		{
-			validator: checkNameContainsLettersNumbersAndWhiteSpace,
-			errorMessage: 'Name contains only letters and spaces'
-		},
-		{
-			validator: checkNameMaxLength(name_max_len),
-			errorMessage: `Name's max length is ${name_max_len} characters`
-		}
-	);
+	let nameField = new InputField([
+		requireField('Name is required'),
+		hasAlnumAndSpace('Name contains only letters and spaces'),
+		hasMaxLength(`Name's max length is ${name_max_len} characters`, name_max_len)
+	]);
 
-	let emailField = new TextFieldValidation();
-	emailField.validation.push(
-		{
-			validator: checkFieldRequired,
-			errorMessage: 'Email is required'
-		},
-		{
-			validator: checkEmailFormat,
-			errorMessage: 'Incorrect email. Example: bob@test.com'
-		}
-	);
+	let emailField = new InputField([
+		requireField('Email is required'),
+		hasCorrectEmailFormat('Incorrect email. Example: bob@test.com')
+	]);
 
-	let passwordField = new TextFieldValidation();
-	passwordField.validation.push({
-		validator: checkFieldRequired,
-		errorMessage: 'Password is required'
-	});
+	let passwordField = new InputField([requireField('Password is required')]);
 
-	let confirmPasswordField = new TextFieldValidation();
-	confirmPasswordField.validation.push({
-		validator: checkFieldRequired,
-		errorMessage: 'Confirm Password is required'
-	});
+	let confirmPasswordField = new InputField([requireField('Confirm Password is required')]);
 
 	$: isValid =
 		nameField.valid && emailField.valid && passwordField.valid && confirmPasswordField.valid;

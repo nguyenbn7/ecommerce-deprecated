@@ -1,7 +1,7 @@
 <script>
 	import { page } from '$app/stores';
-	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
-	import { formatAsUSD } from '$lib/util/helper.function';
+	import { ECOMMERCE_NAME } from '$lib/util/constant';
+	import { currency } from '$lib/util/functions';
 	import { breadcrumb } from '$lib/components/share/breadcrumb.svelte';
 	import { onMount } from 'svelte';
 	import { addItemToBasket, basket, removeItemFromBasket } from '$lib/service/basket.service';
@@ -73,7 +73,7 @@
 			</div>
 			<div class="col-6 mt-5">
 				<h2>{product.name}</h2>
-				<p>{formatAsUSD(product.price)}</p>
+				<p>{currency(product.price)}</p>
 
 				<h5 class="text-primary mb-3">
 					You have {quantityInBasket} of this item in your basket

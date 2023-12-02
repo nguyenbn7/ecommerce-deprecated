@@ -3,27 +3,18 @@
 	import InputForm from '$lib/components/account/input-form.svelte';
 	import { ToastService } from '$lib/components/share/toast.svelte';
 	import { loginAs } from '$lib/service/account.service';
-	import { ECOMMERCE_NAME } from '$lib/util/application.constant';
-	import { checkEmailFormat, checkFieldRequired } from '$lib/util/helper.function';
-	import { TextFieldValidation } from '$lib/util/model';
+	import { ECOMMERCE_NAME } from '$lib/util/constant';
+	import { InputField } from '$lib/util/model';
+	import { hasCorrectEmailFormat, requireField } from '$lib/util/validator';
 
-	let emailField = new TextFieldValidation();
-	emailField.validation.push(
-		{
-			validator: checkFieldRequired,
-			errorMessage: 'Email is required'
-		},
-		{
-			validator: checkEmailFormat,
-			errorMessage: 'Incorrect email. Example: bob@test.com'
-		}
-	);
+	let emailField = new InputField([
+		requireField('Email is required'),
+		hasCorrectEmailFormat('Incorrect email. Example: bob@test.com')
+	]);
 
-	let passwordField = new TextFieldValidation();
-	passwordField.validation.push({
-		validator: checkFieldRequired,
-		errorMessage: 'Password is required'
-	});
+	let passwordField = new InputField([
+		requireField("Password is required"),
+	]);
 
 	$: isValid = emailField.valid && passwordField.valid;
 
@@ -130,7 +121,7 @@
 			disabled={isLocked}
 		></InputForm>
 
-		<div class="d-flex justify-content-between my-3">
+		<!-- <div class="d-flex justify-content-between my-3">
 			<div class="form-check text-start">
 				<input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault" />
 				<label class="form-check-label" for="flexCheckDefault"> Remember me </label>
@@ -138,7 +129,7 @@
 			<div class="text-end">
 				<a href={'#'} class="text-decoration-none">Forgot password?</a>
 			</div>
-		</div>
+		</div> -->
 		<button
 			class="btn btn-primary w-100 py-2 mt-2 mb-3 rounded-5"
 			type="submit"

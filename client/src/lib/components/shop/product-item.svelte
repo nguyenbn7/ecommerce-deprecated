@@ -1,6 +1,6 @@
 <script>
 	import { addItemToBasket } from '$lib/service/basket.service';
-	import { formatAsUSD } from '$lib/util/helper.function';
+	import { currency } from '$lib/util/functions';
 
 	/**
 	 * @type {Product}
@@ -27,7 +27,7 @@
 		<a href={'#'} class="text-decoration-none">
 			<h5 class="text-uppercase">{product.name}</h5>
 		</a>
-		<span class="mb-2" style="font-size: 1.5em;">{formatAsUSD(product.price)}</span>
+		<span class="mb-2" style="font-size: 1.5em;">{currency(product.price)}</span>
 	</div>
 </div>
 

@@ -70,12 +70,17 @@ type LoginSuccess = {
 	token: string;
 };
 
-type Validation = {
-	validator: Validator;
-	errorMessage: string | undefined;
-};
+type Validator = { check: (inputField: InputFieldType) => boolean; errorMessage: string?};
+type Validators = Validator[];
 
-type Validator = (inputField: TextFieldValidation) => boolean;
+type InputFieldType = {
+	dirty: boolean;
+	valid: boolean;
+	value: string;
+	validationMessage: string | null;
+	successMessage: string | null;
+	validators: Validators;
+};
 
 type Register = {
 	email: string;

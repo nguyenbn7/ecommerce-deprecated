@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { currentUser, logout } from '$lib/service/account.service';
 	import { basket } from '$lib/service/basket.service';
-	import { readMoreString } from '$lib/util/helper.function';
+	import { readMoreString } from '$lib/util/functions';
 	import { Dropdown } from 'bootstrap';
 
 	const paths = [

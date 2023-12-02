@@ -9,31 +9,27 @@
 	export let disabled = false;
 
 	/**
-	 * @type {import('$lib/util/model').TextFieldValidation}
+	 * @type {import('$lib/util/model').InputField}
 	 */
 	export let inputField;
 
-	function onFocus() {
-		if (!inputField.dirty) {
-			inputField.dirty = true;
-			validate();
-		}
+	async function onFocusOut() {
+		if (!inputField.dirty) inputField.dirty = true;
+		validate();
 	}
 
 	function validate() {
 		inputField.valid = false;
 
-		const validationList = inputField.validation;
-		for (let i = 0; i < validationList.length; i++) {
-			if (!validationList[i].validator(inputField)) {
-				if (validationList[i].errorMessage)
-					// @ts-ignore
-					inputField.validationMessage = validationList[i].errorMessage;
+		for (const validator of inputField.validators) {
+			const { check, errorMessage } = validator;
+			if (!check(inputField)) {
+				inputField.validationMessage = errorMessage;
 				return;
 			}
 		}
 
-		inputField.validationMessage = inputField.successMessage ? inputField.successMessage : '';
+		inputField.validationMessage = inputField.successMessage;
 		inputField.valid = true;
 	}
 
@@ -47,7 +43,7 @@
 	}
 
 	function onKeyUp() {
-		if (!inputField.dirty) return;
+		if (!inputField.dirty) inputField.dirty = true;
 		validate();
 	}
 </script>
@@ -58,7 +54,7 @@
 		class="form-control rounded-5"
 		{id}
 		{placeholder}
-		on:focusin={onFocus}
+		on:focusout={onFocusOut}
 		on:input={handleInput}
 		on:keyup={onKeyUp}
 		class:is-invalid={inputField.dirty && !inputField.valid}
@@ -66,10 +62,12 @@
 		{disabled}
 	/>
 	<label for={id}>{label}</label>
-	<div
-		class:invalid-feedback={inputField.dirty && !inputField.valid}
-		class:valid-feedback={inputField.dirty && inputField.valid}
-	>
-		{inputField.validationMessage}
-	</div>
+	{#if inputField.validationMessage}
+		<div
+			class:invalid-feedback={inputField.dirty && !inputField.valid}
+			class:valid-feedback={inputField.dirty && inputField.valid}
+		>
+			{inputField.validationMessage}
+		</div>
+	{/if}
 </div>
