@@ -1,5 +1,5 @@
 <script>
-	import { ECOMMERCE_NAME } from '$lib/util/constant';
+	import { ECOMMERCE_NAME } from '$lib/share/constant';
 </script>
 
 <svelte:head>

@@ -2,8 +2,8 @@
 	import { page } from '$app/stores';
 	import { currentUser, logout } from '$lib/service/account.service';
 	import { basket } from '$lib/service/basket.service';
-	import { readMoreString } from '$lib/util/functions';
-	import { Dropdown } from 'bootstrap';
+	import { readMoreString } from '$lib/share/functions';
+	import { onMount } from 'svelte';
 
 	const paths = [
 		{ link: '/', name: 'Home' },
@@ -18,6 +18,10 @@
 	function getCount(items) {
 		return items.reduce((total, item) => total + item.quantity, 0);
 	}
+
+	onMount(async () => {
+		(await import('bootstrap')).Dropdown;
+	});
 </script>
 
 <header class="nav nav-expand-md sticky-top bg-body">

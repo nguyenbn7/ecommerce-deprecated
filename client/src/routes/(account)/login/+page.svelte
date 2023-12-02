@@ -1,22 +1,21 @@
 <script>
 	import { goto } from '$app/navigation';
-	import InputForm from '$lib/components/account/input-form.svelte';
+	import InputForm from '$lib/account/input-form.svelte';
 	import { ToastService } from '$lib/components/share/toast.svelte';
 	import { loginAs } from '$lib/service/account.service';
-	import { ECOMMERCE_NAME } from '$lib/util/constant';
-	import { InputField } from '$lib/util/model';
-	import { hasCorrectEmailFormat, requireField } from '$lib/util/validator';
+	import { ECOMMERCE_NAME } from '$lib/share/constant';
+	import { InputField } from '$lib/share/model';
+	import { hasCorrectEmailFormat, requireField } from '$lib/share/validator';
 
-	let emailField = new InputField([
-		requireField('Email is required'),
-		hasCorrectEmailFormat('Incorrect email. Example: bob@test.com')
-	]);
+	const loginForm = {
+		emailField: new InputField([
+			requireField('Email is required'),
+			hasCorrectEmailFormat('Incorrect email. Example: bob@test.com')
+		]),
+		passwordField: new InputField([requireField('Password is required')])
+	};
 
-	let passwordField = new InputField([
-		requireField("Password is required"),
-	]);
-
-	$: isValid = emailField.valid && passwordField.valid;
+	$: isValid = loginForm.emailField.valid && loginForm.passwordField.valid;
 
 	let isLocked = false;
 	let isDemoAccountLogin = false;
@@ -25,7 +24,10 @@
 	async function onSubmitForm() {
 		try {
 			isLocked = true;
-			const result = await loginAs({ email: emailField.value, password: passwordField.value });
+			const result = await loginAs({
+				email: loginForm.emailField.value,
+				password: loginForm.passwordField.value
+			});
 			if (result instanceof Response) {
 				/**
 				 * @type {ErrorResponse}
@@ -103,7 +105,7 @@
 	<form on:submit={onSubmitForm}>
 		<InputForm
 			class="form-floating mt-2 mb-3"
-			bind:inputField={emailField}
+			bind:inputField={loginForm.emailField}
 			id="Email"
 			type="email"
 			label="Email"
@@ -113,7 +115,7 @@
 
 		<InputForm
 			class="form-floating mt-2 mb-3"
-			bind:inputField={passwordField}
+			bind:inputField={loginForm.passwordField}
 			id="Password"
 			type="password"
 			label="Password"

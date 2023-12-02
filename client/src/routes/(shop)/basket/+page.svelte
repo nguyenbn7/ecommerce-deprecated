@@ -1,8 +1,8 @@
 <script>
 	import OrderTotals from '$lib/components/shop/order-totals.svelte';
 	import { addItemToBasket, basket, removeItemFromBasket } from '$lib/service/basket.service';
-	import { ECOMMERCE_NAME } from '$lib/util/constant';
-	import { currency } from '$lib/util/functions';
+	import { ECOMMERCE_NAME } from '$lib/share/constant';
+	import { currency } from '$lib/share/functions';
 </script>
 
 <svelte:head>

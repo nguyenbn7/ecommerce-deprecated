@@ -3,12 +3,13 @@
 	import ProductItem from '$lib/components/shop/product-item.svelte';
 	import PagingHeader from '$lib/components/share/paging-header.svelte';
 	import { onMount } from 'svelte';
-	import { ECOMMERCE_NAME } from '$lib/util/constant';
+	import { ECOMMERCE_NAME } from '$lib/share/constant';
 	import { getProductBrands } from '$lib/service/product-brand.service';
 	import { getProductTypes } from '$lib/service/product-type.service';
-	import { getPageProduct } from '$lib/service/product.service';
 	import { SpinnerService } from '$lib/components/share/spinner.svelte';
 	import { ToastService } from '$lib/components/share/toast.svelte';
+	import { getPageProduct } from '$lib/product/request';
+	import ShopService from '$lib/shop/service';
 
 	/**
 	 * @type {Product[]}
@@ -58,24 +59,13 @@
 	};
 
 	onMount(async () => {
-		let errorMessage = '';
-		try {
-			SpinnerService.show();
-
-			productBrands = [{ id: 0, name: 'All' }, ...(await getProductBrands())];
-			productTypes = [{ id: 0, name: 'All' }, ...(await getProductTypes())];
-
-			await getNewPageProduct(shopParams);
-		} catch (error) {
-			// @ts-ignore
-			if (error.message === 'Failed to fetch') errorMessage = 'Network Error';
-		} finally {
-			SpinnerService.hide();
-		}
-
-		if (errorMessage) {
-			ToastService.notifyError(errorMessage);
-		}
+		const result = await ShopService.loadShopData(shopParams);
+		products = result.products;
+		productBrands = result.productBrands;
+		productTypes = result.productTypes;
+		shopParams.page_number = result.page_number;
+		shopParams.page_size = result.page_size;
+		totalItems = result.totalItems;
 	});
 
 	/**

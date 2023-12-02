@@ -1,11 +1,11 @@
 <script>
 	import { page } from '$app/stores';
-	import { ECOMMERCE_NAME } from '$lib/util/constant';
-	import { currency } from '$lib/util/functions';
+	import { ECOMMERCE_NAME } from '$lib/share/constant';
+	import { currency } from '$lib/share/functions';
 	import { breadcrumb } from '$lib/components/share/breadcrumb.svelte';
 	import { onMount } from 'svelte';
 	import { addItemToBasket, basket, removeItemFromBasket } from '$lib/service/basket.service';
-	import { getProduct } from '$lib/service/product.service';
+	import ShopService from '$lib/shop/service';
 
 	/**
 	 * @type {Product}
@@ -27,8 +27,8 @@
 	}
 
 	onMount(async () => {
-		const productId = $page.params.productId;
-		product = await getProduct(productId);
+		const productId = Number($page.params.productId);
+		product = await ShopService.getProduct(productId);
 		productName = product.name;
 		breadcrumb.mapPathToAlias('[productId]', productName);
 	});

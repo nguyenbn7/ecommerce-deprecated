@@ -1,5 +1,6 @@
 from datetime import timedelta
 import json
+from types import SimpleNamespace
 from typing import Annotated
 
 from fastapi import Depends
@@ -16,7 +17,7 @@ class BasketRepository:
     def get_basket(self, basket_id: str) -> CustomerBasket | None:
         basket_string = self.db.get(basket_id)
         if basket_string:
-            return CustomerBasket(**json.loads(basket_string))
+            return json.loads(basket_string, object_hook=lambda b: SimpleNamespace(**b))
         return None
 
     def update_basket(self, basket: CustomerBasket):

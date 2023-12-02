@@ -70,7 +70,7 @@ type LoginSuccess = {
 	token: string;
 };
 
-type Validator = { check: (inputField: InputFieldType) => boolean; errorMessage: string?};
+type Validator = { check: (inputField: InputFieldType) => boolean; errorMessage: string? };
 type Validators = Validator[];
 
 type InputFieldType = {

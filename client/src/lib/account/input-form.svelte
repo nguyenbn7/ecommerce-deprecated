@@ -9,7 +9,7 @@
 	export let disabled = false;
 
 	/**
-	 * @type {import('$lib/util/model').InputField}
+	 * @type {import('$lib/share/model').InputField}
 	 */
 	export let inputField;
 

@@ -1,6 +1,6 @@
 <script>
 	import { addItemToBasket } from '$lib/service/basket.service';
-	import { currency } from '$lib/util/functions';
+	import { currency } from '$lib/share/functions';
 
 	/**
 	 * @type {Product}

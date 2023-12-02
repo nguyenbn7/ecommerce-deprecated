@@ -38,7 +38,7 @@
 		const pathParams = pageStore.params;
 		const mapper = breadcrumbStore;
 
-		const builtPaths = [{ alias: _.capitalize('home'), href: paths.length ? '/' : null }];
+		const builtPaths = [{ alias: _.startCase('home'), href: paths.length ? '/' : null }];
 
 		for (let idx = 0; idx < paths.length; idx++) {
 			let alias = null;
@@ -47,10 +47,10 @@
 			// @ts-ignore
 			if (paths[idx].startsWith('[')) {
 				// @ts-ignore
-				if (mapper && mapper[paths[idx]]) alias = titleCase(mapper[paths[idx]]);
+				if (mapper && mapper[paths[idx]]) alias = _.startCase(mapper[paths[idx]]);
 				else alias = pathParams[paths[idx].slice(1, -1)];
 			} else {
-				alias = _.capitalize(paths[idx]);
+				alias = _.startCase(paths[idx]);
 			}
 
 			if (idx < paths.length - 1) {

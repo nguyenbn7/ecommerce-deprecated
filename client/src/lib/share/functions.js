@@ -1,8 +1,9 @@
-import { CURRENCY_CODE } from "./constant";
+import { CURRENCY_CODE } from './constant';
 
 /**
  * @param {string} code
  * @param {number} amount
+ * @returns {string}
  */
 export function currency(amount, code = CURRENCY_CODE.US_Dollar) {
 	return new Intl.NumberFormat(navigator.language, {
@@ -24,4 +25,8 @@ export function readMoreString(str, max_length = 50) {
 export function checkEmailFormat(email) {
 	const regex = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
 	return regex.test(email);
+}
+
+export async function delay(ms = 1500) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
 }

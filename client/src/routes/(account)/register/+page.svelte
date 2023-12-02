@@ -1,16 +1,16 @@
 <script>
 	import { goto } from '$app/navigation';
-	import InputForm from '$lib/components/account/input-form.svelte';
+	import InputForm from '$lib/account/input-form.svelte';
 	import { ToastService } from '$lib/components/share/toast.svelte';
 	import { registerAs } from '$lib/service/account.service';
-	import { ECOMMERCE_NAME } from '$lib/util/constant';
-	import { InputField } from '$lib/util/model';
+	import { ECOMMERCE_NAME } from '$lib/share/constant';
+	import { InputField } from '$lib/share/model';
 	import {
 		hasAlnumAndSpace,
 		hasCorrectEmailFormat,
 		hasMaxLength,
 		requireField
-	} from '$lib/util/validator';
+	} from '$lib/share/validator';
 
 	const name_max_len = 70;
 

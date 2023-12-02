@@ -6,13 +6,13 @@ from routes.basket.repository import BasketRepository
 basket_router = APIRouter(prefix="/basket", tags=["Basket"])
 
 
-@basket_router.get("")
+@basket_router.get("/")
 def get_basket(
     id: str, basket_repo: Annotated[BasketRepository, Depends(BasketRepository)]
 ):
     basket = basket_repo.get_basket(id)
     if not basket:
-        return CustomerBasket(id)
+        return CustomerBasket(id, [])
     return basket
 
 

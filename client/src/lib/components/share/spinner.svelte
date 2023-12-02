@@ -1,5 +1,6 @@
 <script context="module">
 	import { Modal } from 'bootstrap';
+	import { onMount } from 'svelte';
 
 	class SpinnerService {
 		/**
@@ -14,31 +15,20 @@
 			this.#spinnerModalId = id;
 		}
 
-		static #modal() {
+		static show() {
 			/**
 			 * @type {import("bootstrap").Modal}
 			 */
-			let instance = Modal.getOrCreateInstance(document.getElementById(this.#spinnerModalId));
-
-			return {
-				getInstance: () => {
-					if (!instance)
-						instance = Modal.getOrCreateInstance(document.getElementById(this.#spinnerModalId));
-
-					if (!instance) throw Error('Can not create spinner');
-					return instance;
-				}
-			};
-		}
-
-		static show() {
-			const modal = this.#modal().getInstance();
-			modal.show();
+			const modal = Modal.getOrCreateInstance(document.getElementById(this.#spinnerModalId));
+			modal.show(modal);
 		}
 
 		static hide() {
-			const modal = this.#modal().getInstance();
-			modal.hide();
+			/**
+			 * @type {import("bootstrap").Modal | null}
+			 */
+			const modal = Modal.getInstance(document.getElementById(this.#spinnerModalId));
+			modal?.hide();
 		}
 	}
 
@@ -50,14 +40,17 @@
 	 * @type {string}
 	 */
 	export let id;
+	let isReady = false;
+	onMount(() => (isReady = true));
 </script>
 
 <div
-	class="modal fade"
+	class="modal"
 	tabindex="-1"
 	aria-hidden="true"
 	data-bs-backdrop="static"
 	data-bs-keyboard="false"
+	class:fade={isReady}
 	{id}
 >
 	<div class="modal-dialog modal-dialog-centered justify-content-center">
