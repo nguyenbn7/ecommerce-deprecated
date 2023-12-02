@@ -75,7 +75,27 @@ async def get_current_user(
     except JWTError:
         raise credentials_exception
 
-    user = user_repo.get_user_by_username(username)
+    user = user_repo.get_user_by_email(username)
     if user is None:
         raise credentials_exception
+    return user
+
+
+def create_user(user_repo: UserRepository, user: ApplicationUser, password: str):
+    user.password_hash = hash_password(password)
+    user.normalized_email = user.email.strip().upper()
+    user.normalized_user_name = user.user_name.strip().upper()
+    user_repo.save(user)
+    return user
+
+
+def sign_in(user_repo: UserRepository, email: str, password: str):
+    user = user_repo.get_user_by_email(email)
+
+    if not user:
+        return None
+
+    if not verfiy_password(password, user.password_hash):
+        return None
+
     return user

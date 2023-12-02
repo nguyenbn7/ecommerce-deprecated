@@ -1,6 +1,6 @@
 from datetime import datetime
 import enum
-from typing import List
+from typing import Any, List
 from sqlalchemy import BigInteger, Integer, String, DateTime, Numeric, Enum, ForeignKey
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from pydantic import BaseModel, Field
@@ -75,7 +75,7 @@ class OrderDTO(BaseModel):
     billing_address: BillingAddressDTO
     shipping_address: ShippingAddressDTO | None = Field(default=None)
     delivery_method_id: int
-    payment_method: str
+    payment_type: str
 
 
 class OrderItem(BaseORM):
@@ -138,7 +138,16 @@ class OrderStatus(BaseORM):
     normalized_name: Mapped[str] = mapped_column(String, nullable=False)
 
 
-class PaymentType(enum.Enum):
+class MetaEnum(enum.EnumMeta):
+    def __contains__(cls, item):
+        try:
+            cls(item)
+        except ValueError:
+            return False
+        return True
+
+
+class PaymentType(enum.Enum, metaclass=MetaEnum):
     CASH = "CASH"
     CREDIT_CARD = "CREDIT_CARD"
     DEBIT_CARD = "DEBIT_CARD"

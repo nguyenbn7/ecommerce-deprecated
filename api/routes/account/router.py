@@ -10,10 +10,10 @@ from routes.account.model import (
 )
 from routes.account.repository import UserRepository
 from routes.account.service import (
+    create_user,
     generate_jwt_token,
     get_current_user,
-    hash_password,
-    verfiy_password,
+    sign_in,
 )
 
 account_router = APIRouter(prefix="/account", tags=["Account"])
@@ -23,19 +23,14 @@ account_router = APIRouter(prefix="/account", tags=["Account"])
 def login(
     loginDTO: LoginDTO, user_repo: Annotated[UserRepository, Depends(UserRepository)]
 ):
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Email or Password incorrect",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-
-    user = user_repo.get_user_by_username(loginDTO.email)
+    user = sign_in(user_repo, loginDTO.email, loginDTO.password)
 
     if not user:
-        raise credentials_exception
-
-    if not verfiy_password(loginDTO.password, user.password_hash):
-        raise credentials_exception
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Email or Password incorrect",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
     return SuccessResponse(generate_jwt_token(user), user.email, user.display_name)
 
@@ -53,18 +48,25 @@ def register(
         )
 
     user = ApplicationUser()
-    user.user_name = registerDTO.email
-    user.email = registerDTO.email
-    user.display_name = registerDTO.display_name
-    user.password_hash = hash_password(registerDTO.password)
+    user.email = registerDTO.email.strip()
+    user.display_name = registerDTO.display_name.strip()
+    user.user_name = user.email
 
-    user_repo.save_user(user)
+    user = create_user(user_repo, user, registerDTO.password)
 
     return SuccessResponse(generate_jwt_token(user), user.email, user.display_name)
 
 
-@account_router.get("/info")
+@account_router.get("/display")
 def get_user_basic_info(
     current_user: Annotated[ApplicationUser, Depends(get_current_user)]
 ):
     return UserInfo(current_user.email, current_user.display_name)
+
+
+# @account_router.get("/profile")
+# def get_user_basic_info(
+#     current_user: Annotated[ApplicationUser, Depends(get_current_user)],
+
+# ):
+#     return UserInfo(current_user.email, current_user.display_name)

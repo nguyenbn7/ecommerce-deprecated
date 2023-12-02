@@ -10,23 +10,9 @@ class UserRepository(Repository[ApplicationUser]):
     def __init__(self, db: Annotated[Session, Depends(get_db_context)]) -> None:
         super().__init__(db)
 
-    def get_user_by_username(self, username: str) -> ApplicationUser | None:
-        return (
-            self.db_session.query(self.entity)
-            .filter(self.entity.normalized_user_name == username.upper())
-            .first()
-        )
-
     def get_user_by_email(self, email: str) -> ApplicationUser | None:
         return (
             self.db_session.query(self.entity)
             .filter(self.entity.normalized_email == email.upper())
             .first()
         )
-
-    def save_user(self, entity: ApplicationUser):
-        entity.normalized_email = entity.email.strip().upper()
-        entity.normalized_user_name = entity.user_name.strip().upper()
-        self.db_session.add(entity)
-        self.db_session.commit()
-        return entity

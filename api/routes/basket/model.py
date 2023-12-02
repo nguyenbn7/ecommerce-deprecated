@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-import json
 from typing import List
 from uuid import uuid4
 

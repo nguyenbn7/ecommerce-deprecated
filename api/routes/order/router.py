@@ -9,7 +9,7 @@ from routes.order.model import Order, OrderDTO, OrderItem, PaymentType
 from routes.order.repository import (
     DeliveryMethodRepository,
     OrderRepository,
-    PaymentRepository,
+    OrderStatusRepository,
 )
 
 
@@ -32,7 +32,7 @@ def create_order(
     order_dto: OrderDTO,
     current_user: Annotated[ApplicationUser, Depends(get_current_user)],
     basket_repo: Annotated[BasketRepository, Depends(BasketRepository)],
-    payment_repo: Annotated[PaymentRepository, Depends(PaymentRepository)],
+    order_status_repo: Annotated[OrderStatusRepository, Depends(OrderStatusRepository)],
     delivery_method_repo: Annotated[
         DeliveryMethodRepository, Depends(DeliveryMethodRepository)
     ],
@@ -46,9 +46,8 @@ def create_order(
     if not len(basket.items):
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Basket has no item")
 
-    payment_method = payment_repo.get_by_id(order_dto.payment_method_id)
-    if not payment_method:
-        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Invalid payment method")
+    if order_dto.payment_type not in PaymentType:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Invalid payment type")
 
     delivery_method = delivery_method_repo.get_by_id(order_dto.delivery_method_id)
     if not delivery_method:
@@ -62,18 +61,18 @@ def create_order(
 
     order = Order()
     order.buyer_email = current_user.email
-    order.payment_method = payment_method.code
+    order.payment_type = order_dto.payment_type
     order.items = list(map(map_basket_item_to_order_item, basket.items))
-    order.delivery_method_short_name = delivery_method.short_name
-    order.delivery_method_delivery_time = delivery_method.delivery_time
-    order.delivery_method_price = delivery_method.price
+    order.delivery_method_id = delivery_method.id
+    order.status_id = order_status_repo.find_by_name("pending").id
+    order.delivery_price = delivery_method.price
     order.billing_address = billing_address
     order.shipping_address = shipping_address
+    order.subtotal = sum(item.price * item.quantity for item in order.items)
 
     order_repo.save(order)
 
-    # TODO: delete basket after done
-    # basket_repo.delete_basket(order_dto.basket_id)
+    basket_repo.delete_basket(order_dto.basket_id)
 
     return {"order_id": order.id}
 
@@ -82,4 +81,4 @@ def create_order(
 def get_payment_methods(
     current_user: Annotated[ApplicationUser, Depends(get_current_user)]
 ):
-    return list(map(p.value for p in PaymentType))
+    return list(p.value for p in PaymentType)
