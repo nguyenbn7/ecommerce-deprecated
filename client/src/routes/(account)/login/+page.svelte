@@ -1,7 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import InputForm from '$lib/account/input-form.svelte';
+	import InputForm from '$lib/account/floating-input-form.svelte';
 	import { ToastService } from '$lib/components/share/toast.svelte';
 	import { loginAs } from '$lib/service/account.service';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
@@ -74,7 +74,7 @@
 			}
 
 			ToastService.notifySuccess(`Welcome back ${result.display_name}`);
-			
+
 			const returnUrl = $page.url.searchParams.get('returnUrl');
 			if (returnUrl) return goto(returnUrl);
 			return goto('/');
@@ -109,25 +109,29 @@
 	</div>
 
 	<form on:submit={onSubmitForm}>
-		<InputForm
-			class="form-floating mt-2 mb-3"
-			bind:inputField={loginForm.emailField}
-			id="Email"
-			type="email"
-			label="Email"
-			placeholder="name@example.com"
-			disabled={isLocked}
-		></InputForm>
+		<div class="form-floating mt-2 mb-3">
+			<InputForm
+				class="form-control rounded-5"
+				bind:inputField={loginForm.emailField}
+				id="Email"
+				type="email"
+				label="Email"
+				placeholder="name@example.com"
+				disabled={isLocked}
+			></InputForm>
+		</div>
 
-		<InputForm
-			class="form-floating mt-2 mb-3"
-			bind:inputField={loginForm.passwordField}
-			id="Password"
-			type="password"
-			label="Password"
-			placeholder="Password"
-			disabled={isLocked}
-		></InputForm>
+		<div class="form-floating mt-2 mb-3">
+			<InputForm
+				class="form-control rounded-5"
+				bind:inputField={loginForm.passwordField}
+				id="Password"
+				type="password"
+				label="Password"
+				placeholder="Password"
+				disabled={isLocked}
+			></InputForm>
+		</div>
 
 		<!-- <div class="d-flex justify-content-between my-3">
 			<div class="form-check text-start">

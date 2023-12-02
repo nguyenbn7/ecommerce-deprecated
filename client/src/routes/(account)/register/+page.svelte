@@ -1,7 +1,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import InputForm from '$lib/account/input-form.svelte';
+	import InputForm from '$lib/account/floating-input-form.svelte';
 	import { ToastService } from '$lib/components/share/toast.svelte';
 	import { registerAs } from '$lib/service/account.service';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
@@ -81,40 +81,48 @@
 		</p>
 	</div>
 
-	<InputForm
-		class="form-floating mt-2 mb-3"
-		bind:inputField={nameField}
-		id="Name"
-		label="Name"
-		placeholder="John Doe"
-	></InputForm>
+	<div class="form-floating mt-2 mb-3">
+		<InputForm
+			class="form-control rounded-5"
+			bind:inputField={nameField}
+			id="Name"
+			label="Name"
+			placeholder="John Doe"
+		></InputForm>
+	</div>
 
-	<InputForm
-		class="form-floating mt-2 mb-3"
-		bind:inputField={emailField}
-		id="Email"
-		type="email"
-		label="Email"
-		placeholder="name@example.com"
-	></InputForm>
+	<div class="form-floating mt-2 mb-3">
+		<InputForm
+			class="form-control rounded-5"
+			bind:inputField={emailField}
+			id="Email"
+			type="email"
+			label="Email"
+			placeholder="name@example.com"
+		></InputForm>
+	</div>
 
-	<InputForm
-		class="form-floating mt-2 mb-3"
-		bind:inputField={passwordField}
-		id="Password"
-		type="password"
-		label="Password"
-		placeholder="Password"
-	></InputForm>
+	<div class="form-floating mt-2 mb-3">
+		<InputForm
+			class="form-control rounded-5"
+			bind:inputField={passwordField}
+			id="Password"
+			type="password"
+			label="Password"
+			placeholder="Password"
+		></InputForm>
+	</div>
 
-	<InputForm
-		class="form-floating mt-2 mb-3"
-		bind:inputField={confirmPasswordField}
-		id="ConfirmPassword"
-		type="password"
-		label="Confirm Password"
-		placeholder="Confirm Password"
-	></InputForm>
+	<div class="form-floating mt-2 mb-3">
+		<InputForm
+			class="form-control rounded-5"
+			bind:inputField={confirmPasswordField}
+			id="ConfirmPassword"
+			type="password"
+			label="Confirm Password"
+			placeholder="Confirm Password"
+		></InputForm>
+	</div>
 
 	<button
 		class="btn btn-primary w-100 py-2 mt-2 mb-3 rounded-5"

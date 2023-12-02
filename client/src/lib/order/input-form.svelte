@@ -48,26 +48,24 @@
 	}
 </script>
 
-<div class={classNames}>
-	<input
-		{type}
-		class="form-control rounded-5"
-		{id}
-		{placeholder}
-		on:focusout={onFocusOut}
-		on:input={handleInput}
-		on:keyup={onKeyUp}
-		class:is-invalid={inputField.dirty && !inputField.valid}
-		class:is-valid={inputField.dirty && inputField.valid}
-		{disabled}
-	/>
-	<label for={id}>{label}</label>
-	{#if inputField.validationMessage}
-		<div
-			class:invalid-feedback={inputField.dirty && !inputField.valid}
-			class:valid-feedback={inputField.dirty && inputField.valid}
-		>
-			{inputField.validationMessage}
-		</div>
-	{/if}
-</div>
+<label for={id} class="form-label">{@html label}</label>
+<input
+	{type}
+	class={classNames}
+	{id}
+	{placeholder}
+	on:focusout={onFocusOut}
+	on:input={handleInput}
+	on:keyup={onKeyUp}
+	class:is-invalid={inputField.dirty && !inputField.valid}
+	class:is-valid={inputField.dirty && inputField.valid}
+	{disabled}
+/>
+{#if inputField.validationMessage}
+	<div
+		class:invalid-feedback={inputField.dirty && !inputField.valid}
+		class:valid-feedback={inputField.dirty && inputField.valid}
+	>
+		{inputField.validationMessage}
+	</div>
+{/if}
