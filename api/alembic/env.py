@@ -10,7 +10,14 @@ from routes.product.model import Product
 from routes.product_brand.model import ProductBrand
 from routes.product_type.model import ProductType
 from routes.account.model import ApplicationUser, ApplicationUserAddress
-from routes.order.model import BillingAddress, ShippingAddress, PaymentMethod, DeliveryMethod, OrderItem, Order
+from routes.order.model import (
+    BillingAddress,
+    ShippingAddress,
+    OrderStatus,
+    DeliveryMethod,
+    OrderItem,
+    Order,
+)
 from share.setting import get_database_settings
 
 # this is the Alembic Config object, which provides

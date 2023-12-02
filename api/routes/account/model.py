@@ -71,8 +71,7 @@ class ApplicationUserAddress(BaseORM):
     __tablename__ = "user_addresses"
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
-    first_name: Mapped[str] = mapped_column(String(256), nullable=False)
-    last_name: Mapped[str] = mapped_column(String(256), nullable=False)
+    full_name: Mapped[str] = mapped_column(String(256), nullable=False)
     street: Mapped[str] = mapped_column(String(400), nullable=False)
     city: Mapped[str] = mapped_column(String(256), nullable=False)
     state: Mapped[str] = mapped_column(String(256), nullable=False)

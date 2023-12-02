@@ -75,7 +75,7 @@ class OrderDTO(BaseModel):
     billing_address: BillingAddressDTO
     shipping_address: ShippingAddressDTO | None = Field(default=None)
     delivery_method_id: int
-    payment_method_id: int
+    payment_method: str
 
 
 class OrderItem(BaseORM):
@@ -91,14 +91,6 @@ class OrderItem(BaseORM):
 
     order_id: Mapped[int] = mapped_column(ForeignKey("orders.id"))
     order: Mapped["Order"] = relationship(back_populates="items")
-
-
-class PaymentMethod(BaseORM):
-    __tablename__ = "payment_methods"
-
-    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
-    name: Mapped[str] = mapped_column(String, nullable=False)
-    code: Mapped[str] = mapped_column(String, nullable=False)
 
 
 class BillingAddress(BaseORM):
@@ -138,28 +130,34 @@ class DeliveryMethod(BaseORM):
     price: Mapped[float] = mapped_column(Numeric(precision=10, scale=2), nullable=False)
 
 
-class OrderStatus(enum.Enum):
-    PENDING = "PENDING"
-    PAYMENT_RECEIVED = "PAYMENT_RECEIVED"
-    PAYMENT_FAILED = "PAYMENT_FAILED"
+class OrderStatus(BaseORM):
+    __tablename__ = "order_statuses"
+
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    normalized_name: Mapped[str] = mapped_column(String, nullable=False)
+
+
+class PaymentType(enum.Enum):
+    CASH = "CASH"
+    CREDIT_CARD = "CREDIT_CARD"
+    DEBIT_CARD = "DEBIT_CARD"
 
 
 class Order(BaseORM):
     __tablename__ = "orders"
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
-    status: Mapped[OrderStatus] = mapped_column(
-        Enum(OrderStatus), default=OrderStatus.PENDING, nullable=False
-    )
-    payment_method: Mapped[str] = mapped_column(String, nullable=False)
-    date: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow(), nullable=False
-    )
     buyer_email: Mapped[str] = mapped_column(String, nullable=False)
-    delivery_method_short_name: Mapped[str] = mapped_column(String, nullable=False)
-    delivery_method_delivery_time: Mapped[str] = mapped_column(String, nullable=False)
-    delivery_method_price: Mapped[float] = mapped_column(
+    payment_type: Mapped[str] = mapped_column(Enum(PaymentType), nullable=False)
+    delivery_price: Mapped[float] = mapped_column(
         Numeric(precision=10, scale=2), nullable=False
+    )
+    subtotal: Mapped[float] = mapped_column(
+        Numeric(precision=10, scale=2), nullable=False
+    )
+    created_date: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.utcnow(), nullable=False
     )
 
     items: Mapped[List[OrderItem]] = relationship(back_populates="order")
@@ -169,9 +167,10 @@ class Order(BaseORM):
         ForeignKey("shipping_addresses.id")
     )
     shipping_address: Mapped[ShippingAddress] = relationship()
+    status_id: Mapped[int] = mapped_column(ForeignKey("order_statuses.id"))
+    status: Mapped[OrderStatus] = relationship()
+    delivery_method_id: Mapped[int] = mapped_column(ForeignKey("delivery_methods.id"))
+    delivery_method: Mapped[DeliveryMethod] = relationship()
 
     def get_total(self):
-        return (
-            sum(item.price * item.quantity for item in self.items)
-            + self.delivery_method.price
-        )
+        return self.subtotal + self.delivery_price

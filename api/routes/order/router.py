@@ -5,7 +5,7 @@ from routes.account.service import get_current_user
 from routes.basket.model import BasketItem
 from routes.basket.repository import BasketRepository
 
-from routes.order.model import Order, OrderDTO, OrderItem
+from routes.order.model import Order, OrderDTO, OrderItem, PaymentType
 from routes.order.repository import (
     DeliveryMethodRepository,
     OrderRepository,
@@ -76,3 +76,10 @@ def create_order(
     # basket_repo.delete_basket(order_dto.basket_id)
 
     return {"order_id": order.id}
+
+
+@order_router.get("/payments")
+def get_payment_methods(
+    current_user: Annotated[ApplicationUser, Depends(get_current_user)]
+):
+    return list(map(p.value for p in PaymentType))

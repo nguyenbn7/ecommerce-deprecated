@@ -1,0 +1,14 @@
+[
+    {
+        "name": "Pending",
+        "normalized_name": "PENDING"
+    },
+    {
+        "name": "Payment Received",
+        "normalized_name": "PAYMENT_RECEIVED"
+    },
+    {
+        "name": "Payment Failed",
+        "normalized_name": "PAYMENT_FAILED"
+    }
+]

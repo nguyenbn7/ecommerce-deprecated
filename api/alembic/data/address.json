@@ -1,0 +1,18 @@
+[
+    {
+        "full_name": "Demo Customer",
+        "street": "260 Trailsway Parkway",
+        "city": "Mc Keesport",
+        "state": "Pennsylvania",
+        "zip_code": "15134",
+        "user_id": 1
+    },
+    {
+        "full_name": "Demo Customer 1",
+        "street": "74 Ridgeway Place",
+        "city": "Richmond",
+        "state": "Virginia",
+        "zip_code": "23203",
+        "user_id": 2
+    }
+]
