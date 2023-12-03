@@ -11,14 +11,14 @@ const TOKEN_KEY_NAME = 'token';
 
 export const currentUser = readonly(_user);
 
-export function getAccessToken() {
+function getAccessToken() {
 	return localStorage.getItem(TOKEN_KEY_NAME);
 }
 
 export async function loadUser() {
 	const accessToken = getAccessToken();
 	if (!accessToken) return;
-	const response = await fetch(`${PUBLIC_BASE_API_URL}/account/info`, {
+	const response = await fetch(`${PUBLIC_BASE_API_URL}/account/display`, {
 		headers: {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${accessToken}`

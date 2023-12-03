@@ -1,54 +1,61 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import InputForm from '$lib/account/floating-input-form.svelte';
 	import { ToastService } from '$lib/components/share/toast.svelte';
 	import { loginAs } from '$lib/service/account.service';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
-	import { InputField } from '$lib/share/model';
-	import { hasCorrectEmailFormat, requireField } from '$lib/share/validator';
+	import { FormField } from '$lib/share/form/validation';
+	import EmailInput, { EmailInputValidator } from '$lib/share/form/email-input.svelte';
+	import PasswordInput, { PasswordInputValidator } from '$lib/share/form/password-input.svelte';
+	import ValidationFeedback from '$lib/share/form/validation-feedback.svelte';
+	import AccountService from '$lib/account/service';
 
-	const loginForm = {
-		emailField: new InputField([
-			requireField('Email is required'),
-			hasCorrectEmailFormat('Incorrect email. Example: bob@test.com')
-		]),
-		passwordField: new InputField([requireField('Password is required')])
-	};
+	class LoginForm {
+		static emailField = new FormField(
+			EmailInputValidator.checkRequired('Email is required'),
+			EmailInputValidator.checkFormat('Incorrect email. Example: bob@test.com')
+		);
+		static passwordField = new FormField(
+			PasswordInputValidator.checkRequired('Password is required')
+		);
 
-	$: isValid = loginForm.emailField.valid && loginForm.passwordField.valid;
+		static get valid() {
+			return this.emailField.valid && this.passwordField.valid;
+		}
 
-	let isLocked = false;
+		static #onSubmit = false;
+
+		/**
+		 * @param {boolean} state
+		 */
+		static set isSubmiting(state) {
+			this.#onSubmit = state;
+		}
+
+		static get isSubmiting() {
+			return this.#onSubmit;
+		}
+	}
+
 	let isDemoAccountLogin = false;
 	let isAccounts = [false, false];
 
 	async function onSubmitForm() {
 		try {
-			isLocked = true;
-			const result = await loginAs({
-				email: loginForm.emailField.value,
-				password: loginForm.passwordField.value
+			LoginForm.isSubmiting = true;
+			const userInfo = await AccountService.login({
+				email: LoginForm.emailField.value,
+				password: LoginForm.passwordField.value
 			});
-			if (result instanceof Response) {
-				/**
-				 * @type {ErrorResponse}
-				 */
-				const errorResponse = await result.json();
-				if (errorResponse.message) {
-					ToastService.notifyError(errorResponse.message);
-				}
-				return;
-			}
 
-			ToastService.notifySuccess(`Welcome back ${result.display_name}`);
-			const returnUrl = $page.url.searchParams.get('returnUrl');
-			if (returnUrl) return goto(returnUrl);
-			return goto('/');
-		} catch (error) {
-			// @ts-ignore
-			ToastService.notifyError(error.message);
+			if (userInfo) {
+				ToastService.notifySuccess(`Welcome back ${userInfo.displayName}`);
+				const returnUrl = $page.url.searchParams.get('returnUrl');
+				if (returnUrl) return goto(returnUrl);
+				return goto('/');
+			}
 		} finally {
-			isLocked = false;
+			LoginForm.isSubmiting = false;
 		}
 	}
 
@@ -110,48 +117,37 @@
 
 	<form on:submit={onSubmitForm}>
 		<div class="form-floating mt-2 mb-3">
-			<InputForm
-				class="form-control rounded-5"
-				bind:inputField={loginForm.emailField}
-				id="Email"
-				type="email"
-				label="Email"
+			<EmailInput
+				class="form-control rounded-4"
+				bind:formField={LoginForm.emailField}
+				id="email"
 				placeholder="name@example.com"
-				disabled={isLocked}
-			></InputForm>
+			></EmailInput>
+			<label for="email">Email</label>
+			<ValidationFeedback formField={LoginForm.emailField}></ValidationFeedback>
 		</div>
 
 		<div class="form-floating mt-2 mb-3">
-			<InputForm
-				class="form-control rounded-5"
-				bind:inputField={loginForm.passwordField}
-				id="Password"
-				type="password"
-				label="Password"
+			<PasswordInput
+				class="form-control rounded-4"
+				bind:formField={LoginForm.passwordField}
+				id="password"
 				placeholder="Password"
-				disabled={isLocked}
-			></InputForm>
+			></PasswordInput>
+			<label for="password">Password</label>
+			<ValidationFeedback formField={LoginForm.passwordField}></ValidationFeedback>
 		</div>
 
-		<!-- <div class="d-flex justify-content-between my-3">
-			<div class="form-check text-start">
-				<input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault" />
-				<label class="form-check-label" for="flexCheckDefault"> Remember me </label>
-			</div>
-			<div class="text-end">
-				<a href={'#'} class="text-decoration-none">Forgot password?</a>
-			</div>
-		</div> -->
 		<button
-			class="btn btn-primary w-100 py-2 mt-2 mb-3 rounded-5"
+			class="btn btn-primary w-100 py-2 mt-2 mb-3 rounded-4"
 			type="submit"
-			disabled={!isValid || isLocked}
+			disabled={!LoginForm.valid}
 		>
 			Login
-			{#if isLocked}
+			<!-- {#if isLocked}
 				<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
 				<span class="visually-hidden" role="status">Loading...</span>
-			{/if}
+			{/if} -->
 		</button>
 	</form>
 	<div class="d-flex mt-3 mb-4">
@@ -166,7 +162,7 @@
 	<div class="row row-cols-2 g-2 mt-2">
 		<div class="col d-flex justify-content-center">
 			<button
-				class="btn btn-outline-info rounded-5"
+				class="btn btn-outline-info rounded-4"
 				type="submit"
 				on:click={onLoginCustomer}
 				disabled={isDemoAccountLogin}
@@ -180,7 +176,7 @@
 		</div>
 		<div class="col d-flex justify-content-center">
 			<button
-				class="btn btn-outline-info rounded-5"
+				class="btn btn-outline-info rounded-4"
 				type="submit"
 				on:click={onLoginCustomer1}
 				disabled={isDemoAccountLogin}

@@ -64,23 +64,13 @@ type Login = {
 	password: string;
 };
 
-type LoginSuccess = {
-	display_name: string;
-	email: string;
-	token: string;
-};
+// type LoginSuccess = {
+// 	display_name: string;
+// 	email: string;
+// 	token: string;
+// };
 
-type Validator = { check: (inputField: InputFieldType) => boolean; errorMessage: string?};
-type Validators = Validator[];
-
-type InputFieldType = {
-	dirty: boolean;
-	valid: boolean;
-	value: string;
-	validationMessage: string | null;
-	successMessage: string | null;
-	validators: Validators;
-};
+type Validator = { check: (value: string | null | undefined) => boolean; errorMessage: string?};
 
 type Register = {
 	email: string;
@@ -88,18 +78,6 @@ type Register = {
 	password: string;
 	confirm_password: string;
 };
-
-type UserInfo = {
-	email: string;
-	display_name: string;
-};
-
-type SuccessResponse = {
-	token: string;
-	email: string;
-	display_name: string;
-};
-
 declare namespace Toastr {
 	type Type = 'ERROR' | 'SUCCESS' | 'INFO' | 'WARNING';
 
@@ -143,4 +121,33 @@ type OrderAddress = {
 	state: string
 	zip_code: string
 }
+
+// ACCOUNT
+type LoginDTO = {
+	email: string,
+	password: string
+}
+
+type RegisterDTO = {
+	email: string,
+	password: string,
+	display_name: string,
+	confirm_password: string,
+}
+
+type SignInSuccess = {
+	display_name: string;
+	email: string;
+	token: string;
+}
+
+type UserInfo = {
+	email: string;
+	displayName: string;
+};
+
+type UserInfoResponse = {
+	email: string;
+	display_name: string;
+};
 

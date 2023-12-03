@@ -1,13 +1,8 @@
-import { PUBLIC_BASE_API_URL } from '$env/static/public';
 import { SpinnerService } from '$lib/components/share/spinner.svelte';
 import { ToastService } from '$lib/components/share/toast.svelte';
-import { delay } from '$lib/share/functions';
-import axios, { AxiosError } from 'axios';
+import { delay, httpClient } from '$lib/share/request';
+import { AxiosError } from 'axios';
 
-const httpClient = axios.create({
-	baseURL: PUBLIC_BASE_API_URL,
-	timeout: 5000
-});
 
 httpClient.interceptors.response.use(async (response) => {
 	await delay();

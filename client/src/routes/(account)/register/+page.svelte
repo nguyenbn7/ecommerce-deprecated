@@ -1,70 +1,83 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import InputForm from '$lib/account/floating-input-form.svelte';
+	import AccountService from '$lib/account/service';
 	import { ToastService } from '$lib/components/share/toast.svelte';
-	import { registerAs } from '$lib/service/account.service';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
-	import { InputField } from '$lib/share/model';
-	import {
-		hasAlnumAndSpace,
-		hasCorrectEmailFormat,
-		hasMaxLength,
-		requireField
-	} from '$lib/share/validator';
+	import EmailInput, { EmailInputValidator } from '$lib/share/form/email-input.svelte';
+	import PasswordInput, { PasswordInputValidator } from '$lib/share/form/password-input.svelte';
+	import TextInput, { TextInputValidator } from '$lib/share/form/text-input.svelte';
+	import { FormField, Validators } from '$lib/share/form/validation';
+	import ValidationFeedback from '$lib/share/form/validation-feedback.svelte';
 
 	const name_max_len = 70;
 
-	let nameField = new InputField([
-		requireField('Name is required'),
-		hasAlnumAndSpace('Name contains only letters and spaces'),
-		hasMaxLength(`Name's max length is ${name_max_len} characters`, name_max_len)
-	]);
+	class RegisterForm {
+		static nameField = new FormField(
+			TextInputValidator.checkRequired('Name is required'),
+			Validators.containsAlnumAndSpace('Name contains only letters and spaces'),
+			Validators.checkMaxLength(`Name's max length is ${name_max_len} characters`, name_max_len)
+		);
 
-	let emailField = new InputField([
-		requireField('Email is required'),
-		hasCorrectEmailFormat('Incorrect email. Example: bob@test.com')
-	]);
+		static emailField = new FormField(
+			EmailInputValidator.checkRequired('Email is required'),
+			EmailInputValidator.checkFormat('Incorrect email. Example: bob@test.com')
+		);
 
-	let passwordField = new InputField([requireField('Password is required')]);
+		static passwordField = new FormField(
+			PasswordInputValidator.checkRequired('Password is required')
+		);
 
-	let confirmPasswordField = new InputField([requireField('Confirm Password is required')]);
+		static confirmPasswordField = new FormField(
+			PasswordInputValidator.checkRequired('Confirm Password is required')
+		);
 
-	$: isValid =
-		nameField.valid && emailField.valid && passwordField.valid && confirmPasswordField.valid;
+		static get valid() {
+			return (
+				this.nameField.valid &&
+				this.emailField.valid &&
+				this.passwordField.valid &&
+				this.confirmPasswordField.valid
+			);
+		}
+
+		static #onSubmit = false;
+
+		/**
+		 * @param {boolean} state
+		 */
+		static set isSubmiting(state) {
+			this.#onSubmit = state;
+		}
+
+		static get isSubmiting() {
+			return this.#onSubmit;
+		}
+	}
 
 	let isLocked = false;
 
 	async function onSubmitForm() {
 		try {
-			isLocked = true;
-			const result = await registerAs({
-				email: emailField.value,
-				display_name: nameField.value,
-				password: passwordField.value,
-				confirm_password: confirmPasswordField.value
+			RegisterForm.isSubmiting = true;
+			const userInfo = await AccountService.register({
+				email: RegisterForm.emailField.value,
+				password: RegisterForm.passwordField.value,
+				display_name: RegisterForm.nameField.value,
+				confirm_password: RegisterForm.confirmPasswordField.value
 			});
 
-			if (result instanceof Response) {
-				/**
-				 * @type {ErrorResponse}
-				 */
-				const errorResponse = await result.json();
-				if (errorResponse.error) {
-					ToastService.notifyError(errorResponse.error);
-				}
-				return;
+			if (userInfo) {
+				ToastService.notifySuccess(`Welcome ${userInfo?.displayName}`);
+				const returnUrl = $page.url.searchParams.get('returnUrl');
+				if (returnUrl) return goto(returnUrl);
+				return goto('/');
 			}
-
-			ToastService.notifySuccess(`Welcome ${result.display_name}`);
-			const returnUrl = $page.url.searchParams.get('returnUrl');
-			if (returnUrl) return goto(returnUrl);
-			return goto('/');
 		} catch (error) {
 			// @ts-ignore
 			ToastService.notifyError(error.message);
 		} finally {
-			isLocked = false;
+			RegisterForm.isSubmiting = false;
 		}
 	}
 </script>
@@ -82,57 +95,58 @@
 	</div>
 
 	<div class="form-floating mt-2 mb-3">
-		<InputForm
-			class="form-control rounded-5"
-			bind:inputField={nameField}
-			id="Name"
-			label="Name"
-			placeholder="John Doe"
-		></InputForm>
+		<TextInput
+			class="form-control rounded-4"
+			bind:formField={RegisterForm.nameField}
+			id="displayName"
+			placeholder="I am cute"
+		></TextInput>
+		<label for="displayName">Display Name</label>
+		<ValidationFeedback formField={RegisterForm.emailField}></ValidationFeedback>
 	</div>
 
 	<div class="form-floating mt-2 mb-3">
-		<InputForm
-			class="form-control rounded-5"
-			bind:inputField={emailField}
-			id="Email"
-			type="email"
-			label="Email"
+		<EmailInput
+			class="form-control rounded-4"
+			bind:formField={RegisterForm.emailField}
+			id="email"
 			placeholder="name@example.com"
-		></InputForm>
+		></EmailInput>
+		<label for="email">Email</label>
+		<ValidationFeedback formField={RegisterForm.emailField}></ValidationFeedback>
 	</div>
 
 	<div class="form-floating mt-2 mb-3">
-		<InputForm
-			class="form-control rounded-5"
-			bind:inputField={passwordField}
-			id="Password"
-			type="password"
-			label="Password"
+		<PasswordInput
+			class="form-control rounded-4"
+			bind:formField={RegisterForm.passwordField}
+			id="password"
 			placeholder="Password"
-		></InputForm>
+		></PasswordInput>
+		<label for="password">Password</label>
+		<ValidationFeedback formField={RegisterForm.passwordField}></ValidationFeedback>
 	</div>
 
 	<div class="form-floating mt-2 mb-3">
-		<InputForm
-			class="form-control rounded-5"
-			bind:inputField={confirmPasswordField}
-			id="ConfirmPassword"
-			type="password"
-			label="Confirm Password"
-			placeholder="Confirm Password"
-		></InputForm>
+		<PasswordInput
+			class="form-control rounded-4"
+			bind:formField={RegisterForm.confirmPasswordField}
+			id="confirmPassword"
+			placeholder="Re-type password"
+		></PasswordInput>
+		<label for="confirmPassword">Confirm Password</label>
+		<ValidationFeedback formField={RegisterForm.confirmPasswordField}></ValidationFeedback>
 	</div>
 
 	<button
 		class="btn btn-primary w-100 py-2 mt-2 mb-3 rounded-5"
 		type="submit"
-		disabled={!isValid || isLocked}
+		disabled={!RegisterForm.valid}
 	>
 		Register
-		{#if isLocked}
+		<!-- {#if isLocked}
 			<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
 			<span class="visually-hidden" role="status">Loading...</span>
-		{/if}
+		{/if} -->
 	</button>
 </form>

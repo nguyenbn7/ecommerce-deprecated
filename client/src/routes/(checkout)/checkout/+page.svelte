@@ -122,7 +122,7 @@
 							<InputForm
 								inputField={billingAddress.address2}
 								placeholder="Apartment or suite"
-								label="Address 2 <span class="text-body-secondary">(Optional)</span>"
+								label={'Address 2 <span class="text-body-secondary">(Optional)</span>'}
 								class="form-control"
 								id="address2"
 							></InputForm>
@@ -139,7 +139,7 @@
 
 						<div class="col-md-4">
 							<label for="state" class="form-label">State</label>
-							<select class="form-select" id="state" required="">
+							<select class="form-select" id="state">
 								<option value="">Choose...</option>
 								<option>California</option>
 							</select>

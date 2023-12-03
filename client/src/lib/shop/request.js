@@ -1,11 +1,37 @@
-import httpClientWithSpinner from '$lib/share/httpClient';
+import { SpinnerService } from "$lib/components/share/spinner.svelte";
+import { ToastService } from "$lib/components/share/toast.svelte";
+import { delay, httpClient } from "$lib/share/request";
+import { AxiosError } from "axios";
+
+httpClient.interceptors.request.use(config => {
+    SpinnerService.show();
+    return config;
+})
+
+httpClient.interceptors.response.use(async (response) => {
+    await delay();
+    SpinnerService.hide();
+    return response;
+}, error => {
+    if (error instanceof AxiosError) {
+        const response = error.response;
+        let errorMessage = error.message;
+        if (response) {
+            errorMessage = response.data.message
+        }
+        ToastService.notifyError(errorMessage);
+        console.log(error)
+    }
+    SpinnerService.hide();
+    throw error;
+});
 
 /**
  * @param {number} productId
  * @returns {Promise<Product>}
  */
 async function getProduct(productId) {
-    const response = await httpClientWithSpinner.get(`products/${productId}`);
+    const response = await httpClient.get(`products/${productId}`);
     return response.data;
 }
 
@@ -13,7 +39,7 @@ async function getProduct(productId) {
  * @returns {Promise<ProductBrand[]>}
  */
 async function getProductBrands() {
-    const response = await httpClientWithSpinner.get(`products/brands/`);
+    const response = await httpClient.get(`products/brands/`);
     return response.data;
 }
 
@@ -21,7 +47,7 @@ async function getProductBrands() {
  * @returns {Promise<ProductType[]>}
  */
 async function getProductTypes() {
-    const response = await httpClientWithSpinner.get(`products/types/`);
+    const response = await httpClient.get(`products/types/`);
     return response.data;
 }
 
@@ -38,7 +64,7 @@ async function getPageProduct(shopParams) {
     params['page_size'] = shopParams.page_size;
     if (shopParams.search) params['search'] = shopParams.search;
 
-    const response = await httpClientWithSpinner.get('products', {
+    const response = await httpClient.get('products', {
         params
     });
     return response.data;

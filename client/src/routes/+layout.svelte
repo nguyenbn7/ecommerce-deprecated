@@ -2,7 +2,6 @@
 	import Spinner, { SpinnerService } from '$lib/components/share/spinner.svelte';
 	import ToastContainer from '$lib/components/share/toast-container.svelte';
 	import { ToastService } from '$lib/components/share/toast.svelte';
-	import '$lib/style/spinner.custom.scss';
 
 	const toastContainerId = 'toast-container';
 	const spinnerId = 'spinnerModal';

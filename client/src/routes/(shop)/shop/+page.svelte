@@ -4,10 +4,6 @@
 	import PagingHeader from '$lib/components/share/paging-header.svelte';
 	import { onMount } from 'svelte';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
-	import { getProductBrands } from '$lib/service/product-brand.service';
-	import { getProductTypes } from '$lib/service/product-type.service';
-	import { SpinnerService } from '$lib/components/share/spinner.svelte';
-	import { ToastService } from '$lib/components/share/toast.svelte';
 	import { getPageProduct } from '$lib/product/request';
 	import ShopService from '$lib/shop/service';
 

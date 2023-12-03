@@ -48,6 +48,7 @@
 	}
 </script>
 
+
 <input
 	{type}
 	class={classNames}
