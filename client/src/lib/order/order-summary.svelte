@@ -1,6 +1,8 @@
 <script>
-	import { basket, basketTotals } from '$lib/service/basket.service';
+	import BasketService from '$lib/basket/service';
 	import { currency } from '$lib/share/functions';
+	let basket = BasketService.basket;
+	let basketTotals = BasketService.basketTotals;
 </script>
 
 <div class="card">

@@ -2,7 +2,6 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { ToastService } from '$lib/components/share/toast.svelte';
-	import { loginAs } from '$lib/service/account.service';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
 	import { FormField } from '$lib/share/form/validation';
 	import EmailInput, { EmailInputValidator } from '$lib/share/form/email-input.svelte';
@@ -41,12 +40,19 @@
 	let isAccounts = [false, false];
 
 	async function onSubmitForm() {
+		await handleLogin({
+			email: LoginForm.emailField.value,
+			password: LoginForm.passwordField.value
+		});
+	}
+
+	/**
+	 * @param {LoginDTO} loginDTO
+	 */
+	async function handleLogin(loginDTO) {
 		try {
 			LoginForm.isSubmiting = true;
-			const userInfo = await AccountService.login({
-				email: LoginForm.emailField.value,
-				password: LoginForm.passwordField.value
-			});
+			const userInfo = await AccountService.login(loginDTO);
 
 			if (userInfo) {
 				ToastService.notifySuccess(`Welcome back ${userInfo.displayName}`);
@@ -59,47 +65,18 @@
 		}
 	}
 
-	/**
-	 * @param {string} email
-	 * @param {string} password
-	 * @param {number} id
-	 */
-	async function onLoginDemoAccount(email, password, id) {
-		try {
-			isDemoAccountLogin = true;
-			isAccounts[id] = true;
-			const result = await loginAs({ email, password });
-			if (result instanceof Response) {
-				/**
-				 * @type {ErrorResponse}
-				 */
-				const errorResponse = await result.json();
-				if (errorResponse.message) {
-					ToastService.notifyError(errorResponse.message);
-				}
-				return;
-			}
-
-			ToastService.notifySuccess(`Welcome back ${result.display_name}`);
-
-			const returnUrl = $page.url.searchParams.get('returnUrl');
-			if (returnUrl) return goto(returnUrl);
-			return goto('/');
-		} catch (error) {
-			// @ts-ignore
-			ToastService.notifyError(error.message);
-		} finally {
-			isDemoAccountLogin = false;
-			isAccounts[id] = false;
-		}
-	}
-
 	async function onLoginCustomer() {
-		await onLoginDemoAccount('customer@test.com', 'Pa$$w0rd', 0);
+		await handleLogin({
+			email: 'customer@test.com',
+			password: 'Pa$$w0rd'
+		});
 	}
 
 	async function onLoginCustomer1() {
-		await onLoginDemoAccount('customer1@test.com', 'Pa$$w0rd', 1);
+		await handleLogin({
+			email: 'customer1@test.com',
+			password: 'Pa$$w0rd'
+		});
 	}
 </script>
 
@@ -122,6 +99,7 @@
 				bind:formField={LoginForm.emailField}
 				id="email"
 				placeholder="name@example.com"
+				readonly={LoginForm.isSubmiting}
 			></EmailInput>
 			<label for="email">Email</label>
 			<ValidationFeedback formField={LoginForm.emailField}></ValidationFeedback>
@@ -133,6 +111,7 @@
 				bind:formField={LoginForm.passwordField}
 				id="password"
 				placeholder="Password"
+				readonly={LoginForm.isSubmiting}
 			></PasswordInput>
 			<label for="password">Password</label>
 			<ValidationFeedback formField={LoginForm.passwordField}></ValidationFeedback>
@@ -141,13 +120,13 @@
 		<button
 			class="btn btn-primary w-100 py-2 mt-2 mb-3 rounded-4"
 			type="submit"
-			disabled={!LoginForm.valid}
+			disabled={!LoginForm.valid || LoginForm.isSubmiting}
 		>
 			Login
-			<!-- {#if isLocked}
+			{#if LoginForm.isSubmiting}
 				<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
 				<span class="visually-hidden" role="status">Loading...</span>
-			{/if} -->
+			{/if}
 		</button>
 	</form>
 	<div class="d-flex mt-3 mb-4">

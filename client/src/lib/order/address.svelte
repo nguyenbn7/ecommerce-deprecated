@@ -1,46 +1,10 @@
-<script context="module">
-	export class AddressForm {
-		#onSubmit = false;
-		constructor() {
-			this.fullNameField = new FormField(TextInputValidator.checkRequired('Full name is required'));
-			this.emailField = new FormField(
-				EmailInputValidator.checkRequired('Email is required'),
-				EmailInputValidator.checkFormat('Incorrect email. Example: bob@test.com')
-			);
-			this.addressField = new FormField(TextInputValidator.checkRequired('Address is required'));
-			this.address2Field = new FormField();
-		}
-
-		get valid() {
-			return (
-				this.fullNameField.valid &&
-				this.emailField.valid &&
-				this.addressField.valid &&
-				this.address2Field.valid
-			);
-		}
-
-		/**
-		 * @param {boolean} state
-		 */
-		set isSubmiting(state) {
-			this.#onSubmit = state;
-		}
-
-		get isSubmiting() {
-			return this.#onSubmit;
-		}
-	}
-</script>
-
 <script>
-	import EmailInput, { EmailInputValidator } from '$lib/share/form/email-input.svelte';
-	import TextInput, { TextInputValidator } from '$lib/share/form/text-input.svelte';
-	import { FormField } from '$lib/share/form/validation';
+	import EmailInput from '$lib/share/form/email-input.svelte';
+	import TextInput from '$lib/share/form/text-input.svelte';
 	import ValidationFeedback from '$lib/share/form/validation-feedback.svelte';
 
 	/**
-	 * @type {AddressForm}
+	 * @type {import("../order/form").AddressFormGroup}
 	 */
 	export let addressForm;
 </script>
@@ -49,44 +13,44 @@
 	<label for="fullName">Full Name</label>
 	<TextInput
 		class="form-control rounded-1"
-		bind:formField={addressForm.fullNameField}
+		bind:formField={addressForm.fullName}
 		id="fullName"
 		placeholder="Example: John Doe"
 	></TextInput>
-	<ValidationFeedback formField={addressForm.fullNameField}></ValidationFeedback>
+	<ValidationFeedback formField={addressForm.fullName}></ValidationFeedback>
 </div>
 
 <div class="col-12">
 	<label for="email">Email</label>
 	<EmailInput
 		class="form-control rounded-1"
-		bind:formField={addressForm.emailField}
+		bind:formField={addressForm.email}
 		id="email"
 		placeholder="johndoe@gmail.com"
 	></EmailInput>
-	<ValidationFeedback formField={addressForm.emailField}></ValidationFeedback>
+	<ValidationFeedback formField={addressForm.email}></ValidationFeedback>
 </div>
 
 <div class="col-12">
 	<label for="address">Address</label>
 	<TextInput
 		class="form-control rounded-1"
-		bind:formField={addressForm.addressField}
+		bind:formField={addressForm.address}
 		id="address"
 		placeholder="1234 Main St"
 	></TextInput>
-	<ValidationFeedback formField={addressForm.addressField}></ValidationFeedback>
+	<ValidationFeedback formField={addressForm.address}></ValidationFeedback>
 </div>
 
 <div class="col-12">
 	<label for="address2">Address 2 <span class="text-body-secondary">(Optional)</span></label>
 	<TextInput
 		class="form-control rounded-1"
-		bind:formField={addressForm.address2Field}
+		bind:formField={addressForm.address2}
 		id="address2"
 		placeholder="Apartment or suite"
 	></TextInput>
-	<ValidationFeedback formField={addressForm.address2Field}></ValidationFeedback>
+	<ValidationFeedback formField={addressForm.address2}></ValidationFeedback>
 </div>
 
 <div class="col-md-5">

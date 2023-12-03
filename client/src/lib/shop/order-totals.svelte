@@ -1,6 +1,8 @@
 <script>
-	import { basketTotals } from '$lib/service/basket.service';
+	import BasketService from '$lib/basket/service';
 	import { currency } from '$lib/share/functions';
+	
+	let basketTotals = BasketService.basketTotals;
 </script>
 
 <div class="bg-light px-4 py-3 text-uppercase fw-bold">Order Summary</div>

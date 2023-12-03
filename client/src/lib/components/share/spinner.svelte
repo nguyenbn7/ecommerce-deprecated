@@ -15,18 +15,20 @@
 			this.#spinnerModalId = id;
 		}
 
-		static show() {
+		static showSpinner() {
 			/**
 			 * @type {import("bootstrap").Modal}
 			 */
+			if (document.getElementById(this.#spinnerModalId) === null) return;
 			const modal = Modal.getOrCreateInstance(document.getElementById(this.#spinnerModalId));
 			modal.show(modal);
 		}
 
-		static hide() {
+		static hideSpinner() {
 			/**
 			 * @type {import("bootstrap").Modal | null}
 			 */
+			if (document.getElementById(this.#spinnerModalId) === null) return;
 			const modal = Modal.getInstance(document.getElementById(this.#spinnerModalId));
 			modal?.hide();
 		}
@@ -64,7 +66,7 @@
 		height: 56px;
 		border-radius: 50%;
 		border: 9px solid whitesmoke;
-		/* border: 9px solid #474bff */;
+		/* border: 9px solid #474bff */
 		animation:
 			spinner-bulqg1 1.1199999999999999s infinite linear alternate,
 			spinner-oaa3wk 2.2399999999999998s infinite linear;

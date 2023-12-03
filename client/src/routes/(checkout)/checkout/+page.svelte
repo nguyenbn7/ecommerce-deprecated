@@ -1,10 +1,11 @@
 <script>
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
-	import Address, { AddressForm } from '$lib/order/address.svelte';
+	import Address from '$lib/order/address.svelte';
 	import OrderSummary from '$lib/order/order-summary.svelte';
-	import OrderHttpClient from '$lib/order/request';
 	import { onMount } from 'svelte';
 	import { startCase, toLower } from 'lodash';
+	import { OrderFormGroup } from '$lib/order/form';
+	import OrderService from '$lib/order/service';
 
 	let hasSameAddress = true;
 
@@ -14,12 +15,28 @@
 	let paymentTypes = [];
 
 	onMount(async () => {
-		paymentTypes = [...(await OrderHttpClient.getPaymentTypes())];
+		paymentTypes = [...(await OrderService.getPaymentTypes())];
 	});
 
-	const billingAddress = new AddressForm();
+	let orderForm = new OrderFormGroup();
 
-	const shippingAddress = new AddressForm();
+	$: console.log(orderForm.valid);
+
+	/**
+	 * @type {string}
+	 */
+	let selected;
+	/**
+	 * @param {Event} $event
+	 */
+	function onChange($event) {
+		/**
+		 * @type {HTMLInputElement}
+		 */
+		// @ts-ignore
+		const target = $event.target;
+		selected = target.value;
+	}
 
 	function onSubmitForm() {}
 </script>
@@ -49,7 +66,7 @@
 						</div>
 						<div class="card-body px-4 pb-4">
 							<div class="row g-3">
-								<Address addressForm={billingAddress}></Address>
+								<Address bind:addressForm={orderForm.billingAddress}></Address>
 
 								<div class="form-check mt-4 ms-2">
 									<input
@@ -73,7 +90,7 @@
 							</div>
 							<div class="card-body px-4 pb-4">
 								<div class="row g-3">
-									<Address addressForm={shippingAddress}></Address>
+									<!-- <Address addressForm={shippingAddress}></Address> -->
 								</div>
 							</div>
 						</div>
@@ -87,7 +104,14 @@
 							<div class="my-3">
 								{#each paymentTypes as type}
 									<div class="form-check">
-										<input type="radio" class="form-check-input" id={type} />
+										<input
+											type="radio"
+											class="form-check-input"
+											value={type}
+											id={type}
+											checked={selected == type}
+											on:change={onChange}
+										/>
 										<label class="form-check-label" for={type}>
 											{startCase(toLower(type.split('_').join(' ')))}
 										</label>
@@ -97,6 +121,8 @@
 
 							<div class="row gy-3">
 								<div class="col-md-6">
+									<!-- <TextInput /> 	 -->
+
 									<label for="cc-name" class="form-label">Name on card</label>
 									<input type="text" class="form-control" id="cc-name" placeholder="" />
 									<small class="text-body-secondary">Full name as displayed on card</small>
@@ -124,7 +150,9 @@
 						</div>
 					</div>
 
-					<button class="w-100 btn btn-primary btn-lg" type="submit">Continue to checkout</button>
+					<button class="w-100 btn btn-primary btn-lg" type="submit" disabled={!orderForm.valid}>
+						Continue to checkout
+					</button>
 				</form>
 			</div>
 		</div>

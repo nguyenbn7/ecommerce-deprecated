@@ -4,8 +4,10 @@
 	import { currency } from '$lib/share/functions';
 	import { breadcrumb } from '$lib/components/share/breadcrumb.svelte';
 	import { onMount } from 'svelte';
-	import { addItemToBasket, basket, removeItemFromBasket } from '$lib/service/basket.service';
 	import ShopService from '$lib/shop/service';
+	import BasketService from '$lib/basket/service';
+
+	const { addItemToBasket, basket, removeItemFromBasket } = BasketService;
 
 	/**
 	 * @type {Product}

@@ -1,5 +1,5 @@
 <script>
-	import { addItemToBasket } from '$lib/service/basket.service';
+	import BasketService from '$lib/basket/service';
 	import { currency } from '$lib/share/functions';
 
 	/**
@@ -15,7 +15,7 @@
 			<button
 				class="btn btn-success bi bi-cart me-2"
 				title="Add to cart"
-				on:click={() => addItemToBasket(product)}
+				on:click={() => BasketService.addItemToBasket(product)}
 			></button>
 			<a class="btn btn-primary" href="/shop/{product.id}" title="Detail">
 				<i class="bi bi-info-circle"></i>

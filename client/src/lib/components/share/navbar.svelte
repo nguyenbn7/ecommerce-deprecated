@@ -1,7 +1,7 @@
 <script>
 	import { page } from '$app/stores';
-	import { currentUser, logout } from '$lib/service/account.service';
-	import { basket } from '$lib/service/basket.service';
+	import AccountService from '$lib/account/service';
+	import BasketService from '$lib/basket/service';
 	import { readMoreString } from '$lib/share/functions';
 	import { onMount } from 'svelte';
 
@@ -18,6 +18,9 @@
 	function getCount(items) {
 		return items.reduce((total, item) => total + item.quantity, 0);
 	}
+
+	let currentUser = AccountService.currentUser;
+	let basket = BasketService.basket;
 
 	onMount(async () => {
 		(await import('bootstrap')).Dropdown;
@@ -69,8 +72,8 @@
 				</a>
 				<ul class="dropdown-menu dropdown-menu-end">
 					<li>
-						<h2 class="dropdown-header" title={$currentUser.display_name}>
-							{readMoreString($currentUser.display_name, 25)}
+						<h2 class="dropdown-header" title={$currentUser.displayName}>
+							{readMoreString($currentUser.displayName, 25)}
 						</h2>
 					</li>
 					<li>
@@ -85,7 +88,7 @@
 					</li>
 					<li><hr class="dropdown-divider" /></li>
 					<li>
-						<a class="dropdown-item" href={'#'} on:click={logout}>
+						<a class="dropdown-item" href={'#'} on:click={AccountService.logout}>
 							<i class="bi bi-box-arrow-in-right"></i> Logout
 						</a>
 					</li>

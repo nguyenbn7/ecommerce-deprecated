@@ -1,10 +1,9 @@
 <script>
 	import Pagination from '$lib/components/share/pagination.svelte';
-	import ProductItem from '$lib/components/shop/product-item.svelte';
+	import ProductItem from '$lib/shop/product-item.svelte';
 	import PagingHeader from '$lib/components/share/paging-header.svelte';
 	import { onMount } from 'svelte';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
-	import { getPageProduct } from '$lib/product/request';
 	import ShopService from '$lib/shop/service';
 
 	/**
@@ -78,7 +77,7 @@
 	 * @param {ShopParams} shopParams
 	 */
 	async function getNewPageProduct(shopParams) {
-		const pageProduct = await getPageProduct(shopParams);
+		const pageProduct = await ShopService.getPageProduct(shopParams);
 		products = [...pageProduct.data];
 		shopParams.page_number = pageProduct.page_number;
 		shopParams.page_size = pageProduct.page_size;

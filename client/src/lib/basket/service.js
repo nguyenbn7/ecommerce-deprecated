@@ -1,4 +1,4 @@
-import { PUBLIC_BASE_API_URL } from '$env/static/public';
+import { apiClientWithSpinner } from '$lib/share/request';
 import { get, readonly, writable } from 'svelte/store';
 
 /**
@@ -11,15 +11,18 @@ const _basket = writable(undefined);
 const _basketTotals = writable(undefined);
 const BASKET_KEY_NAME = 'basket_id';
 
-export const basketTotals = readonly(_basketTotals);
-export const basket = readonly(_basket);
+const basketTotals = readonly(_basketTotals);
+const basket = readonly(_basket);
 
 /**
  * @param {string} id
  */
 async function getBasket(id) {
-	const response = await fetch(`${PUBLIC_BASE_API_URL}/basket?id=${id}`);
-	const newBasket = await response.json();
+	const response = await apiClientWithSpinner.get(`basket?id=${id}`);
+	/**
+	 * @type {Basket}
+	 */
+	const newBasket = response.data;
 	_basket.update(() => newBasket);
 	calculateTotals();
 }
@@ -28,14 +31,11 @@ async function getBasket(id) {
  * @param {Basket} basket
  */
 async function setBasket(basket) {
-	const response = await fetch(`${PUBLIC_BASE_API_URL}/basket/`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(basket)
-	});
-	const newBasket = await response.json();
+	const response = await apiClientWithSpinner.post(`basket/`, basket);
+	/**
+	 * @type {Basket}
+	 */
+	const newBasket = response.data;
 	_basket.update(() => newBasket);
 	calculateTotals();
 }
@@ -44,20 +44,13 @@ async function setBasket(basket) {
  * @param {Basket} basket
  */
 async function deleteBasket(basket) {
-	const response = await fetch(`${PUBLIC_BASE_API_URL}/basket?id=${basket.id}`, {
-		method: 'DELETE',
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	});
+	const response = await apiClientWithSpinner.delete(`basket?id=${basket.id}`);
 
 	if (response.status === 200) {
 		_basket.update(() => undefined);
 		_basketTotals.update(() => undefined);
 		return;
 	}
-	console.error('Error: ', response.status);
-	console.error('Detail: ', response.json());
 }
 
 /**
@@ -130,7 +123,7 @@ export async function loadBasket() {
  * @param {BasketItem | Product} item
  * @param {number} quantity
  */
-export async function addItemToBasket(item, quantity = 1) {
+async function addItemToBasket(item, quantity = 1) {
 	if (isProduct(item)) item = mapProductItemToBasketItem(item);
 
 	const basket = get(_basket) ?? createBasket();
@@ -141,7 +134,7 @@ export async function addItemToBasket(item, quantity = 1) {
 /**
  * @param {number} id
  */
-export function removeItemFromBasket(id, quantity = 1) {
+function removeItemFromBasket(id, quantity = 1) {
 	const basket = get(_basket);
 	if (!basket) return;
 	const item = basket.items.find((i) => i.id === id);
@@ -154,3 +147,13 @@ export function removeItemFromBasket(id, quantity = 1) {
 		else deleteBasket(basket);
 	}
 }
+
+const BasketService = {
+	removeItemFromBasket,
+	addItemToBasket,
+	loadBasket,
+	basketTotals,
+	basket
+}
+
+export default BasketService;
