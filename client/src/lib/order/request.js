@@ -38,8 +38,18 @@ async function createOrder(data) {
 	})
 }
 
+async function getPaymentTypes() {
+	const response = await httpClient.get("/orders/payments", {
+		headers: {
+			Authorization: `Bearer ${AccountService.getAccessToken()}`
+		}
+	});
+	return response.data;
+}
+
 const OrderHttpClient = {
-	createOrder
+	createOrder,
+	getPaymentTypes
 }
 
 export default OrderHttpClient;
