@@ -2,13 +2,13 @@ import { apiClientWithSpinner } from '$lib/share/request';
 import { get, readonly, writable } from 'svelte/store';
 
 /**
- * @type {import("svelte/store").Writable<Basket | undefined>}
+ * @type {import("svelte/store").Writable<Basket | null>}
  */
-const _basket = writable(undefined);
+const _basket = writable(null);
 /**
- * @type {import("svelte/store").Writable<BasketTotals | undefined>}
+ * @type {import("svelte/store").Writable<BasketTotals | null>}
  */
-const _basketTotals = writable(undefined);
+const _basketTotals = writable(null);
 const BASKET_KEY_NAME = 'basket_id';
 
 const basketTotals = readonly(_basketTotals);
@@ -47,8 +47,8 @@ async function deleteBasket(basket) {
 	const response = await apiClientWithSpinner.delete(`basket?id=${basket.id}`);
 
 	if (response.status === 200) {
-		_basket.update(() => undefined);
-		_basketTotals.update(() => undefined);
+		_basket.update(() => null);
+		_basketTotals.update(() => null);
 		return;
 	}
 }

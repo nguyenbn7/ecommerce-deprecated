@@ -1,4 +1,5 @@
 import { PUBLIC_BASE_API_URL } from "$env/static/public";
+import AccountService from "$lib/account/service";
 import { SpinnerService } from "$lib/components/share/spinner.svelte";
 import { ToastService } from "$lib/components/share/toast.svelte";
 import axios, { AxiosError } from "axios";
@@ -37,8 +38,26 @@ apiClientWithSpinner.interceptors.response.use(async (response) => {
     return response;
 }, handleError)
 
+const apiClientAuthSpinner = axios.create({
+    baseURL: PUBLIC_BASE_API_URL,
+    timeout: 5000
+})
+
+apiClientAuthSpinner.interceptors.request.use(config => {
+    config.headers.Authorization = `Bearer ${AccountService.getAccessToken()}`
+    return config;
+})
+
+apiClientAuthSpinner.interceptors.response.use(async (response) => {
+    SpinnerService.showSpinner();
+    await delay(1000);
+    SpinnerService.hideSpinner();
+    return response;
+}, handleError)
+
 export {
     httpClient,
     delay,
-    apiClientWithSpinner
+    apiClientWithSpinner,
+    apiClientAuthSpinner
 };

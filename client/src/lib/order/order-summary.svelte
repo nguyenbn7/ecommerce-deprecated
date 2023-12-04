@@ -1,8 +1,13 @@
 <script>
-	import BasketService from '$lib/basket/service';
 	import { currency } from '$lib/share/functions';
-	let basket = BasketService.basket;
-	let basketTotals = BasketService.basketTotals;
+	/**
+	 * @type {Basket | null}
+	 */
+	export let basket;
+	/**
+	 * @type {BasketTotals | null}
+	 */
+	export let basketTotals;
 </script>
 
 <div class="card">
@@ -14,8 +19,8 @@
 	</div>
 	<div class="card-body p-0">
 		<ul class="list-group">
-			{#if $basket}
-				{#each $basket.items as item}
+			{#if basket}
+				{#each basket.items as item}
 					<li class="list-group-item d-flex justify-content-between align-items-center lh-sm">
 						<div class="row align-items-center">
 							<div class="col-3 p-1 position-relative">
@@ -36,7 +41,7 @@
 			{/if}
 			<li class="list-group-item d-flex justify-content-between">
 				<span>Total (USD)</span>
-				<strong>{currency($basketTotals?.total ?? 0)}</strong>
+				<strong>{currency(basketTotals?.total ?? 0)}</strong>
 			</li>
 		</ul>
 	</div>

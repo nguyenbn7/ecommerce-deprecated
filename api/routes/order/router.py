@@ -82,3 +82,13 @@ def get_payment_methods(
     current_user: Annotated[ApplicationUser, Depends(get_current_user)]
 ):
     return list(p.value for p in PaymentType)
+
+
+@order_router.get("/delivery-methods")
+def get_delivery_methods(
+    current_user: Annotated[ApplicationUser, Depends(get_current_user)],
+    delivery_method_repo: Annotated[
+        DeliveryMethodRepository, Depends(DeliveryMethodRepository)
+    ],
+):
+    return delivery_method_repo.get_all()

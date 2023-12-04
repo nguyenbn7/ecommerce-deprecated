@@ -4,8 +4,11 @@
 	import OrderSummary from '$lib/order/order-summary.svelte';
 	import { onMount } from 'svelte';
 	import { startCase, toLower } from 'lodash';
-	import { OrderFormGroup } from '$lib/order/form';
+	import { AddressFormGroup, OrderFormGroup } from '$lib/order/form';
 	import OrderService from '$lib/order/service';
+	import BasketService from '$lib/basket/service';
+	import { get } from 'svelte/store';
+	import { currency } from '$lib/share/functions';
 
 	let hasSameAddress = true;
 
@@ -13,32 +16,105 @@
 	 * @type {string[]}
 	 */
 	let paymentTypes = [];
+	/**
+	 * @type {DeliveryMethod[]}
+	 */
+	let deliveryMethods = [];
 
 	onMount(async () => {
-		paymentTypes = [...(await OrderService.getPaymentTypes())];
+		const result = await Promise.all([
+			OrderService.getPaymentTypes(),
+			OrderService.getDeliveryMethods()
+		]);
+		paymentTypes = [...result[0]];
+		deliveryMethods = [...result[1]];
 	});
 
 	let orderForm = new OrderFormGroup();
+	let basket = get(BasketService.basket);
+	let basketTotals = get(BasketService.basketTotals);
 
-	$: console.log(orderForm.valid);
+	$: if (hasSameAddress) {
+		orderForm.shippingAddress = orderForm.billingAddress;
+	} else {
+		orderForm.shippingAddress = new AddressFormGroup();
+	}
 
 	/**
 	 * @type {string}
 	 */
-	let selected;
+	let paymentType;
+	/**
+	 * @type {number}
+	 */
+	let deliveryMethodId;
+
 	/**
 	 * @param {Event} $event
 	 */
-	function onChange($event) {
+	function onChangePaymentType($event) {
 		/**
 		 * @type {HTMLInputElement}
 		 */
 		// @ts-ignore
 		const target = $event.target;
-		selected = target.value;
+		paymentType = target.value;
 	}
 
-	function onSubmitForm() {}
+	/**
+	 * @param {Event} $event
+	 */
+	function onChangeDeliveryMethod($event) {
+		/**
+		 * @type {HTMLInputElement}
+		 */
+		// @ts-ignore
+		const target = $event.target;
+		deliveryMethodId = Number(target.value);
+	}
+
+	async function onSubmitForm() {
+		if (basket === null) return;
+
+		/**
+		 * @type {Order}
+		 */
+		const order = {};
+
+		order.basket_id = basket.id;
+		/**
+		 * @type {OrderAddress}
+		 */
+		order.billing_address = {
+			full_name: orderForm.billingAddress.fullName.value,
+			email: orderForm.billingAddress.email.value,
+			phone_number: orderForm.billingAddress.phoneNumber.value,
+			address: orderForm.billingAddress.address.value,
+			address2: orderForm.billingAddress.address2.value,
+			country: 'USA',
+			state: 'Texas',
+			zip_code: '74494'
+		};
+
+		/**
+		 * @type {OrderAddress}
+		 */
+		order.shipping_address = {
+			full_name: orderForm.shippingAddress.fullName.value,
+			email: orderForm.shippingAddress.email.value,
+			phone_number: orderForm.shippingAddress.phoneNumber.value,
+			address: orderForm.shippingAddress.address.value,
+			address2: orderForm.shippingAddress.address.value,
+			country: 'USA',
+			state: 'Texas',
+			zip_code: '74494'
+		};
+
+		order.payment_type = paymentType;
+		order.delivery_method_id = deliveryMethodId;
+
+		await OrderService.createOrder(order);
+	}
 </script>
 
 <svelte:head>
@@ -56,7 +132,7 @@
 
 		<div class="row g-5">
 			<div class="col-md-5 col-lg-4 order-md-last">
-				<OrderSummary></OrderSummary>
+				<OrderSummary {basket} {basketTotals}></OrderSummary>
 			</div>
 			<div class="col-md-7 col-lg-8">
 				<form on:submit={onSubmitForm}>
@@ -90,11 +166,36 @@
 							</div>
 							<div class="card-body px-4 pb-4">
 								<div class="row g-3">
-									<!-- <Address addressForm={shippingAddress}></Address> -->
+									<Address addressForm={orderForm.shippingAddress}></Address>
 								</div>
 							</div>
 						</div>
 					{/if}
+
+					<div class="card my-5">
+						<div class="card-header">
+							<h4 class="mb-0">Delivery</h4>
+						</div>
+						<div class="card-body px-4 pb-4">
+							<div class="row g-3">
+								{#each deliveryMethods as method}
+									<div class="form-check">
+										<input
+											type="radio"
+											class="form-check-input"
+											value={method.id}
+											id={method.short_name}
+											checked={deliveryMethodId === method.id}
+											on:change={onChangeDeliveryMethod}
+										/>
+										<label class="form-check-label" for={method.short_name}>
+											{method.short_name} - {currency(method.price)} ({method.delivery_time})
+										</label>
+									</div>
+								{/each}
+							</div>
+						</div>
+					</div>
 
 					<div class="card my-5">
 						<div class="card-header">
@@ -109,8 +210,8 @@
 											class="form-check-input"
 											value={type}
 											id={type}
-											checked={selected == type}
-											on:change={onChange}
+											checked={paymentType === type}
+											on:change={onChangePaymentType}
 										/>
 										<label class="form-check-label" for={type}>
 											{startCase(toLower(type.split('_').join(' ')))}
@@ -118,11 +219,9 @@
 									</div>
 								{/each}
 							</div>
-
+							<!-- TODO: -->
 							<div class="row gy-3">
 								<div class="col-md-6">
-									<!-- <TextInput /> 	 -->
-
 									<label for="cc-name" class="form-label">Name on card</label>
 									<input type="text" class="form-control" id="cc-name" placeholder="" />
 									<small class="text-body-secondary">Full name as displayed on card</small>

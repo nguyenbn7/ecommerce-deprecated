@@ -11,8 +11,9 @@ export class AddressFormGroup extends FormGroup {
             EmailInputValidator.checkRequired('Email is required'),
             EmailInputValidator.checkFormat('Incorrect email. Example: bob@test.com')
         );
+        this.phoneNumber = new FormField('', TextInputValidator.checkRequired("Phone number is required"));
         this.address = new FormField('', TextInputValidator.checkRequired('Address is required'));
-        this.address2 = new FormField();
+        this.address2 = new FormField(undefined);
     }
 }
 
@@ -20,5 +21,6 @@ export class OrderFormGroup extends FormGroup {
     constructor() {
         super();
         this.billingAddress = new AddressFormGroup();
+        this.shippingAddress = null;
     }
 }

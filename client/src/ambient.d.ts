@@ -103,12 +103,13 @@ type ErrorResponse = {
 	errors: any | Array | undefined | null;
 };
 
+// CHECKOUT
 type Order = {
 	basket_id: string,
 	billing_address: OrderAddress,
 	shipping_address: OrderAddress?,
 	delivery_method_id: number
-	payment_method_id: number
+	payment_type: string
 }
 
 type OrderAddress = {
@@ -120,6 +121,13 @@ type OrderAddress = {
 	country: string
 	state: string
 	zip_code: string
+}
+
+type DeliveryMethod = {
+	short_name: string
+	delivery_time: string
+	price: number
+	id: number
 }
 
 // ACCOUNT

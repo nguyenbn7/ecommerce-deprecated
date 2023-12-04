@@ -1,3 +1,5 @@
+import { sum } from "lodash";
+
 export class FormField {
     /**
      * @param {Validator[]} validators
@@ -28,9 +30,13 @@ export class FormGroup {
      * @returns {boolean}
      */
     get valid() {
-        return Object.keys(this).every(propName => {
+        const a = Object.keys(this).every(propName => {
+            // @ts-ignore
+            console.log(this[propName],this[propName]?.valid)
             // @ts-ignore
             return this[propName]?.valid;
         })
+        console.log(`get valid(): ${a}`)
+        return a;
     }
 }

@@ -21,6 +21,17 @@
 </div>
 
 <div class="col-12">
+	<label for="phone">Phone Number</label>
+	<TextInput
+		class="form-control rounded-1"
+		bind:formField={addressForm.phoneNumber}
+		id="phone"
+		placeholder="+1 (999) 999-9999"
+	></TextInput>
+	<ValidationFeedback formField={addressForm.phoneNumber}></ValidationFeedback>
+</div>
+
+<div class="col-12">
 	<label for="email">Email</label>
 	<EmailInput
 		class="form-control rounded-1"
