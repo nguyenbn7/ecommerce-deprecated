@@ -142,7 +142,7 @@ type SignInSuccess = {
 	token: string;
 };
 
-type UserInfo = {
+type User = {
 	email: string;
 	displayName: string;
 };

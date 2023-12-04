@@ -1,6 +1,6 @@
 <script>
-	import AccountService from '$lib/(account)/service';
-	import BasketService from '$lib/basket/service';
+	import { AccountService } from '$lib/(account)/service';
+	import { BasketService } from '$lib/basket/service';
 	import Spinner, { SpinnerService } from '$lib/components/share/spinner.svelte';
 	import ToastContainer from '$lib/components/share/toast-container.svelte';
 	import { ToastService } from '$lib/components/share/toast.svelte';
@@ -12,7 +12,10 @@
 	ToastService.setToastContainerId(toastContainerId);
 	SpinnerService.setSpinnerId(spinnerId);
 
-	onMount(async () => await Promise.all([BasketService.loadBasket(), AccountService.loadUser()]));
+	onMount(async () => {
+		BasketService.loadBasketBackground();
+		AccountService.loadUserBackground();
+	});
 </script>
 
 <ToastContainer

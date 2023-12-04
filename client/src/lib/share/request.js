@@ -1,5 +1,5 @@
 import { PUBLIC_BASE_API_URL } from '$env/static/public';
-import AccountService from '$lib/(account)/service';
+import { AccountService } from '$lib/(account)/service';
 import { SpinnerService } from '$lib/components/share/spinner.svelte';
 import { ToastService } from '$lib/components/share/toast.svelte';
 import axios, { AxiosError } from 'axios';

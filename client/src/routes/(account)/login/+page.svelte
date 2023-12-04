@@ -6,7 +6,7 @@
 	import ValidationFeedback from '$lib/share/form/validation-feedback.svelte';
 	import { LoginForm } from '$lib/(account)/login/model';
 	import InputForm from '$lib/share/form/input-form.svelte';
-	import AccountService from '$lib/(account)/service';
+	import { AccountService } from '$lib/(account)/service';
 
 	/**
 	 * @param {LoginDTO} loginDTO

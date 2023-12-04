@@ -1,5 +1,5 @@
 <script>
-	import BasketService from '$lib/basket/service';
+	import { BasketService } from '$lib/basket/service';
 	import { currency } from '$lib/share/functions';
 
 	/**

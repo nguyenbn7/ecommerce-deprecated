@@ -1,18 +1,16 @@
 import { apiClientBackground, apiClientWithSpinner } from '$lib/share/request';
 import { get, readonly, writable } from 'svelte/store';
 
+const BASKET_ID = 'basketId';
+
 /**
  * @type {import("svelte/store").Writable<Basket | null>}
  */
-const _basket = writable(null);
+const basketSource = writable(null);
 /**
  * @type {import("svelte/store").Writable<BasketTotals | null>}
  */
-const _basketTotals = writable(null);
-const BASKET_KEY_NAME = 'basket_id';
-
-const basketTotals = readonly(_basketTotals);
-const basket = readonly(_basket);
+const basketTotalsSource = writable(null);
 
 /**
  * @param {string} id
@@ -22,7 +20,7 @@ async function getBasket(id) {
 	 * @type {Basket}
 	 */
 	const newBasket = (await apiClientBackground.get(`basket?id=${id}`)).data;
-	_basket.update(() => newBasket);
+	basketSource.update(() => newBasket);
 	calculateTotals();
 }
 
@@ -30,12 +28,11 @@ async function getBasket(id) {
  * @param {Basket} basket
  */
 async function setBasket(basket) {
-	const response = await apiClientWithSpinner.post(`basket/`, basket);
 	/**
 	 * @type {Basket}
 	 */
-	const newBasket = response.data;
-	_basket.update(() => newBasket);
+	const newBasket = (await apiClientWithSpinner.post(`basket/`, basket)).data;
+	basketSource.update(() => newBasket);
 	calculateTotals();
 }
 
@@ -46,8 +43,8 @@ async function deleteBasket(basket) {
 	const response = await apiClientWithSpinner.delete(`basket?id=${basket.id}`);
 
 	if (response.status === 200) {
-		_basket.update(() => null);
-		_basketTotals.update(() => null);
+		basketSource.update(() => null);
+		basketTotalsSource.update(() => null);
 		return;
 	}
 }
@@ -76,7 +73,7 @@ function createBasket() {
 		id: 'basket1',
 		items: []
 	};
-	localStorage.setItem(BASKET_KEY_NAME, basket.id);
+	localStorage.setItem(BASKET_ID, basket.id);
 	return basket;
 }
 
@@ -105,16 +102,16 @@ function isProduct(item) {
 }
 
 function calculateTotals() {
-	const basket = get(_basket);
+	const basket = get(basketSource);
 	if (!basket) return;
 	const shipping = 0;
 	const subtotal = basket.items.reduce((total, item) => total + item.price * item.quantity, 0);
 	const total = subtotal + shipping;
-	_basketTotals.update(() => ({ shipping, subtotal, total }));
+	basketTotalsSource.update(() => ({ shipping, subtotal, total }));
 }
 
 async function loadBasketBackground() {
-	const basketId = localStorage.getItem(BASKET_KEY_NAME);
+	const basketId = localStorage.getItem(BASKET_ID);
 	if (basketId) await getBasket(basketId);
 }
 
@@ -125,7 +122,7 @@ async function loadBasketBackground() {
 async function addItemToBasket(item, quantity = 1) {
 	if (isProduct(item)) item = mapProductItemToBasketItem(item);
 
-	const basket = get(_basket) ?? createBasket();
+	const basket = get(basketSource) ?? createBasket();
 	basket.items = addOrUpdateItem(basket.items, item, quantity);
 	await setBasket(basket);
 }
@@ -134,7 +131,7 @@ async function addItemToBasket(item, quantity = 1) {
  * @param {number} id
  */
 function removeItemFromBasket(id, quantity = 1) {
-	const basket = get(_basket);
+	const basket = get(basketSource);
 	if (!basket) return;
 	const item = basket.items.find((i) => i.id === id);
 	if (item) {
@@ -147,12 +144,13 @@ function removeItemFromBasket(id, quantity = 1) {
 	}
 }
 
+const basketTotals = readonly(basketTotalsSource);
+const basket = readonly(basketSource);
+
 const BasketService = {
 	removeItemFromBasket,
 	addItemToBasket,
-	loadBasketBackground,
-	basketTotals,
-	basket
+	loadBasketBackground
 };
 
-export default BasketService;
+export { BasketService, basket, basketTotals };

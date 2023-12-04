@@ -1,7 +1,7 @@
 <script>
 	import { page } from '$app/stores';
-	import AccountService from '$lib/account/service';
-	import BasketService from '$lib/basket/service';
+	import { AccountService, currentUser } from '$lib/(account)/service';
+	import { basket } from '$lib/basket/service';
 	import { readMoreString } from '$lib/share/functions';
 	import { onMount } from 'svelte';
 
@@ -18,9 +18,6 @@
 	function getCount(items) {
 		return items.reduce((total, item) => total + item.quantity, 0);
 	}
-
-	let currentUser = AccountService.currentUser;
-	let basket = BasketService.basket;
 
 	onMount(async () => {
 		(await import('bootstrap')).Dropdown;

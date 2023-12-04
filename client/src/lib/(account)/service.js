@@ -1,13 +1,16 @@
 import { apiClientBackground, httpClient } from '$lib/share/request';
 import { get, readonly, writable } from 'svelte/store';
 
-const KEY = 'token';
+const ACCESS_TOKEN = 'token';
 
-const tokenStore = writable('');
 /**
- * @type {import("svelte/store").Writable<UserInfo | null>}
+ * @type {import("svelte/store").Writable<string>}
  */
-const userInfo = writable(null);
+const tokenSource = writable('');
+/**
+ * @type {import("svelte/store").Writable<User | null>}
+ */
+const currentUserStore = writable(null);
 
 /**
  * @returns {Promise<UserInfoResponse>}
@@ -22,8 +25,8 @@ async function getDisplayInfo() {
 }
 
 function getAccessToken() {
-	tokenStore.update(() => localStorage.getItem(KEY) ?? '');
-	return get(tokenStore);
+	tokenSource.update(() => localStorage.getItem(ACCESS_TOKEN) ?? '');
+	return get(tokenSource);
 }
 
 async function loadUserBackground() {
@@ -32,53 +35,59 @@ async function loadUserBackground() {
 
 	// Check if token is correct one
 	const data = await getDisplayInfo();
-	userInfo.update(() => ({ email: data.email, displayName: data.display_name }));
+	currentUserStore.update(() => ({ email: data.email, displayName: data.display_name }));
 }
 
 function logout() {
-	tokenStore.update(() => {
-		localStorage.removeItem(KEY);
+	tokenSource.update(() => {
+		localStorage.removeItem(ACCESS_TOKEN);
 		return '';
 	});
-	userInfo.update(() => null);
+	currentUserStore.update(() => null);
 }
 
 /**
  * @param {LoginDTO} loginDTO
  */
 async function login(loginDTO) {
-	const response = await httpClient.post('account/login', loginDTO);
 	/**
 	 * @type {SignInSuccess}
 	 */
-	const data = response.data;
-	localStorage.setItem(KEY, data.token);
-	tokenStore.update(() => data.token);
-	userInfo.update(() => ({ email: data.email, displayName: data.display_name }));
-	return get(userInfo);
+	const data = (await httpClient.post('account/login', loginDTO)).data;
+
+	localStorage.setItem(ACCESS_TOKEN, data.token);
+
+	tokenSource.update(() => data.token);
+	currentUserStore.update(() => ({ email: data.email, displayName: data.display_name }));
+
+	return get(currentUserStore);
 }
 
 /**
  * @param {RegisterDTO} registerDTO
  */
 async function register(registerDTO) {
-	const response = await httpClient.post('account/register', registerDTO);
-	const data = response.data;
-	localStorage.setItem(KEY, data.token);
-	tokenStore.update(() => data.token);
-	userInfo.update(() => ({ email: data.email, displayName: data.display_name }));
-	return get(userInfo);
+	/**
+	 * @type {SignInSuccess}
+	 */
+	const data = (await httpClient.post('account/register', registerDTO)).data;
+
+	localStorage.setItem(ACCESS_TOKEN, data.token);
+
+	tokenSource.update(() => data.token);
+	currentUserStore.update(() => ({ email: data.email, displayName: data.display_name }));
+
+	return get(currentUserStore);
 }
 
-const currentUser = readonly(userInfo);
+const currentUser = readonly(currentUserStore);
 
 const AccountService = {
 	getAccessToken,
 	loadUserBackground,
 	logout,
 	login,
-	register,
-	currentUser
+	register
 };
 
-export default AccountService;
+export { AccountService, currentUser };
