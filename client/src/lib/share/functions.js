@@ -18,4 +18,3 @@ export function currency(amount, code = CURRENCY_CODE.US_Dollar) {
 export function readMoreString(str, max_length = 50) {
 	return str.length > max_length ? `${str.substring(0, max_length)}...` : str;
 }
-

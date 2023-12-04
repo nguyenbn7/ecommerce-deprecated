@@ -1,4 +1,4 @@
-import { apiClientWithSpinner } from '$lib/share/request';
+import { apiClientBackground, apiClientWithSpinner } from '$lib/share/request';
 import { get, readonly, writable } from 'svelte/store';
 
 /**
@@ -18,11 +18,10 @@ const basket = readonly(_basket);
  * @param {string} id
  */
 async function getBasket(id) {
-	const response = await apiClientWithSpinner.get(`basket?id=${id}`);
 	/**
 	 * @type {Basket}
 	 */
-	const newBasket = response.data;
+	const newBasket = (await apiClientBackground.get(`basket?id=${id}`)).data;
 	_basket.update(() => newBasket);
 	calculateTotals();
 }
@@ -114,7 +113,7 @@ function calculateTotals() {
 	_basketTotals.update(() => ({ shipping, subtotal, total }));
 }
 
-export async function loadBasket() {
+async function loadBasketBackground() {
 	const basketId = localStorage.getItem(BASKET_KEY_NAME);
 	if (basketId) await getBasket(basketId);
 }
@@ -151,9 +150,9 @@ function removeItemFromBasket(id, quantity = 1) {
 const BasketService = {
 	removeItemFromBasket,
 	addItemToBasket,
-	loadBasket,
+	loadBasketBackground,
 	basketTotals,
 	basket
-}
+};
 
 export default BasketService;

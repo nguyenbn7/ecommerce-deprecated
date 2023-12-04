@@ -98,49 +98,49 @@ type ErrorResponse = {
 
 // CHECKOUT
 type Order = {
-	basket_id: string,
-	billing_address: OrderAddress,
-	shipping_address: OrderAddress?,
-	delivery_method_id: number
-	payment_type: string
-}
+	basket_id: string;
+	billing_address: OrderAddress;
+	shipping_address: OrderAddress?;
+	delivery_method_id: number;
+	payment_type: string;
+};
 
 type OrderAddress = {
-	full_name: string
-	email: string
-	phone_number: string
-	address: string
-	address2: string
-	country: string
-	state: string
-	zip_code: string
-}
+	full_name: string;
+	email: string;
+	phone_number: string;
+	address: string;
+	address2: string;
+	country: string;
+	state: string;
+	zip_code: string;
+};
 
 type DeliveryMethod = {
-	short_name: string
-	delivery_time: string
-	price: number
-	id: number
-}
+	short_name: string;
+	delivery_time: string;
+	price: number;
+	id: number;
+};
 
 // ACCOUNT
 type LoginDTO = {
-	email: string,
-	password: string
-}
+	email: string;
+	password: string;
+};
 
 type RegisterDTO = {
-	email: string,
-	password: string,
-	display_name: string,
-	confirm_password: string,
-}
+	email: string;
+	password: string;
+	display_name: string;
+	confirm_password: string;
+};
 
 type SignInSuccess = {
 	display_name: string;
 	email: string;
 	token: string;
-}
+};
 
 type UserInfo = {
 	email: string;
@@ -153,5 +153,5 @@ type UserInfoResponse = {
 };
 
 type OrderForm = {
-	email: any
-}
+	email: any;
+};

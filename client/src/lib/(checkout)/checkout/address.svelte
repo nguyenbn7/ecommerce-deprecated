@@ -1,6 +1,6 @@
 <script>
 	import InputForm from '$lib/share/form/input-form.svelte';
-import ValidationFeedback from '$lib/share/form/validation-feedback.svelte';
+	import ValidationFeedback from '$lib/share/form/validation-feedback.svelte';
 
 	/**
 	 * @type {import("./form").AddressFormGroup}
@@ -21,7 +21,7 @@ import ValidationFeedback from '$lib/share/form/validation-feedback.svelte';
 </div>
 
 <div class="col-12">
-	<label for="phone">Phone Number</label>	
+	<label for="phone">Phone Number</label>
 	<InputForm
 		class="form-control rounded-1"
 		bind:formField={addressForm.phoneNumber}

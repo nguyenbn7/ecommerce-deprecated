@@ -1,7 +1,7 @@
 <script>
 	import BasketService from '$lib/basket/service';
 	import { currency } from '$lib/share/functions';
-	
+
 	let basketTotals = BasketService.basketTotals;
 </script>
 

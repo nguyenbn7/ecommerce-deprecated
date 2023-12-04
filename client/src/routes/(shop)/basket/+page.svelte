@@ -3,7 +3,7 @@
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
 	import { currency } from '$lib/share/functions';
 	import BasketService from '$lib/basket/service';
-	
+
 	const { addItemToBasket, basket, removeItemFromBasket } = BasketService;
 </script>
 

@@ -9,7 +9,7 @@
 	import { AddressFormGroup, OrderFormGroup } from '$lib/(checkout)/checkout/form';
 	import OrderSummary from '$lib/(checkout)/checkout/order-summary.svelte';
 	import Address from '$lib/(checkout)/checkout/address.svelte';
-		
+
 	let hasSameAddress = true;
 	/**
 	 * @type {string[]}
@@ -85,11 +85,11 @@
 		 * @type {OrderAddress}
 		 */
 		order.billing_address = {
-			full_name: orderForm.billingAddress.fullName.value ?? "",
-			email: orderForm.billingAddress.email.value ?? "",
-			phone_number: orderForm.billingAddress.phoneNumber.value ?? "",
-			address: orderForm.billingAddress.address.value ?? "",
-			address2: orderForm.billingAddress.address2.value ?? "",
+			full_name: orderForm.billingAddress.fullName.value ?? '',
+			email: orderForm.billingAddress.email.value ?? '',
+			phone_number: orderForm.billingAddress.phoneNumber.value ?? '',
+			address: orderForm.billingAddress.address.value ?? '',
+			address2: orderForm.billingAddress.address2.value ?? '',
 			country: 'USA',
 			state: 'Texas',
 			zip_code: '74494'
