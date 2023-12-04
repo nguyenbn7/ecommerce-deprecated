@@ -1,28 +1,20 @@
-export class FormField {
-    /**
-     * @param {Validator[]} validators
-     */
-    constructor(...validators) {
-        /** @type {boolean} */
-        this.dirty = false;
-        /** @type {boolean} */
-        this.valid = false;
-        /** @type {string} */
-        this.value = '';
-        /** @type {string | null} */
-        this.invalidFeedback;
-        /** @type {Validator[]} */
-        this.validators = validators ?? [];
+/**
+ * @param {string} errorMessage
+ * @returns {Validator}
+ */
+function checkRequired(errorMessage = 'Field is required') {
+    return {
+        check: (value) => !!value,
+        errorMessage
     }
 }
-
 /**
  * @param {string} errorMessage
  * @returns {Validator}
  */
 function checkMaxLength(errorMessage = '', max_length = 256) {
     return {
-        check: (value) => value !== null && value !== undefined && value.length <= max_length,
+        check: (value) => value.length <= max_length,
         errorMessage: errorMessage ? errorMessage : `Field should have maximum ${max_length} characters`
     };
 }
@@ -33,12 +25,24 @@ function checkMaxLength(errorMessage = '', max_length = 256) {
  */
 function containsAlnumAndSpace(errorMessage = 'Field contains only numbers, letters and spaces') {
     return {
-        check: (value) => value !== null && value !== undefined && /^[a-zA-Z\s\d]+$/.test(value),
+        check: (value) => /^[a-zA-Z\s\d]+$/.test(value),
+        errorMessage
+    };
+}
+/**
+ * @param {string} errorMessage
+ * @returns {Validator}
+ */
+function checkEmailFormat(errorMessage = 'Email has incorrect format') {
+    return {
+        check: (value) => /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(value),
         errorMessage
     };
 }
 
 export const Validators = {
+    checkRequired,
     checkMaxLength,
-    containsAlnumAndSpace
+    containsAlnumAndSpace,
+    checkEmailFormat
 }

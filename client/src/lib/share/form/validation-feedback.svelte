@@ -1,25 +1,25 @@
 <script>
 	/**
-	 * @type {import("./validation").FormField}
+	 * @type {import("./class").FormField}
 	 */
 	export let formField;
 
 	/**
 	 * @type {string | null | undefined}
 	 */
-	export let validFeedback = null;
+	export let success = null;
 </script>
 
 {#if formField.dirty && !formField.valid}
 	<div class="invalid-feedback">
-		{#if formField.invalidFeedback}
-			{formField.invalidFeedback}
+		{#if formField.error}
+			{formField.error}
 		{/if}
 	</div>
 {:else if formField.dirty && formField.valid}
 	<div class="valid-feedback">
-		{#if validFeedback}
-			{validFeedback}
+		{#if success}
+			{success}
 		{/if}
 	</div>
 {/if}

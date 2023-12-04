@@ -1,4 +1,4 @@
-import AccountService from '$lib/account/service';
+import AccountService from '$lib/(account)/service';
 import { apiClientAuthSpinner, httpClient } from '$lib/share/request';
 
 /**

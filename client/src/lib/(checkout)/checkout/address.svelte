@@ -1,66 +1,70 @@
 <script>
-	import EmailInput from '$lib/share/form/email-input.svelte';
-	import TextInput from '$lib/share/form/text-input.svelte';
-	import ValidationFeedback from '$lib/share/form/validation-feedback.svelte';
+	import InputForm from '$lib/share/form/input-form.svelte';
+import ValidationFeedback from '$lib/share/form/validation-feedback.svelte';
 
 	/**
-	 * @type {import("../order/form").AddressFormGroup}
+	 * @type {import("./form").AddressFormGroup}
 	 */
 	export let addressForm;
 </script>
 
 <div class="col-12">
 	<label for="fullName">Full Name</label>
-	<TextInput
+	<InputForm
 		class="form-control rounded-1"
 		bind:formField={addressForm.fullName}
 		id="fullName"
 		placeholder="Example: John Doe"
-	></TextInput>
+		type="text"
+	/>
 	<ValidationFeedback formField={addressForm.fullName}></ValidationFeedback>
 </div>
 
 <div class="col-12">
-	<label for="phone">Phone Number</label>
-	<TextInput
+	<label for="phone">Phone Number</label>	
+	<InputForm
 		class="form-control rounded-1"
 		bind:formField={addressForm.phoneNumber}
 		id="phone"
 		placeholder="+1 (999) 999-9999"
-	></TextInput>
+		type="text"
+	/>
 	<ValidationFeedback formField={addressForm.phoneNumber}></ValidationFeedback>
 </div>
 
 <div class="col-12">
 	<label for="email">Email</label>
-	<EmailInput
+	<InputForm
 		class="form-control rounded-1"
 		bind:formField={addressForm.email}
 		id="email"
 		placeholder="johndoe@gmail.com"
-	></EmailInput>
+		type="email"
+	/>
 	<ValidationFeedback formField={addressForm.email}></ValidationFeedback>
 </div>
 
 <div class="col-12">
 	<label for="address">Address</label>
-	<TextInput
+	<InputForm
 		class="form-control rounded-1"
 		bind:formField={addressForm.address}
 		id="address"
 		placeholder="1234 Main St"
-	></TextInput>
+		type="text"
+	/>
 	<ValidationFeedback formField={addressForm.address}></ValidationFeedback>
 </div>
 
 <div class="col-12">
 	<label for="address2">Address 2 <span class="text-body-secondary">(Optional)</span></label>
-	<TextInput
+	<InputForm
 		class="form-control rounded-1"
 		bind:formField={addressForm.address2}
 		id="address2"
 		placeholder="Apartment or suite"
-	></TextInput>
+		type="text"
+	/>
 	<ValidationFeedback formField={addressForm.address2}></ValidationFeedback>
 </div>
 

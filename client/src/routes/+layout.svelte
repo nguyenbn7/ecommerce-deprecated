@@ -1,5 +1,5 @@
 <script>
-	import AccountService from '$lib/account/service';
+	import AccountService from '$lib/(account)/service';
 	import BasketService from '$lib/basket/service';
 	import Spinner, { SpinnerService } from '$lib/components/share/spinner.svelte';
 	import ToastContainer from '$lib/components/share/toast-container.svelte';

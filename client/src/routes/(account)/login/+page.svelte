@@ -3,66 +3,32 @@
 	import { page } from '$app/stores';
 	import { ToastService } from '$lib/components/share/toast.svelte';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
-	import { FormField } from '$lib/share/form/validation';
-	import EmailInput, { EmailInputValidator } from '$lib/share/form/email-input.svelte';
-	import PasswordInput, { PasswordInputValidator } from '$lib/share/form/password-input.svelte';
 	import ValidationFeedback from '$lib/share/form/validation-feedback.svelte';
-	import AccountService from '$lib/account/service';
-
-	class LoginForm {
-		static emailField = new FormField(
-			EmailInputValidator.checkRequired('Email is required'),
-			EmailInputValidator.checkFormat('Incorrect email. Example: bob@test.com')
-		);
-		static passwordField = new FormField(
-			PasswordInputValidator.checkRequired('Password is required')
-		);
-
-		static get valid() {
-			return this.emailField.valid && this.passwordField.valid;
-		}
-
-		static #onSubmit = false;
-
-		/**
-		 * @param {boolean} state
-		 */
-		static set isSubmiting(state) {
-			this.#onSubmit = state;
-		}
-
-		static get isSubmiting() {
-			return this.#onSubmit;
-		}
-	}
-
-	let isDemoAccountLogin = false;
-	let isAccounts = [false, false];
-
-	async function onSubmitForm() {
-		await handleLogin({
-			email: LoginForm.emailField.value,
-			password: LoginForm.passwordField.value
-		});
-	}
+	import { LoginForm } from '$lib/(account)/login/model';
+	import InputForm from '$lib/share/form/input-form.svelte';
+	import AccountService from '$lib/(account)/service';
 
 	/**
 	 * @param {LoginDTO} loginDTO
 	 */
 	async function handleLogin(loginDTO) {
-		try {
-			LoginForm.isSubmiting = true;
-			const userInfo = await AccountService.login(loginDTO);
+		const userInfo = await AccountService.login(loginDTO);
 
-			if (userInfo) {
-				ToastService.notifySuccess(`Welcome back ${userInfo.displayName}`);
-				const returnUrl = $page.url.searchParams.get('returnUrl');
-				if (returnUrl) return goto(returnUrl);
-				return goto('/');
-			}
-		} finally {
-			LoginForm.isSubmiting = false;
+		if (userInfo) {
+			ToastService.notifySuccess(`Welcome back ${userInfo.displayName}`);
+			const returnUrl = $page.url.searchParams.get('redirect');
+			if (returnUrl) return goto(returnUrl);
+			return goto('/');
 		}
+	}
+
+	let loginForm = new LoginForm();
+
+	async function onSubmitForm() {
+		await handleLogin({
+			email: loginForm.email.value,
+			password: loginForm.password.value
+		});
 	}
 
 	async function onLoginCustomer() {
@@ -94,39 +60,39 @@
 
 	<form on:submit={onSubmitForm}>
 		<div class="form-floating mt-2 mb-3">
-			<EmailInput
+			<InputForm
 				class="form-control rounded-4"
-				bind:formField={LoginForm.emailField}
+				bind:formField={loginForm.email}
 				id="email"
+				type="email"
 				placeholder="name@example.com"
-				readonly={LoginForm.isSubmiting}
-			></EmailInput>
+			/>
 			<label for="email">Email</label>
-			<ValidationFeedback formField={LoginForm.emailField}></ValidationFeedback>
+			<ValidationFeedback formField={loginForm.email}></ValidationFeedback>
 		</div>
 
 		<div class="form-floating mt-2 mb-3">
-			<PasswordInput
+			<InputForm
 				class="form-control rounded-4"
-				bind:formField={LoginForm.passwordField}
+				bind:formField={loginForm.password}
 				id="password"
 				placeholder="Password"
-				readonly={LoginForm.isSubmiting}
-			></PasswordInput>
+				type="password"
+			/>
 			<label for="password">Password</label>
-			<ValidationFeedback formField={LoginForm.passwordField}></ValidationFeedback>
+			<ValidationFeedback formField={loginForm.password}></ValidationFeedback>
 		</div>
 
 		<button
 			class="btn btn-primary w-100 py-2 mt-2 mb-3 rounded-4"
 			type="submit"
-			disabled={!LoginForm.valid || LoginForm.isSubmiting}
+			disabled={!loginForm.valid}
 		>
 			Login
-			{#if LoginForm.isSubmiting}
+			<!-- {#if LoginForm.isSubmiting}
 				<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
 				<span class="visually-hidden" role="status">Loading...</span>
-			{/if}
+			{/if} -->
 		</button>
 	</form>
 	<div class="d-flex mt-3 mb-4">
@@ -140,31 +106,21 @@
 	</div>
 	<div class="row row-cols-2 g-2 mt-2">
 		<div class="col d-flex justify-content-center">
-			<button
-				class="btn btn-outline-info rounded-4"
-				type="submit"
-				on:click={onLoginCustomer}
-				disabled={isDemoAccountLogin}
-			>
+			<button class="btn btn-outline-info rounded-4" type="submit" on:click={onLoginCustomer}>
 				Demo Customer
-				{#if isDemoAccountLogin && isAccounts[0]}
+				<!-- {#if isDemoAccountLogin && isAccounts[0]}
 					<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
 					<span class="visually-hidden" role="status">Loading...</span>
-				{/if}
+				{/if} -->
 			</button>
 		</div>
 		<div class="col d-flex justify-content-center">
-			<button
-				class="btn btn-outline-info rounded-4"
-				type="submit"
-				on:click={onLoginCustomer1}
-				disabled={isDemoAccountLogin}
-			>
+			<button class="btn btn-outline-info rounded-4" type="submit" on:click={onLoginCustomer1}>
 				Demo Customer1
-				{#if isDemoAccountLogin && isAccounts[1]}
+				<!-- {#if isDemoAccountLogin && isAccounts[1]}
 					<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
 					<span class="visually-hidden" role="status">Loading...</span>
-				{/if}
+				{/if} -->
 			</button>
 		</div>
 	</div>

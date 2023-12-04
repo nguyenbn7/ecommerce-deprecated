@@ -1,85 +1,32 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import AccountService from '$lib/account/service';
+	import { RegisterForm } from '$lib/(account)/register/model';
+	import AccountService from '$lib/(account)/service';
 	import { ToastService } from '$lib/components/share/toast.svelte';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
-	import EmailInput, { EmailInputValidator } from '$lib/share/form/email-input.svelte';
-	import PasswordInput, { PasswordInputValidator } from '$lib/share/form/password-input.svelte';
-	import TextInput, { TextInputValidator } from '$lib/share/form/text-input.svelte';
-	import { FormField, Validators } from '$lib/share/form/validation';
+	import InputForm from '$lib/share/form/input-form.svelte';
 	import ValidationFeedback from '$lib/share/form/validation-feedback.svelte';
 
-	const name_max_len = 70;
-
-	class RegisterForm {
-		static nameField = new FormField(
-			TextInputValidator.checkRequired('Name is required'),
-			Validators.containsAlnumAndSpace('Name contains only letters and spaces'),
-			Validators.checkMaxLength(`Name's max length is ${name_max_len} characters`, name_max_len)
-		);
-
-		static emailField = new FormField(
-			EmailInputValidator.checkRequired('Email is required'),
-			EmailInputValidator.checkFormat('Incorrect email. Example: bob@test.com')
-		);
-
-		static passwordField = new FormField(
-			PasswordInputValidator.checkRequired('Password is required')
-		);
-
-		static confirmPasswordField = new FormField(
-			PasswordInputValidator.checkRequired('Confirm Password is required')
-		);
-
-		static get valid() {
-			return (
-				this.nameField.valid &&
-				this.emailField.valid &&
-				this.passwordField.valid &&
-				this.confirmPasswordField.valid
-			);
-		}
-
-		static #onSubmit = false;
-
-		/**
-		 * @param {boolean} state
-		 */
-		static set isSubmiting(state) {
-			this.#onSubmit = state;
-		}
-
-		static get isSubmiting() {
-			return this.#onSubmit;
-		}
-	}
-
-	let isLocked = false;
-
 	async function onSubmitForm() {
-		try {
-			RegisterForm.isSubmiting = true;
-			const userInfo = await AccountService.register({
-				email: RegisterForm.emailField.value,
-				password: RegisterForm.passwordField.value,
-				display_name: RegisterForm.nameField.value,
-				confirm_password: RegisterForm.confirmPasswordField.value
-			});
+		const userInfo = await AccountService.register({
+			email: registerForm.email.value,
+			password: registerForm.password.value,
+			display_name: registerForm.displayName.value,
+			confirm_password: registerForm.confirmPassword.value
+		});
 
-			if (userInfo) {
-				ToastService.notifySuccess(`Welcome ${userInfo?.displayName}`);
-				const returnUrl = $page.url.searchParams.get('returnUrl');
-				if (returnUrl) return goto(returnUrl);
-				return goto('/');
-			}
-		} catch (error) {
-			// @ts-ignore
-			ToastService.notifyError(error.message);
-		} finally {
-			RegisterForm.isSubmiting = false;
+		if (userInfo) {
+			ToastService.notifySuccess(`Welcome ${userInfo?.displayName}`);
+			const returnUrl = $page.url.searchParams.get('redirect');
+			if (returnUrl) return goto(returnUrl);
+			return goto('/');
 		}
 	}
+
+	const displayNameMaxLen = 70;
+
+	let registerForm = new RegisterForm(displayNameMaxLen);
 </script>
 
 <svelte:head>
@@ -95,53 +42,57 @@
 	</div>
 
 	<div class="form-floating mt-2 mb-3">
-		<TextInput
+		<InputForm
 			class="form-control rounded-4"
-			bind:formField={RegisterForm.nameField}
+			bind:formField={registerForm.displayName}
 			id="displayName"
 			placeholder="I am cute"
-		></TextInput>
+			type="text"
+		/>
 		<label for="displayName">Display Name</label>
-		<ValidationFeedback formField={RegisterForm.emailField}></ValidationFeedback>
+		<ValidationFeedback formField={registerForm.displayName}></ValidationFeedback>
 	</div>
 
 	<div class="form-floating mt-2 mb-3">
-		<EmailInput
+		<InputForm
 			class="form-control rounded-4"
-			bind:formField={RegisterForm.emailField}
+			bind:formField={registerForm.email}
 			id="email"
 			placeholder="name@example.com"
-		></EmailInput>
+			type="email"
+		/>
 		<label for="email">Email</label>
-		<ValidationFeedback formField={RegisterForm.emailField}></ValidationFeedback>
+		<ValidationFeedback formField={registerForm.email}></ValidationFeedback>
 	</div>
 
 	<div class="form-floating mt-2 mb-3">
-		<PasswordInput
+		<InputForm
 			class="form-control rounded-4"
-			bind:formField={RegisterForm.passwordField}
+			bind:formField={registerForm.password}
 			id="password"
 			placeholder="Password"
-		></PasswordInput>
+			type="password"
+		/>
 		<label for="password">Password</label>
-		<ValidationFeedback formField={RegisterForm.passwordField}></ValidationFeedback>
+		<ValidationFeedback formField={registerForm.password}></ValidationFeedback>
 	</div>
 
 	<div class="form-floating mt-2 mb-3">
-		<PasswordInput
+		<InputForm
 			class="form-control rounded-4"
-			bind:formField={RegisterForm.confirmPasswordField}
+			bind:formField={registerForm.confirmPassword}
 			id="confirmPassword"
-			placeholder="Re-type password"
-		></PasswordInput>
+			placeholder="Confirm password"
+			type="password"
+		/>
 		<label for="confirmPassword">Confirm Password</label>
-		<ValidationFeedback formField={RegisterForm.confirmPasswordField}></ValidationFeedback>
+		<ValidationFeedback formField={registerForm.confirmPassword}></ValidationFeedback>
 	</div>
 
 	<button
 		class="btn btn-primary w-100 py-2 mt-2 mb-3 rounded-5"
 		type="submit"
-		disabled={!RegisterForm.valid}
+		disabled={!registerForm.valid}
 	>
 		Register
 		<!-- {#if isLocked}

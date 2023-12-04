@@ -1,7 +1,5 @@
 // https://www.reddit.com/r/sveltejs/comments/11fr6oe/where_do_you_put_your_shared_custom_types_for/
 
-type Products = Product[];
-
 type Product = {
 	price: number;
 	picture_url: string;
@@ -64,13 +62,7 @@ type Login = {
 	password: string;
 };
 
-// type LoginSuccess = {
-// 	display_name: string;
-// 	email: string;
-// 	token: string;
-// };
-
-type Validator = { check: (value: string | null | undefined) => boolean; errorMessage: string?};
+type Validator = { check: (value: string) => boolean; errorMessage: string };
 
 type Register = {
 	email: string;
@@ -78,6 +70,7 @@ type Register = {
 	password: string;
 	confirm_password: string;
 };
+
 declare namespace Toastr {
 	type Type = 'ERROR' | 'SUCCESS' | 'INFO' | 'WARNING';
 
@@ -159,3 +152,6 @@ type UserInfoResponse = {
 	display_name: string;
 };
 
+type OrderForm = {
+	email: any
+}
