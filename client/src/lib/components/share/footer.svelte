@@ -1,8 +1,8 @@
 <footer class="bg-light-subtle">
 	<div class="container">
-		<div class="py-5">
+		<div class="px-3 pt-5">
 			<div class="row">
-				<div class="col-4">
+				<div class="col-md-4">
 					<h5 class="mb-4">Contact Us</h5>
 					<ul class="nav flex-column">
 						<li class="nav-item mb-2">
@@ -26,7 +26,7 @@
 							</a>
 						</li>
 
-						<li class="nav-item mt-4 mb-2">
+						<li class="nav-item mt-4 mb-3">
 							<iframe
 								class="w-100"
 								src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3323.356430445871!2d-101.8624006172556!3d33.59605527293671!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86fe12c4f4115643%3A0x4be2acd0830de582!2s199%20Avenue%20S%2C%20Lubbock%2C%20TX%2079415%2C%20Hoa%20K%E1%BB%B3!5e0!3m2!1svi!2s!4v1701750814877!5m2!1svi!2s"
@@ -38,9 +38,9 @@
 						</li>
 					</ul>
 				</div>
-				<div class="col-8">
+				<div class="col-md-8">
 					<div class="row">
-						<div class="col-2 text-center">
+						<div class="col-3 col-md-2 mb-3">
 							<h5>About Skinet</h5>
 							<ul class="nav flex-column">
 								<li class="nav-item mb-2">
@@ -86,7 +86,7 @@
 							</ul>
 						</div>
 
-						<div class="col-4 ps-5">
+						<div class="col-9 col-md-4 ps-5 mb-3">
 							<h5>Support</h5>
 							<ul class="nav flex-column">
 								<li class="nav-item mb-2">
@@ -132,7 +132,7 @@
 							</ul>
 						</div>
 
-						<div class="col-5 ms-2 flex-grow-1">
+						<div class="col-md-5 ms-2 flex-grow-1">
 							<form>
 								<h5>Subscribe to our newsletter</h5>
 								<p>Monthly digest of what's new and exciting from us.</p>
@@ -152,7 +152,7 @@
 				</div>
 			</div>
 
-			<div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
+			<div class="d-flex flex-column flex-sm-row justify-content-between px-4 pt-4 pb-4 mt-5 border-top">
 				<p>© 2023 Skinet Company, Inc. All rights reserved.</p>
 				<ul class="list-unstyled d-flex fs-3">
 					<li class="ms-3">
