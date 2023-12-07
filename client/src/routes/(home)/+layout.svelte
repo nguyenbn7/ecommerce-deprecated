@@ -4,6 +4,8 @@
 </script>
 
 <Navbar></Navbar>
-<slot />
+<div class="container">
+	<slot />
+</div>
 
 <Footer></Footer>

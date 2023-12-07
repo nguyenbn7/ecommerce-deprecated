@@ -6,6 +6,10 @@
 	import { ToastService } from '$lib/components/share/toast.svelte';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import '@fortawesome/fontawesome-svg-core/styles.css';
+	import { config, icon } from '@fortawesome/fontawesome-svg-core';
+	import { faAnglesUp } from '@fortawesome/free-solid-svg-icons';
+	config.autoAddCss = false;
 
 	const toastContainerId = 'toast-container';
 	const spinnerId = 'spinnerModal';
@@ -24,7 +28,7 @@
 		const c = document.documentElement.scrollTop || document.body.scrollTop;
 		if (c > 0) {
 			window.requestAnimationFrame(scrollToTop);
-			window.scrollTo(0, c - c / 100);
+			window.scrollTo(0, c - c / 10);
 		}
 	}
 </script>
@@ -46,13 +50,12 @@
 		transition:fade={{ duration: 400 }}
 		on:click={scrollToTop}
 	>
-		<i class="bi bi-chevron-double-up"></i>
+		{@html icon(faAnglesUp).html}
 	</a>
 {/if}
 
 <style lang="scss">
 	@import '~bootstrap/scss/bootstrap.scss';
-	@import '~bootstrap-icons/font/bootstrap-icons.scss';
 
 	.back-to-top {
 		position: fixed;

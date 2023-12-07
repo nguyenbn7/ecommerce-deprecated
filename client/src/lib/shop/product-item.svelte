@@ -1,6 +1,8 @@
 <script>
 	import { BasketService } from '$lib/basket/service';
 	import { currency } from '$lib/share/functions';
+	import { icon } from '@fortawesome/fontawesome-svg-core';
+	import { faBasketShopping, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 
 	/**
 	 * @type {Product}
@@ -13,12 +15,14 @@
 		<img src={product.picture_url} alt={product.name} class="img-fluid bg-info" />
 		<div class="d-flex align-items-center justify-content-center hover-overlay">
 			<button
-				class="btn btn-success bi bi-cart me-2"
-				title="Add to cart"
+				class="btn btn-success me-2"
+				title="Add to basket"
 				on:click={() => BasketService.addItemToBasket(product)}
-			></button>
+			>
+				{@html icon(faBasketShopping).html}
+			</button>
 			<a class="btn btn-primary" href="/shop/{product.id}" title="Detail">
-				<i class="bi bi-info-circle"></i>
+				{@html icon(faCircleInfo).html}
 			</a>
 		</div>
 	</div>

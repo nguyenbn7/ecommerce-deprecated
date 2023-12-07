@@ -3,6 +3,14 @@
 	import { AccountService, currentUser } from '$lib/(account)/service';
 	import { basket } from '$lib/basket/service';
 	import { readMoreString } from '$lib/share/functions';
+	import { icon } from '@fortawesome/fontawesome-svg-core';
+	import {
+		faBasketShopping,
+		faCircleUser,
+		faHeart,
+		faSearch,
+		faUser
+	} from '@fortawesome/free-solid-svg-icons';
 	import { onMount } from 'svelte';
 
 	const paths = [
@@ -52,10 +60,10 @@
 
 		<div class="col-md-3 text-end">
 			<a class="nav-btn text-secondary" href={'#'} title="Search">
-				<i class="bi bi-search"></i>
+				{@html icon(faSearch).html}
 			</a>
 			<a class="nav-btn text-secondary" href="/favorites" title="Wish list">
-				<i class="bi bi-heart"></i>
+				{@html icon(faHeart).html}
 			</a>
 			{#if $currentUser}
 				<a
@@ -65,7 +73,7 @@
 					href={'#'}
 					title="Profile"
 				>
-					<i class="bi bi-person-circle"></i>
+					{@html icon(faCircleUser).html}
 				</a>
 				<ul class="dropdown-menu dropdown-menu-end">
 					<li>
@@ -92,7 +100,7 @@
 				</ul>
 			{:else}
 				<a class="nav-btn text-secondary" href="/login" title="Login">
-					<i class="bi bi-person"></i>
+					{@html icon(faUser).html}
 				</a>
 			{/if}
 			<a
@@ -102,15 +110,13 @@
 				href="/basket"
 				title="Basket"
 			>
+				{@html icon(faBasketShopping).html}
 				{#if $basket && $basket.items.length}
-					<i class="bi bi-basket-fill"></i>
 					<span
 						class="position-absolute translate-middle p-2 bg-transparent badge rounded-pill text-danger fs-5 cart-no"
 					>
 						{getCount($basket.items)}
 					</span>
-				{:else}
-					<i class="bi bi-basket"></i>
 				{/if}
 			</a>
 		</div>

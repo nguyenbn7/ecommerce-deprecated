@@ -67,12 +67,15 @@
 	}
 </script>
 
-<ol class="breadcrumb{styleClasses ? ` ${styleClasses}` : ''}">
+<ol
+	class={styleClasses ? styleClasses : ''}
+	style="--bs-breadcrumb-divider: '>';"
+	aria-label="breadcrumb"
+>
 	{#each breadcrumbPaths as path, idx}
 		{#if !path.href && !idx}
 			<li class="breadcrumb-item active" aria-current="page">
-				<i class="bi bi-house-door-fill"></i>
-				<span class="visually-hidden">{path.alias}</span>
+				{path.alias}
 			</li>
 		{:else if !path.href}
 			<li class="breadcrumb-item active" aria-current="page">
@@ -80,14 +83,13 @@
 			</li>
 		{:else if !idx}
 			<li class="breadcrumb-item">
-				<a class="link-body-emphasis fw-semibold text-decoration-none" href={path.href}>
-					<i class="bi bi-house-door-fill"></i>
-					<span class="visually-hidden">{path.alias}</span>
+				<a class="link-primary fw-semibold text-decoration-none" href={path.href}>
+					{path.alias}
 				</a>
 			</li>
 		{:else}
 			<li class="breadcrumb-item">
-				<a class="link-body-emphasis fw-semibold text-decoration-none" href={path.href}>
+				<a class="link-primary fw-semibold text-decoration-none" href={path.href}>
 					{path.alias}
 				</a>
 			</li>

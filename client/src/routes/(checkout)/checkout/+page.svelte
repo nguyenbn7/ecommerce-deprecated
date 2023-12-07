@@ -2,7 +2,7 @@
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
 	import { onMount } from 'svelte';
 	import { startCase, toLower } from 'lodash';
-	import BasketService from '$lib/basket/service';
+	import { BasketService, basket, basketTotals } from '$lib/basket/service';
 	import { get } from 'svelte/store';
 	import { currency } from '$lib/share/functions';
 	import OrderService from '$lib/(checkout)/checkout/service';
@@ -30,8 +30,6 @@
 	});
 
 	let orderForm = new OrderFormGroup();
-	let basket = get(BasketService.basket);
-	let basketTotals = get(BasketService.basketTotals);
 
 	$: if (hasSameAddress) {
 		orderForm.shippingAddress = orderForm.billingAddress;
@@ -80,7 +78,7 @@
 		 */
 		const order = {};
 
-		order.basket_id = basket.id;
+		order.basket_id = $basket?.id ?? "";
 		/**
 		 * @type {OrderAddress}
 		 */
@@ -131,7 +129,7 @@
 
 		<div class="row g-5">
 			<div class="col-md-5 col-lg-4 order-md-last">
-				<OrderSummary {basket} {basketTotals}></OrderSummary>
+				<OrderSummary {$basket} {$basketTotals}></OrderSummary>
 			</div>
 			<div class="col-md-7 col-lg-8">
 				<form on:submit={onSubmitForm}>

@@ -5,9 +5,11 @@
 	import { breadcrumb } from '$lib/components/share/breadcrumb.svelte';
 	import { onMount } from 'svelte';
 	import ShopService from '$lib/shop/service';
-	import BasketService from '$lib/basket/service';
+	import { BasketService, basket } from '$lib/basket/service';
+	import { icon } from '@fortawesome/fontawesome-svg-core';
+	import { faCircleMinus, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
-	const { addItemToBasket, basket, removeItemFromBasket } = BasketService;
+	const { addItemToBasket, removeItemFromBasket } = BasketService;
 
 	/**
 	 * @type {Product}
@@ -87,11 +89,11 @@
 						on:click={decrementQuantity}
 						disabled={quantity < 1}
 					>
-						<i class="bi bi-dash-circle" style="font-size: 2em;"></i>
+						<i>{@html icon(faCircleMinus).html}</i>
 					</button>
-					<span class="font-weight-bold" style="font-size: 1.5em;">{quantity}</span>
+					<span class="fw-semibold" style="font-size: 1.5em;">{quantity}</span>
 					<button class="p-0 m-0 ms-2 border-0 quantity-btn" on:click={incrementQuantity}>
-						<i class="bi bi-plus-circle" style="font-size: 2em;"></i>
+						<i>{@html icon(faPlusCircle).html}</i>
 					</button>
 					<button
 						class="btn btn-danger ms-4"
@@ -113,6 +115,10 @@
 		--bs-text-opacity: 1;
 		color: rgba(var(--bs-warning-rgb), var(--bs-text-opacity));
 		background-color: transparent;
+	}
+
+	.quantity-btn i {
+		font-size: 2em;
 	}
 
 	.quantity-btn:hover i {

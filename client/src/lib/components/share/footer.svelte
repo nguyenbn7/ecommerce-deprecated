@@ -1,3 +1,8 @@
+<script>
+	import { icon } from '@fortawesome/fontawesome-svg-core';
+	import { faEnvelope, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons';
+</script>
+
 <footer class="bg-light-subtle">
 	<div class="container">
 		<div class="px-3 pt-5">
@@ -10,19 +15,20 @@
 								href="http://maps.google.com/?q=199 Avenue S, Lubbock, TX 79415, USA"
 								class="nav-link p-0 text-body-secondary"
 							>
-								<i class="bi bi-pin-map-fill me-2"></i> 199 Avenue S, Lubbock, Texas 79415, USA
+								{@html icon(faLocationDot, { classes: ['me-1'] }).html} 199 Avenue S, Lubbock, Texas
+								79415, USA
 							</a>
 						</li>
 
 						<li class="nav-item mb-2">
 							<a href="mailto:info@example.com" class="nav-link p-0 text-body-secondary">
-								<i class="bi bi-envelope-at me-2"></i> info@example.com
+								{@html icon(faEnvelope, { classes: ['me-1'] }).html} info@example.com
 							</a>
 						</li>
 
 						<li class="nav-item mb-2">
 							<a href="tel:+1999999999" class="nav-link p-0 text-body-secondary">
-								<i class="bi bi-telephone me-2"></i> (999) 999-9999
+								{@html icon(faPhone, { classes: ['me-1'] }).html} (999) 999-9999
 							</a>
 						</li>
 
@@ -152,30 +158,11 @@
 				</div>
 			</div>
 
-			<div class="d-flex flex-column flex-sm-row justify-content-between px-4 pt-4 pb-4 mt-5 border-top">
-				<p>© 2023 Skinet Company, Inc. All rights reserved.</p>
-				<ul class="list-unstyled d-flex fs-3">
-					<li class="ms-3">
-						<a class="link-body-emphasis" href="https://twitter.com/">
-							<i class="bi bi-twitter"></i>
-						</a>
-					</li>
-					<li class="ms-3">
-						<a class="link-body-emphasis" href="https://www.instagram.com/">
-							<i class="bi bi-instagram"></i>
-						</a>
-					</li>
-					<li class="ms-3">
-						<a class="link-body-emphasis" href="https://www.facebook.com/">
-							<i class="bi bi-facebook"></i>
-						</a>
-					</li>
-					<li class="ms-3">
-						<a class="link-body-emphasis" href="https://www.youtube.com/">
-							<i class="bi bi-youtube"></i>
-						</a>
-					</li>
-				</ul>
+			<div class="row pt-4 pb-4 mt-5 border-top">
+				<p class="col-md-6 text-center text-md-start">© 2023 Skinet. All rights reserved.</p>
+				<div class="col-md-6 text-center text-md-end">
+					<img src="/images/payments.png" alt="payments" />
+				</div>
 			</div>
 		</div>
 	</div>
