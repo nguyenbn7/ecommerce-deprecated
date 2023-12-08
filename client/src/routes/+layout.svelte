@@ -1,14 +1,14 @@
 <script>
 	import { AccountService } from '$lib/(account)/service';
-	import { BasketService } from '$lib/basket/service';
-	import Spinner, { SpinnerService } from '$lib/components/share/spinner.svelte';
-	import ToastContainer from '$lib/components/share/toast-container.svelte';
-	import { ToastService } from '$lib/components/share/toast.svelte';
+	import { BasketService } from '$lib/(shop)/basket/service';
+	import Spinner, { SpinnerService } from '$lib/share/component/spinner.svelte';
+	import ToastContainer from '$lib/share/component/toast-container.svelte';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import '@fortawesome/fontawesome-svg-core/styles.css';
 	import { config, icon } from '@fortawesome/fontawesome-svg-core';
 	import { faAnglesUp } from '@fortawesome/free-solid-svg-icons';
+	import { ToastService } from '$lib/share/component/toast.svelte';
 	config.autoAddCss = false;
 
 	const toastContainerId = 'toast-container';
@@ -25,11 +25,6 @@
 	let y = 0;
 
 	function scrollToTop() {
-		// const c = document.documentElement.scrollTop || document.body.scrollTop;
-		// if (c > 0) {
-		// 	window.requestAnimationFrame(scrollToTop);
-		// 	window.scrollTo(0, c - c / 10);
-		// }
 		window.scrollTo({
 			left: 0,
 			top: 0,

@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { RegisterForm } from '$lib/(account)/register/model';
 	import { AccountService } from '$lib/(account)/service';
-	import { ToastService } from '$lib/components/share/toast.svelte';
+	import { ToastService } from '$lib/share/component/toast.svelte';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
 	import InputForm from '$lib/share/form/input-form.svelte';
 	import ValidationFeedback from '$lib/share/form/validation-feedback.svelte';

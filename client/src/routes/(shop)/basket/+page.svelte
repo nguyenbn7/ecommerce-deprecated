@@ -1,8 +1,8 @@
 <script>
-	import OrderTotals from '$lib/shop/order-totals.svelte';
+	import OrderTotals from '$lib/(shop)/shop/order-totals.svelte';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
 	import { currency } from '$lib/share/functions';
-	import { BasketService, basket } from '$lib/basket/service';
+	import { BasketService, basket } from '$lib/(shop)/basket/service';
 
 	const { addItemToBasket, removeItemFromBasket } = BasketService;
 </script>

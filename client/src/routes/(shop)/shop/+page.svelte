@@ -1,10 +1,10 @@
 <script>
-	import Pagination from '$lib/components/share/pagination.svelte';
-	import ProductItem from '$lib/shop/product-item.svelte';
-	import PagingHeader from '$lib/components/share/paging-header.svelte';
+	import Pagination from '$lib/share/component/pagination.svelte';
+	import ProductItem from '$lib/(shop)/shop/product-item.svelte';
+	import PagingHeader from '$lib/(shop)/shop/paging-header.svelte';
 	import { onMount } from 'svelte';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
-	import ShopService from '$lib/shop/service';
+	import ShopService from '$lib/(shop)/shop/service';
 	import { icon } from '@fortawesome/fontawesome-svg-core';
 	import { faSearch } from '@fortawesome/free-solid-svg-icons';
 

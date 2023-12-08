@@ -1,5 +1,5 @@
 <script>
-	import { basketTotals } from '$lib/basket/service';
+	import { basketTotals } from '$lib/(shop)/basket/service';
 	import { currency } from '$lib/share/functions';
 </script>
 

@@ -1,8 +1,8 @@
 import { PUBLIC_BASE_API_URL } from '$env/static/public';
 import { AccountService } from '$lib/(account)/service';
-import { SpinnerService } from '$lib/components/share/spinner.svelte';
-import { ToastService } from '$lib/components/share/toast.svelte';
+import { SpinnerService } from '$lib/share/component/spinner.svelte';
 import axios, { AxiosError } from 'axios';
+import { ToastService } from './component/toast.svelte';
 
 async function delay(ms = 1500) {
 	return new Promise((resolve) => setTimeout(resolve, ms));

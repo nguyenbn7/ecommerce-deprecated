@@ -1,7 +1,7 @@
 <script>
 	import { page } from '$app/stores';
 	import { AccountService, currentUser } from '$lib/(account)/service';
-	import { basket } from '$lib/basket/service';
+	import { basket } from '$lib/(shop)/basket/service';
 	import { readMoreString } from '$lib/share/functions';
 	import { icon } from '@fortawesome/fontawesome-svg-core';
 	import {

@@ -2,7 +2,7 @@
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
 	import { onMount } from 'svelte';
 	import { startCase, toLower } from 'lodash';
-	import { BasketService, basket, basketTotals } from '$lib/basket/service';
+	import { BasketService, basket, basketTotals } from '$lib/(shop)/basket/service';
 	import { get } from 'svelte/store';
 	import { currency } from '$lib/share/functions';
 	import OrderService from '$lib/(checkout)/checkout/service';

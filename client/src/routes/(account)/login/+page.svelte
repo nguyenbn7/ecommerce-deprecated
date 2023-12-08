@@ -1,12 +1,12 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { ToastService } from '$lib/components/share/toast.svelte';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
 	import ValidationFeedback from '$lib/share/form/validation-feedback.svelte';
 	import { LoginForm } from '$lib/(account)/login/model';
 	import InputForm from '$lib/share/form/input-form.svelte';
 	import { AccountService } from '$lib/(account)/service';
+	import { ToastService } from '$lib/share/component/toast.svelte';
 
 	/**
 	 * @param {LoginDTO} loginDTO

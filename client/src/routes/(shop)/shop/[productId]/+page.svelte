@@ -2,10 +2,10 @@
 	import { page } from '$app/stores';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
 	import { currency } from '$lib/share/functions';
-	import { breadcrumb } from '$lib/components/share/breadcrumb.svelte';
+	import { breadcrumb } from '$lib/share/component/breadcrumb.svelte';
 	import { onMount } from 'svelte';
-	import ShopService from '$lib/shop/service';
-	import { BasketService, basket } from '$lib/basket/service';
+	import ShopService from '$lib/(shop)/shop/service';
+	import { BasketService, basket } from '$lib/(shop)/basket/service';
 	import { icon } from '@fortawesome/fontawesome-svg-core';
 	import { faCircleMinus, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 

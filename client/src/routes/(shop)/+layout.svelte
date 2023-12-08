@@ -1,10 +1,10 @@
 <script>
 	import { page } from '$app/stores';
-	import BrandBar from '$lib/brand-bar.svelte';
-	import Breadcrumb from '$lib/components/share/breadcrumb.svelte';
-	import Footer from '$lib/components/share/footer.svelte';
-	import NavBar from '$lib/nav-bar.svelte';
-	import TopBar from '$lib/top-bar.svelte';
+	import BrandBar from '$lib/share/layout/brand-bar.svelte';
+	import Breadcrumb from '$lib/share/component/breadcrumb.svelte';
+	import Footer from '$lib/share/layout/footer.svelte';
+	import NavBar from '$lib/share/layout/nav-bar.svelte';
+	import TopBar from '$lib/share/layout/top-bar.svelte';
 	const mapTitle = [
 		{ link: '/shop', name: 'Our Shop' },
 		{ link: '/about', name: 'About Us' },
@@ -17,6 +17,7 @@
 <NavBar />
 
 <div class="d-flex flex-column" style="min-height: 100vh;">
+	<!-- TODO: merge breadcrumb with header -->
 	<div class="container-fluid bg-secondary-subtle mb-5">
 		<div
 			class="d-flex flex-column align-items-center justify-content-center"

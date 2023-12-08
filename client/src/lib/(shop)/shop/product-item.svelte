@@ -1,5 +1,5 @@
 <script>
-	import { BasketService } from '$lib/basket/service';
+	import { BasketService } from '$lib/(shop)/basket/service';
 	import { currency } from '$lib/share/functions';
 	import { icon } from '@fortawesome/fontawesome-svg-core';
 	import { faBasketShopping, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
