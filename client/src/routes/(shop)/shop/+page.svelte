@@ -5,6 +5,8 @@
 	import { onMount } from 'svelte';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
 	import ShopService from '$lib/shop/service';
+	import { icon } from '@fortawesome/fontawesome-svg-core';
+	import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 	/**
 	 * @type {Product[]}
@@ -42,7 +44,10 @@
 		{ name: 'Price: High to Low', value: '-price' }
 	];
 
-	let searchTerm = '';
+	/**
+	 * @type {string | undefined}
+	 */
+	let searchTerm;
 
 	const defaultShopParams = {
 		page_number: 1,
@@ -121,19 +126,16 @@
 	}
 
 	async function onSearch() {
-		if (searchTerm) {
-			shopParams.search = searchTerm;
-			shopParams.page_number = 1;
-			await getNewPageProduct(shopParams);
-		}
-	}
-
-	async function onReset() {
-		if (searchTerm) {
-			searchTerm = '';
+		// TODO: handle more case
+		if (searchTerm === shopParams.search) return;
+		if (!searchTerm) {
+			searchTerm = undefined;
 			shopParams = Object.assign(shopParams, defaultShopParams);
-			await getNewPageProduct(shopParams);
+			return await getNewPageProduct(shopParams);
 		}
+		shopParams.search = searchTerm;
+		shopParams.page_number = 1;
+		return await getNewPageProduct(shopParams);
 	}
 </script>
 
@@ -143,17 +145,32 @@
 
 {#if productBrands.length}
 	<div class="row">
-		<aside class="col-3 sidebar-sticky">
-			<div class="my-2">
-				<h5 class="text-warning ms-3">Sort By</h5>
-				<select class="form-select mb-4" on:change={onSortSelected}>
+		<aside class="col-12 col-md-3">
+			<div class="d-flex mt-2 mb-3">
+				<div class="input-group mb-3">
+					<input
+						type="text"
+						class="form-control"
+						placeholder="Search by product name"
+						aria-describedby="button-addon2"
+						bind:value={searchTerm}
+						on:keyup={onKeyUpSearch}
+					/>
+					<button class="btn btn-outline-secondary" type="button" on:click={onSearch}>
+						<i>{@html icon(faSearch).html}</i>
+					</button>
+				</div>
+			</div>
+			<div class="mt-2 mb-4">
+				<h5 class="text-warning mb-3">Sort By</h5>
+				<select class="form-select" on:change={onSortSelected}>
 					{#each sortOptions as sort}
 						<option value={sort.value}>{sort.name}</option>
 					{/each}
 				</select>
 			</div>
-			<div class="my-2">
-				<h5 class="text-warning ms-3">Brands</h5>
+			<div class="mt-2 mb-4">
+				<h5 class="text-warning mb-3">Brands</h5>
 				<ul class="list-group">
 					{#each productBrands as brand}
 						<a
@@ -167,8 +184,8 @@
 					{/each}
 				</ul>
 			</div>
-			<div class="my-2">
-				<h5 class="text-warning ms-3">Types</h5>
+			<div class="mt-2 mb-4">
+				<h5 class="text-warning mb-3">Types</h5>
 				<ul class="list-group">
 					{#each productTypes as type}
 						<a
@@ -183,26 +200,14 @@
 				</ul>
 			</div>
 		</aside>
-		<div class="col-9">
-			<div class="d-flex justify-content-between align-items-center pb-3">
+		<div class="col-12 col-md-9">
+			<div class="d-flex justify-content-between pt-3 pb-4p pt-md-0">
 				<PagingHeader
 					pageNumber={shopParams.page_number}
 					{totalItems}
 					pageSize={shopParams.page_size}
 				></PagingHeader>
-				<div class="d-flex mt-2">
-					<input
-						type="text"
-						placeholder="Search product name"
-						class="form-control me-2"
-						bind:value={searchTerm}
-						on:keyup|preventDefault={onKeyUpSearch}
-					/>
-					<button type="button" class="btn btn-outline-primary mx-2" on:click={onSearch}>
-						Search
-					</button>
-					<button type="button" class="btn btn-outline-danger" on:click={onReset}>Clear</button>
-				</div>
+				<!-- TODO: select page size -->
 			</div>
 
 			<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 row-cols-xxl-3 g-3 mb-4">

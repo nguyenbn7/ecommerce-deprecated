@@ -1,16 +1,20 @@
 <script>
 	import { page } from '$app/stores';
+	import BrandBar from '$lib/brand-bar.svelte';
 	import Breadcrumb from '$lib/components/share/breadcrumb.svelte';
 	import Footer from '$lib/components/share/footer.svelte';
-	import Navbar from '$lib/components/share/navbar.svelte';
+	import NavBar from '$lib/nav-bar.svelte';
+	import TopBar from '$lib/top-bar.svelte';
 	const mapTitle = [
-		{ link: '/shop', name: 'Shop' },
-		{ link: '/about', name: 'About' },
+		{ link: '/shop', name: 'Our Shop' },
+		{ link: '/about', name: 'About Us' },
 		{ link: '/blog', name: 'Blog' }
 	];
 </script>
 
-<Navbar></Navbar>
+<TopBar />
+<BrandBar />
+<NavBar />
 
 <div class="d-flex flex-column" style="min-height: 100vh;">
 	<div class="container-fluid bg-secondary-subtle mb-5">
@@ -27,7 +31,7 @@
 		</div>
 	</div>
 	<main class="flex-grow-1 mb-4 mt-5">
-		<div class="container">
+		<div class="container-fluid px-5">
 			<slot />
 		</div>
 	</main>

@@ -59,11 +59,11 @@ export class FormField {
 	set bindInstance(instance) {
 		this.#instance = instance;
 
-		this.#instance.addEventListener('focusin', () => {
+		this.#instance?.addEventListener('focusin', () => {
 			if (!this.#touched) this.#touched = true;
 		});
 
-		this.#instance.addEventListener('input', ($event) => {
+		this.#instance?.addEventListener('input', ($event) => {
 			/**
 			 * @type {EventTarget | null}
 			 */

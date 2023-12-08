@@ -32,7 +32,7 @@
 	});
 </script>
 
-<header class="nav nav-expand-md sticky-top bg-body">
+<header class="nav nav-expand-md bg-body">
 	<nav
 		class="container-xxl d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3"
 	>

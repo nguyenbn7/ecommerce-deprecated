@@ -4,7 +4,7 @@
 </script>
 
 <footer class="bg-light-subtle">
-	<div class="container">
+	<div class="container-fluid px-5">
 		<div class="px-3 pt-5">
 			<div class="row">
 				<div class="col-md-4">

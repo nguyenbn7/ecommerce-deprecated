@@ -25,11 +25,16 @@
 	let y = 0;
 
 	function scrollToTop() {
-		const c = document.documentElement.scrollTop || document.body.scrollTop;
-		if (c > 0) {
-			window.requestAnimationFrame(scrollToTop);
-			window.scrollTo(0, c - c / 10);
-		}
+		// const c = document.documentElement.scrollTop || document.body.scrollTop;
+		// if (c > 0) {
+		// 	window.requestAnimationFrame(scrollToTop);
+		// 	window.scrollTo(0, c - c / 10);
+		// }
+		window.scrollTo({
+			left: 0,
+			top: 0,
+			behavior: 'smooth'
+		});
 	}
 </script>
 
@@ -46,7 +51,7 @@
 {#if y > 100}
 	<a
 		href={'#'}
-		class="btn btn-primary back-to-top"
+		class="btn btn-info back-to-top"
 		transition:fade={{ duration: 400 }}
 		on:click={scrollToTop}
 	>
@@ -55,7 +60,7 @@
 {/if}
 
 <style lang="scss">
-	@import '~bootstrap/scss/bootstrap.scss';
+	@import '~bootswatch/dist/flatly/bootstrap.min.css';
 
 	.back-to-top {
 		position: fixed;

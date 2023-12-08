@@ -1,9 +1,13 @@
 <script>
+	import BrandBar from '$lib/brand-bar.svelte';
 	import Footer from '$lib/components/share/footer.svelte';
-	import Navbar from '$lib/components/share/navbar.svelte';
+	import NavBar from '$lib/nav-bar.svelte';
+	import TopBar from '$lib/top-bar.svelte';
 </script>
 
-<Navbar></Navbar>
+<TopBar />
+<BrandBar />
+<NavBar />
 <div class="container">
 	<slot />
 </div>

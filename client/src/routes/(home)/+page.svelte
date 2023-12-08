@@ -9,8 +9,17 @@
 		faTruckFast
 	} from '@fortawesome/free-solid-svg-icons';
 
+	/**
+	 * @type {HTMLDivElement}
+	 */
+	let carouselInstance;
+
 	onMount(async () => {
-		(await import('bootstrap')).Carousel;
+		const carousel = new (await import('bootstrap')).Carousel(carouselInstance, {
+			interval: 2000,
+			ride: "carousel",
+			pause: false
+		});
 	});
 </script>
 
@@ -18,7 +27,7 @@
 	<title>{ECOMMERCE_NAME} - Home</title>
 </svelte:head>
 
-<div id="carouselExample" class="carousel slide my-5" data-bs-ride="carousel">
+<div bind:this={carouselInstance} class="carousel slide mt-3" id="carouselExample">
 	<div class="carousel-indicators">
 		<button
 			type="button"
@@ -42,13 +51,13 @@
 		></button>
 	</div>
 	<div class="carousel-inner">
-		<div class="carousel-item active" data-bs-slide="1000">
+		<div class="carousel-item active">
 			<img src="/images/hero1.jpg" class="d-block w-100" alt="slide" />
 		</div>
-		<div class="carousel-item" data-bs-slide="1000">
+		<div class="carousel-item">
 			<img src="/images/hero2.jpg" class="d-block w-100" alt="slide" />
 		</div>
-		<div class="carousel-item" data-bs-slide="1000">
+		<div class="carousel-item">
 			<img src="/images/hero3.jpg" class="d-block w-100" alt="slide" />
 		</div>
 	</div>
