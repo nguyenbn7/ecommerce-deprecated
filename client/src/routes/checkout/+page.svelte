@@ -9,6 +9,7 @@
 	import { AddressFormGroup, OrderFormGroup } from '$lib/(checkout)/checkout/form';
 	import OrderSummary from '$lib/(checkout)/checkout/order-summary.svelte';
 	import Address from '$lib/(checkout)/checkout/address.svelte';
+	import Footer from '$lib/share/layout/footer.svelte';
 
 	let hasSameAddress = true;
 	/**
@@ -78,7 +79,7 @@
 		 */
 		const order = {};
 
-		order.basket_id = $basket?.id ?? "";
+		order.basket_id = $basket?.id ?? '';
 		/**
 		 * @type {OrderAddress}
 		 */
@@ -254,3 +255,5 @@
 		</div>
 	</main>
 </div>
+
+<Footer />
