@@ -43,7 +43,7 @@ async def get_current_user(
     except Exception:
         raise credentials_exception
 
-    user = db_session.query(User).filter(User.normalized_user_name == username)
+    user = db_session.query(User).filter(User.normalized_user_name == username.upper()).first()
 
     if user is None:
         raise credentials_exception

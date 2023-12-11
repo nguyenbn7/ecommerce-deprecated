@@ -44,10 +44,10 @@ def create_order(
         db_session,
         current_user.email,
         customer_order.paymentType,
-        delivery_method.id,
+        delivery_method,
+        basket,
         customer_order.billingAddress,
         customer_order.shippingAddress,
-        basket,
     )
 
     delete_customer_basket(redis_session, customer_order.basketId)

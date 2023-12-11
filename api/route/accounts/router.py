@@ -13,6 +13,11 @@ from share.jwt_service import generate_jwt_token
 
 account_router = APIRouter(prefix="/account", tags=["Account"])
 
+SECONDS_TO_MINUTE = 60
+MINUTES_TO_HOUR = 60
+HOURS_TO_DAY = 24
+JWT_TOKEN_LIVE_SECONDS = SECONDS_TO_MINUTE * MINUTES_TO_HOUR * HOURS_TO_DAY
+
 
 @account_router.post("/login")
 def login(
@@ -30,7 +35,11 @@ def login(
 
     claims = {"sub": user.user_name}
 
-    return Authenticated(generate_jwt_token(claims), user.email, user.display_name)
+    return Authenticated(
+        generate_jwt_token(claims, JWT_TOKEN_LIVE_SECONDS),
+        user.email,
+        user.display_name,
+    )
 
 
 @account_router.post("/register")
@@ -56,7 +65,11 @@ def register(
 
     claims = {"sub": user.user_name}
 
-    return Authenticated(generate_jwt_token(claims), user.email, user.display_name)
+    return Authenticated(
+        generate_jwt_token(claims, JWT_TOKEN_LIVE_SECONDS),
+        user.email,
+        user.display_name,
+    )
 
 
 @account_router.get("/display")
