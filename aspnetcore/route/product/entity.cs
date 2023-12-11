@@ -1,4 +1,4 @@
-namespace aspnetcore.route.product;
+namespace ecommerce.route.product.entity;
 
 public class Product
 {

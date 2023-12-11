@@ -1,6 +1,1 @@
-namespace ecommerce.route.product;
-
-public class dto
-{
-    
-}
+namespace ecommerce.route.product.dto;

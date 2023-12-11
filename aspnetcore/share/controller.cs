@@ -6,12 +6,7 @@ namespace ecommerce.share;
 [Route("api/[controller]")]
 public abstract class BaseAPIController : ControllerBase
 {
-    private readonly ILogger? logger;
-
-    protected BaseAPIController()
-    {
-
-    }
+    private readonly ILogger logger;
     protected BaseAPIController(ILogger logger)
     {
         this.logger = logger;
