@@ -40,11 +40,11 @@ def apply_sort(query: Query[TEntity], sort: str | None = None):
 
 def to_page(
     query: Query[TEntity],
-    predicate_query: Query,
+    count_query: Query[Product],
     page_number: int = 1,
     page_size: int = 6,
 ):
-    total_items = predicate_query.with_entities(func.count()).scalar()
+    total_items = count_query.with_entities(func.count(Product.id)).scalar()
 
     page_index, page_size = page_number - 1, page_size
 

@@ -29,9 +29,11 @@ def get_products(
         params.sort,
     )
 
-    predicate_query = apply_predicate(db_session.query(Product.id))
+    count_query = apply_predicate(
+        db_session.query(Product), params.brandId, params.typeId, params.search
+    )
 
-    page_products = to_page(query, predicate_query, params.pageNumber, params.pageSize)
+    page_products = to_page(query, count_query, params.pageNumber, params.pageSize)
 
     return Page(
         page_products.pageNumber,
@@ -39,6 +41,16 @@ def get_products(
         page_products.totalItems,
         list(map(lambda p: p.to_dto(), page_products.data)),
     )
+
+
+@product_router.get("/types")
+def get_product_types(db_session: Annotated[Session, Depends(get_db_session)]):
+    return db_session.query(ProductType).all()
+
+
+@product_router.get("/brands")
+def get_product_brands(db_session: Annotated[Session, Depends(get_db_session)]):
+    return db_session.query(ProductBrand).all()
 
 
 @product_router.get("/{id}")
@@ -54,13 +66,3 @@ def get_product(
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Product not found")
 
     return projected_product.to_dto()
-
-
-@product_router.get("/types")
-def get_product_types(db_session: Annotated[Session, Depends(get_db_session)]):
-    return db_session.query(ProductType).all()
-
-
-@product_router.get("/brands")
-def get_product_brands(db_session: Annotated[Session, Depends(get_db_session)]):
-    return db_session.query(ProductBrand).all()

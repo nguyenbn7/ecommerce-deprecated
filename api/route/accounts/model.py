@@ -56,7 +56,7 @@ class User(BaseORM):
     normalized_user_name: Mapped[str] = mapped_column(String(320), nullable=False)
 
     address: Mapped["UserAddress"] = relationship(
-        "ApplicationUserAddress",
+        "UserAddress",
         back_populates="user",
         uselist=False,
     )
@@ -73,4 +73,4 @@ class UserAddress(BaseORM):
     zip_code: Mapped[str] = mapped_column(String(10), nullable=False)
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    user: Mapped["User"] = relationship("ApplicationUser", back_populates="address")
+    user: Mapped["User"] = relationship("User", back_populates="address")
