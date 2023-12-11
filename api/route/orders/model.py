@@ -1,6 +1,6 @@
 from datetime import datetime
 import enum
-from typing import Any, List
+from typing import List
 from sqlalchemy import BigInteger, Integer, String, DateTime, Numeric, Enum, ForeignKey
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from pydantic import BaseModel, Field
@@ -8,74 +8,30 @@ from pydantic import BaseModel, Field
 from share.model import BaseORM
 
 
-class BillingAddressDTO(BaseModel):
-    full_name: str
+class CustomerAddress(BaseModel):
+    fullName: str
     email: str
-    phone_number: str
+    phoneNumber: str
     address: str
-    address2: str
+    address2: str | None = Field(default=None)
     country: str
     state: str
-    zip_code: str
-
-    def convert_to_billing_address(self):
-        b = BillingAddress()
-        b.full_name = self.full_name
-        b.email = self.email
-        b.phone_number = self.phone_number
-        b.address = self.address
-        b.country = self.country
-        b.state = self.state
-        b.zip_code = self.zip_code
-        return b
-
-    def convert_to_shipping_address(self):
-        b = ShippingAddress()
-        b.full_name = self.full_name
-        b.email = self.email
-        b.phone_number = self.phone_number
-        b.address = self.address
-        b.country = self.country
-        b.state = self.state
-        b.zip_code = self.zip_code
-        return b
-
-
-class ShippingAddressDTO(BaseModel):
-    full_name: str
-    email: str
-    phone_number: str
-    address: str
-    address2: str
-    country: str
-    state: str
-    zip_code: str
-
-    def convert_to_shipping_address(self):
-        b = ShippingAddress()
-        b.full_name = self.full_name
-        b.email = self.email
-        b.phone_number = self.phone_number
-        b.address = self.address
-        b.country = self.country
-        b.state = self.state
-        b.zip_code = self.zip_code
-        return b
+    zipCode: str
 
 
 class DeliveryMethodDTO(BaseModel):
     id: int
-    short_name: str
-    delivery_time: str
+    shortName: str
+    deliveryTime: str
     price: float
 
 
-class OrderDTO(BaseModel):
-    basket_id: str
-    billing_address: BillingAddressDTO
-    shipping_address: ShippingAddressDTO | None = Field(default=None)
-    delivery_method_id: int
-    payment_type: str
+class CustomerOrder(BaseModel):
+    basketId: str
+    billingAddress: CustomerAddress
+    shippingAddress: CustomerAddress | None = Field(default=None)
+    deliveryMethodId: int
+    paymentType: str
 
 
 class OrderItem(BaseORM):

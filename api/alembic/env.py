@@ -5,12 +5,10 @@ from sqlalchemy import pool
 
 from alembic import context
 
-from share.database import BaseORM
-from routes.product.model import Product
-from routes.product_brand.model import ProductBrand
-from routes.product_type.model import ProductType
-from routes.account.model import ApplicationUser, ApplicationUserAddress
-from routes.order.model import (
+from share.model import BaseORM
+from route.products.model import Product, ProductBrand, ProductType
+from route.accounts.model import User, UserAddress
+from route.orders.model import (
     BillingAddress,
     ShippingAddress,
     OrderStatus,

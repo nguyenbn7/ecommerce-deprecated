@@ -8,21 +8,21 @@ from pydantic import BaseModel, Field
 @dataclass
 class BasketItem:
     id: int
-    product_name: str
+    productName: str
     price: float
     quantity: int
-    picture_url: str
+    pictureUrl: str
     brand: str
     type: str
 
 
 @dataclass
-class CustomerBasket:
+class Basket:
     id: str | None = str(uuid4())
     items: List[BasketItem] = field(default_factory=list)
 
 
-class BasketItemDTO(BaseModel):
+class CustomerBasketItem(BaseModel):
     id: int
     product_name: str
     price: float
@@ -32,6 +32,6 @@ class BasketItemDTO(BaseModel):
     type: str
 
 
-class CustomerBasketDTO(BaseModel):
+class CustomerBasket(BaseModel):
     id: str = Field()
-    items: List[BasketItemDTO] = Field()
+    items: List[CustomerBasketItem] = Field()

@@ -1,5 +1,5 @@
-from dataclasses import dataclass
 import re
+from attr import dataclass
 from pydantic import BaseModel, EmailStr, Field, model_validator
 from sqlalchemy import BigInteger, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -7,22 +7,16 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from share.model import BaseORM
 
 
-@dataclass(frozen=True)
-class UserInfo:
-    email: str
-    display_name: str
-
-
-@dataclass(frozen=True)
-class SuccessResponse:
-    token: str
-    email: str
-    display_name: str
-
-
-class LoginDTO(BaseModel):
+class CustomerLogin(BaseModel):
     email: EmailStr = Field(examples=["tom@test.com"])
     password: str = Field(examples=["Pa$$w0rd"])
+
+
+@dataclass(frozen=True)
+class Authenticated:
+    token: str
+    email: str
+    displayName: str
 
 
 password_pattern = re.compile(
@@ -30,11 +24,11 @@ password_pattern = re.compile(
 )
 
 
-class RegisterDTO(BaseModel):
+class CustomerRegister(BaseModel):
     email: EmailStr = Field(examples=["tom@test.com"])
-    display_name: str
+    displayName: str
     password: str = Field(examples=["Pa$$w0rd"])
-    confirm_password: str = Field(examples=["Pa$$w0rd"])
+    confirmPassword: str = Field(examples=["Pa$$w0rd"])
 
     @model_validator(mode="after")
     def check_passwords_match(self):
@@ -43,13 +37,14 @@ class RegisterDTO(BaseModel):
             raise ValueError(
                 "Password must have 1 uppercase, 1 lowercase, 1 number, 1 non alphanumeric and at least 6 characters"
             )
-        pw2 = self.confirm_password
+        pw2 = self.confirmPassword
         if pw1 is not None and pw2 is not None and pw1 != pw2:
-            raise ValueError("password and confirm_password do not match")
+            raise ValueError("password and confirm password do not match")
         return self
 
 
-class ApplicationUser(BaseORM):
+# Database Entity
+class User(BaseORM):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
@@ -60,14 +55,14 @@ class ApplicationUser(BaseORM):
     normalized_email: Mapped[str] = mapped_column(String(320), nullable=False)
     normalized_user_name: Mapped[str] = mapped_column(String(320), nullable=False)
 
-    address: Mapped["ApplicationUserAddress"] = relationship(
+    address: Mapped["UserAddress"] = relationship(
         "ApplicationUserAddress",
         back_populates="user",
         uselist=False,
     )
 
 
-class ApplicationUserAddress(BaseORM):
+class UserAddress(BaseORM):
     __tablename__ = "user_addresses"
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
@@ -78,6 +73,4 @@ class ApplicationUserAddress(BaseORM):
     zip_code: Mapped[str] = mapped_column(String(10), nullable=False)
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    user: Mapped["ApplicationUser"] = relationship(
-        "ApplicationUser", back_populates="address"
-    )
+    user: Mapped["User"] = relationship("ApplicationUser", back_populates="address")
