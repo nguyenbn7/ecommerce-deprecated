@@ -1,219 +1,155 @@
 <script context="module">
-	import Toast from './toast.svelte';
+	import { icon } from '@fortawesome/fontawesome-svg-core';
+	import {
+		faCheckCircle,
+		faExclamationCircle,
+		faInfoCircle,
+		faTimesCircle
+	} from '@fortawesome/free-solid-svg-icons';
+	import { Toast } from 'bootstrap';
+	import { writable } from 'svelte/store';
 
-	class ToastService {
-		/**
-		 * @type {string}
-		 */
-		static #containerId;
+	/**
+	 * @type {import('svelte/store').Writable<string | null>}
+	 */
+	let messageStore = writable(null);
+	/**
+	 * @type {import('svelte/store').Writable<Toastr.Type | null>}
+	 */
+	let typeStore = writable(null);
+	/**
+	 * @type {HTMLDivElement | null}
+	 */
+	let ele = null;
 
-		/**
-		 * @param {string} id
-		 */
-		static setToastContainerId(id) {
-			this.#containerId = id;
-		}
+	let container = null;
 
-		static #toastContainer() {
-			let toastContainer = document.getElementById(this.#containerId);
-
-			return {
-				getInstance: () => {
-					if (!toastContainer) {
-						throw Error('Can not get toast container');
-					}
-					return toastContainer;
-				}
-			};
-		}
-
-		/**
-		 * @param {string} message
-		 * @param {Toastr.Type} type
-		 */
-		static notify(message, type) {
-			const container = this.#toastContainer().getInstance();
-
-			const toast = new Toast({
-				target: container,
-				props: { message, type }
-			});
-			toast.show();
-		}
-
-		/**
-		 * @param {string} message
-		 */
-		static notifyError(message) {
-			this.notify(message, 'ERROR');
-		}
-
-		/**
-		 * @param {string} message
-		 */
-		static notifySuccess(message) {
-			this.notify(message, 'SUCCESS');
-		}
-
-		/**
-		 * @param {string} message
-		 */
-		static notifyWarning(message) {
-			this.notify(message, 'WARNING');
-		}
-
-		/**
-		 * @param {string} message
-		 */
-		static notifyInfo(message) {
-			this.notify(message, 'INFO');
-		}
+	/**
+	 * @param {string} id
+	 */
+	function registerContainer(id) {
+		container = document.getElementById(id);
 	}
+
+	/**
+	 * @param {string} message
+	 * @param {Toastr.Type} type
+	 */
+	function notify(message, type) {
+		/**
+		 * @type {import("bootstrap").Toast}
+		 */
+		let toast = Toast.getOrCreateInstance(ele);
+
+		messageStore.update((_) => message);
+		typeStore.update((_) => type);
+		toast.show();
+	}
+
+	/**
+	 * @param {string} message
+	 */
+	function notifyDanger(message) {
+		notify(message, 'DANGER');
+	}
+
+	/**
+	 * @param {string} message
+	 */
+	function notifySuccess(message) {
+		notify(message, 'SUCCESS');
+	}
+
+	/**
+	 * @param {string} message
+	 */
+	function notifyWarning(message) {
+		notify(message, 'WARNING');
+	}
+
+	/**
+	 * @param {string} message
+	 */
+	function notifyInfo(message) {
+		notify(message, 'INFO');
+	}
+
+	function onClickHide() {
+		/**
+		 * @type {import("bootstrap").Toast | null}
+		 */
+		let toast = Toast.getInstance(ele);
+
+		if (!toast) return;
+
+		toast.hide();
+	}
+
+	const ToastService = {
+		registerContainer,
+		notify,
+		notifyDanger,
+		notifyInfo,
+		notifySuccess,
+		notifyWarning
+	};
 
 	export { ToastService };
 </script>
 
 <script>
-	// TODO: use Toast Bootstrap if possible
-	import { fade, fly } from 'svelte/transition';
-
-	/** @type {Toastr.Configuration} */
-	export let config = {
-		animation: true,
-		autohide: true,
-		/** Delay hidden time in (ms)*/
-		delay: 2000,
-		autodispose: true,
-		enableClickToastDispose: true,
-		enableClickToastHide: false
-	};
-
-	/** @type {Toastr.Type} */
-	export let type;
-
-	let classNames = '';
-	export { classNames as class };
-
-	/** @type {string} */
-	export let message;
-
-	let isShown = false;
-
 	/**
-	 * @type {number | null | undefined}
+	 * @param {Toastr.Type | null} toastType
 	 */
-	let timeout = null;
-
-	/**
-	 * @type {HTMLDivElement}
-	 */
-	let el;
-
-	export function show() {
-		isShown = true;
-		if (config.autohide) {
-			timeout = setTimeout(() => {
-				hide();
-			}, config.delay);
-			return;
-		}
-
-		if (config.autodispose) {
-			timeout = setTimeout(() => dispose(), config.delay);
-			return;
+	function getToastIcon(toastType) {
+		switch (toastType) {
+			case 'DANGER':
+				return faTimesCircle;
+			case 'INFO':
+				return faInfoCircle;
+			case 'SUCCESS':
+				return faCheckCircle;
+			case 'WARNING':
+				return faExclamationCircle;
+			default:
+				return null;
 		}
 	}
-
-	export function hide() {
-		isShown = false;
-		clearInternalTimeout();
-	}
-
-	export function dispose() {
-		isShown = false;
-		clearInternalTimeout();
-		if (el) {
-			setTimeout(() => el.parentElement?.removeChild(el), 1000);
-		}
-	}
-
-	/**
-	 * @param {HTMLDivElement | Element} node
-	 * @param {import("svelte/transition").FlyParams | undefined} [flyParams]
-	 */
-	function customFly(node, flyParams) {
-		if (!config.animation) {
-			return fly(node, { delay: 0, duration: 0 });
-		}
-		flyParams = {
-			x: 300,
-			duration: 2000
-		};
-		return fly(node, flyParams);
-	}
-
-	/**
-	 * @param {HTMLDivElement | Element} node
-	 * @param {import("svelte/transition").FadeParams | undefined} [fadeParams]
-	 */
-	function customFade(node, fadeParams) {
-		if (!config.animation) {
-			// This one can cause bug
-			return fade(node, { delay: 0, duration: 0 });
-		}
-		return fade(node, fadeParams);
-	}
-
-	function clearInternalTimeout() {
-		if (timeout) clearTimeout(timeout);
-		timeout = null;
-	}
-
-	function onClickToast() {
-		if (config.enableClickToastHide) {
-			hide();
-			return;
-		}
-		if (config.enableClickToastDispose) {
-			dispose();
-			return;
-		}
-	}
+	$: typeIcon = getToastIcon($typeStore);
+	$: message = $messageStore || '';
 </script>
 
-{#if isShown}
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div
+	class="toast"
+	aria-live="assertive"
+	aria-atomic="true"
+	tabindex="0"
+	bind:this={ele}
+	on:click={onClickHide}
+	role="button"
+>
 	<div
-		class={`toast show ${classNames}`}
-		role="button"
-		aria-live="assertive"
-		aria-atomic="true"
-		in:customFly
-		out:customFade
-		tabindex="0"
-		on:click={onClickToast}
-		{...$$restProps}
-		bind:this={el}
+		class="row text-white"
+		class:bg-danger={$typeStore === 'DANGER'}
+		class:bg-success={$typeStore === 'SUCCESS'}
+		class:bg-warning={$typeStore === 'WARNING'}
+		class:bg-info={$typeStore === 'INFO'}
 	>
-		<div
-			class="row text-white bg-danger"
-			class:bg-danger={type === 'ERROR'}
-			class:bg-success={type === 'SUCCESS'}
-			class:bg-warning={type === 'WARNING'}
-			class:bg-info={type === 'INFO'}
-		>
+		{#if typeIcon}
 			<div class="col-3 text-center ps-0">
-				<i
-					class="bi"
-					style="font-size: 2.5em;"
-					class:bi-x-circle={type === 'ERROR'}
-					class:bi-check-circle={type === 'SUCCESS'}
-					class:bi-exclamation-circle={type === 'WARNING'}
-					class:bi-info-circle={type === 'INFO'}
-				/>
+				{@html icon(typeIcon, {
+					styles: {
+						'font-size': '2.5em',
+						margin: '0.25em 0'
+					}
+				}).html}
 			</div>
-			<div class="col-9 py-2 pe-1 fs-6">
-				<div class="text-wrap text-break">{message}</div>
-			</div>
+		{/if}
+		<div class="col-9 py-2 pe-1 fs-6">
+			<div class="text-wrap text-break">{message}</div>
 		</div>
 	</div>
-{/if}
+</div>

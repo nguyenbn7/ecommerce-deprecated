@@ -236,7 +236,7 @@
 {/if}
 
 <style lang="scss">
-	.sidebar-sticky {
+	/* .sidebar-sticky {
 		position: -webkit-sticky;
 		position: sticky;
 		top: 5rem;
@@ -245,5 +245,5 @@
 		padding-left: 0.25rem;
 		margin-left: -0.25rem;
 		overflow-y: auto;
-	}
+	} */
 </style>

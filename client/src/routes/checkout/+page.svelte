@@ -130,7 +130,7 @@
 
 		<div class="row g-5">
 			<div class="col-md-5 col-lg-4 order-md-last">
-				<OrderSummary {$basket} {$basketTotals}></OrderSummary>
+				<OrderSummary basket={$basket} basketTotals={$basketTotals} />
 			</div>
 			<div class="col-md-7 col-lg-8">
 				<form on:submit={onSubmitForm}>

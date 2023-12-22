@@ -18,7 +18,7 @@ function handleError(error) {
 	if (response) {
 		errorMessage = response.data.message;
 	}
-	ToastService.notifyError(errorMessage);
+	ToastService.notifyDanger(errorMessage);
 	console.log(error);
 }
 

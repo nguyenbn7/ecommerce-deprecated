@@ -1,5 +1,4 @@
-import AccountService from '$lib/(account)/service';
-import { apiClientAuthSpinner, httpClient } from '$lib/share/request';
+import { apiClientAuthSpinner } from '$lib/share/request';
 
 /**
  * @param {Order} data

@@ -72,7 +72,7 @@ type Register = {
 };
 
 declare namespace Toastr {
-	type Type = 'ERROR' | 'SUCCESS' | 'INFO' | 'WARNING';
+	type Type = 'DANGER' | 'SUCCESS' | 'INFO' | 'WARNING';
 
 	type Configuration = {
 		/** apply animation fly in and fade out. Default true */

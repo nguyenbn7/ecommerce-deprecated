@@ -1,4 +1,6 @@
 <script>
+	import Toast from './toast.svelte';
+
 	/**
 	 * @type {string}
 	 */
@@ -10,4 +12,6 @@
 	let classNames;
 </script>
 
-<div class={classNames} {id}></div>
+<div class={classNames} {id}>
+	<Toast />
+</div>

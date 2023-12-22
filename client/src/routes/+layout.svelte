@@ -14,7 +14,7 @@
 	const toastContainerId = 'toast-container';
 	const spinnerId = 'spinnerModal';
 
-	ToastService.setToastContainerId(toastContainerId);
+	ToastService.registerContainer(toastContainerId);
 	SpinnerService.setSpinnerId(spinnerId);
 
 	onMount(async () => {
