@@ -2,7 +2,7 @@ import { PUBLIC_BASE_API_URL } from '$env/static/public';
 import { AccountService } from '$lib/(account)/service';
 import { SpinnerService } from '$lib/share/component/spinner.svelte';
 import axios, { AxiosError } from 'axios';
-import { ToastService } from './component/toast.svelte';
+import { ToastrService } from './component/toastr.svelte';
 
 async function delay(ms = 1500) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
@@ -18,7 +18,7 @@ function handleError(error) {
 	if (response) {
 		errorMessage = response.data.message;
 	}
-	ToastService.notifyDanger(errorMessage);
+	ToastrService.notifyDanger(errorMessage);
 	console.log(error);
 }
 

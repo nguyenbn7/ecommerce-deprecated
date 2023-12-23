@@ -1,80 +1,12 @@
 <script context="module">
-	import { icon } from '@fortawesome/fontawesome-svg-core';
-	import {
-		faCheckCircle,
-		faExclamationCircle,
-		faInfoCircle,
-		faTimesCircle
-	} from '@fortawesome/free-solid-svg-icons';
 	import { Toast } from 'bootstrap';
-	import { writable } from 'svelte/store';
 
 	/**
-	 * @type {import('svelte/store').Writable<string | null>}
+	 * @type {HTMLDivElement}
 	 */
-	let messageStore = writable(null);
-	/**
-	 * @type {import('svelte/store').Writable<Toastr.Type | null>}
-	 */
-	let typeStore = writable(null);
-	/**
-	 * @type {HTMLDivElement | null}
-	 */
-	let ele = null;
+	let ele;
 
-	let container = null;
-
-	/**
-	 * @param {string} id
-	 */
-	function registerContainer(id) {
-		container = document.getElementById(id);
-	}
-
-	/**
-	 * @param {string} message
-	 * @param {Toastr.Type} type
-	 */
-	function notify(message, type) {
-		/**
-		 * @type {import("bootstrap").Toast}
-		 */
-		let toast = Toast.getOrCreateInstance(ele);
-
-		messageStore.update((_) => message);
-		typeStore.update((_) => type);
-		toast.show();
-	}
-
-	/**
-	 * @param {string} message
-	 */
-	function notifyDanger(message) {
-		notify(message, 'DANGER');
-	}
-
-	/**
-	 * @param {string} message
-	 */
-	function notifySuccess(message) {
-		notify(message, 'SUCCESS');
-	}
-
-	/**
-	 * @param {string} message
-	 */
-	function notifyWarning(message) {
-		notify(message, 'WARNING');
-	}
-
-	/**
-	 * @param {string} message
-	 */
-	function notifyInfo(message) {
-		notify(message, 'INFO');
-	}
-
-	function onClickHide() {
+	export function hide() {
 		/**
 		 * @type {import("bootstrap").Toast | null}
 		 */
@@ -82,22 +14,29 @@
 
 		if (!toast) return;
 
-		toast.hide();
+		if (toast.isShown()) toast.hide();
 	}
-
-	const ToastService = {
-		registerContainer,
-		notify,
-		notifyDanger,
-		notifyInfo,
-		notifySuccess,
-		notifyWarning
-	};
-
-	export { ToastService };
 </script>
 
 <script>
+	import { icon } from '@fortawesome/fontawesome-svg-core';
+	import {
+		faCheckCircle,
+		faExclamationCircle,
+		faInfoCircle,
+		faTimesCircle
+	} from '@fortawesome/free-solid-svg-icons';
+	import { onMount } from 'svelte';
+
+	/**
+	 * @type {string | null}
+	 */
+	export let message = null;
+	/**
+	 * @type {Toastr.Type | null}
+	 */
+	export let type = null;
+
 	/**
 	 * @param {Toastr.Type | null} toastType
 	 */
@@ -115,8 +54,15 @@
 				return null;
 		}
 	}
-	$: typeIcon = getToastIcon($typeStore);
-	$: message = $messageStore || '';
+
+	const typeIcon = getToastIcon(type);
+
+	onMount(() => {
+		let toast = new Toast(ele);
+
+		toast.show();
+		setTimeout(() => ele.parentNode?.removeChild(ele), toast._config.delay + 1000);
+	});
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -128,15 +74,15 @@
 	aria-atomic="true"
 	tabindex="0"
 	bind:this={ele}
-	on:click={onClickHide}
 	role="button"
+	on:click
 >
 	<div
 		class="row text-white"
-		class:bg-danger={$typeStore === 'DANGER'}
-		class:bg-success={$typeStore === 'SUCCESS'}
-		class:bg-warning={$typeStore === 'WARNING'}
-		class:bg-info={$typeStore === 'INFO'}
+		class:bg-danger={type === 'DANGER'}
+		class:bg-success={type === 'SUCCESS'}
+		class:bg-warning={type === 'WARNING'}
+		class:bg-info={type === 'INFO'}
 	>
 		{#if typeIcon}
 			<div class="col-3 text-center ps-0">

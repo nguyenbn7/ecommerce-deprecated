@@ -6,7 +6,7 @@
 	import { LoginForm } from '$lib/(account)/login/model';
 	import InputForm from '$lib/share/form/input-form.svelte';
 	import { AccountService } from '$lib/(account)/service';
-	import { ToastService } from '$lib/share/component/toast.svelte';
+	import { ToastrService } from '$lib/share/component/toastr.svelte';
 
 	/**
 	 * @param {LoginDTO} loginDTO
@@ -15,7 +15,7 @@
 		const userInfo = await AccountService.login(loginDTO);
 
 		if (userInfo) {
-			ToastService.notifySuccess(`Welcome back ${userInfo.displayName}`);
+			ToastrService.notifySuccess(`Welcome back ${userInfo.displayName}`);
 			const returnUrl = $page.url.searchParams.get('redirect');
 			if (returnUrl) return goto(returnUrl);
 			return goto('/');

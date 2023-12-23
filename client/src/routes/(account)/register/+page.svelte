@@ -3,7 +3,7 @@
 	import { page } from '$app/stores';
 	import { RegisterForm } from '$lib/(account)/register/model';
 	import { AccountService } from '$lib/(account)/service';
-	import { ToastService } from '$lib/share/component/toast.svelte';
+	import { ToastrService } from '$lib/share/component/toastr.svelte';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
 	import InputForm from '$lib/share/form/input-form.svelte';
 	import ValidationFeedback from '$lib/share/form/validation-feedback.svelte';
@@ -17,7 +17,7 @@
 		});
 
 		if (userInfo) {
-			ToastService.notifySuccess(`Welcome ${userInfo?.displayName}`);
+			ToastrService.notifySuccess(`Welcome ${userInfo?.displayName}`);
 			const returnUrl = $page.url.searchParams.get('redirect');
 			if (returnUrl) return goto(returnUrl);
 			return goto('/');
