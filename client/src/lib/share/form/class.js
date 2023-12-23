@@ -14,21 +14,11 @@ export class FormField {
 	 * @type {Validator[]}
 	 */
 	#validators;
-	/**
-	 * @type {HTMLInputElement | undefined}
-	 */
-	#instance = undefined;
 
-	/**
-	 * @type {boolean}
-	 */
 	get valid() {
 		return this.#valid;
 	}
 
-	/**
-	 *
-	 */
 	get touched() {
 		return this.#touched;
 	}
@@ -54,29 +44,26 @@ export class FormField {
 	}
 
 	/**
-	 * @param {HTMLInputElement} instance
+	 * @param {FocusEvent & { currentTarget: EventTarget & HTMLInputElement; }} $event
 	 */
-	set bindInstance(instance) {
-		this.#instance = instance;
+	set onFocusOut($event) {
+		if (!this.#touched) this.#touched = true;
+		this.validate();
+	}
 
-		this.#instance?.addEventListener('focusin', () => {
-			if (!this.#touched) this.#touched = true;
-		});
+	/**
+	 * @param {Event & { currentTarget: EventTarget & HTMLInputElement; }} $event
+	 */
+	set onInput($event) {
+		const target = $event.target;
+		if (!target) return;
+		const newValue = /** @type {HTMLInputElement} */ (target).value;
+		this.#dirty = this.#value !== newValue;
+		this.#value = newValue;
 
-		this.#instance?.addEventListener('input', ($event) => {
-			/**
-			 * @type {EventTarget | null}
-			 */
-			const target = $event.target;
-			if (!target) return;
-			const newValue = /** @type {HTMLInputElement} */ (target).value;
-			this.#dirty = this.#value !== newValue;
-			this.#value = newValue;
-
-			if (this.#dirty) {
-				this.validate();
-			}
-		});
+		if (this.#dirty) {
+			this.validate();
+		}
 	}
 
 	validate() {
@@ -87,6 +74,7 @@ export class FormField {
 		for (const validator of this.validators) {
 			const { check, errorMessage } = validator;
 			if (!check(this.#value)) {
+				console.log(errorMessage)
 				this.#error = errorMessage;
 				return;
 			}

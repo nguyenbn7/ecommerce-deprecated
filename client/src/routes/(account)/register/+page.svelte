@@ -5,8 +5,7 @@
 	import { AccountService } from '$lib/(account)/service';
 	import { ToastrService } from '$lib/share/component/toastr.svelte';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
-	import InputForm from '$lib/share/form/input-form.svelte';
-	import ValidationFeedback from '$lib/share/form/validation-feedback.svelte';
+	import FloatingInputValidation from '$lib/share/form/floating-input-validation.svelte';
 
 	async function onSubmitForm() {
 		const userInfo = await AccountService.register({
@@ -41,57 +40,52 @@
 <form class="row g-3 px-1" on:submit={onSubmitForm}>
 	<div class="col-12">
 		<div class="form-floating">
-			<InputForm
+			<FloatingInputValidation
 				class="form-control rounded-4"
-				bind:formField={registerForm.displayName}
 				id="displayName"
+				label="Display Name"
 				placeholder="I am cute"
-				type="text"
+				bind:formField={registerForm.displayName}
 			/>
-			<label for="displayName">Display Name</label>
-			<ValidationFeedback formField={registerForm.displayName}></ValidationFeedback>
 		</div>
 	</div>
 
 	<div class="col-12">
 		<div class="form-floating">
-			<InputForm
+			<FloatingInputValidation
 				class="form-control rounded-4"
-				bind:formField={registerForm.email}
-				id="email"
-				placeholder="name@example.com"
 				type="email"
+				id="email"
+				label="Email"
+				placeholder="name@example.com"
+				bind:formField={registerForm.email}
 			/>
-			<label for="email">Email</label>
-			<ValidationFeedback formField={registerForm.email}></ValidationFeedback>
 		</div>
 	</div>
 
 	<div class="col-12">
 		<div class="form-floating">
-			<InputForm
+			<FloatingInputValidation
 				class="form-control rounded-4"
-				bind:formField={registerForm.password}
-				id="password"
-				placeholder="Password"
 				type="password"
+				id="password"
+				label="Password"
+				placeholder="Password"
+				bind:formField={registerForm.password}
 			/>
-			<label for="password">Password</label>
-			<ValidationFeedback formField={registerForm.password}></ValidationFeedback>
 		</div>
 	</div>
 
 	<div class="col-12">
 		<div class="form-floating mt-2 mb-3">
-			<InputForm
+			<FloatingInputValidation
 				class="form-control rounded-4"
-				bind:formField={registerForm.confirmPassword}
-				id="confirmPassword"
-				placeholder="Confirm password"
 				type="password"
+				id="confirmPassword"
+				label="Confirm Password"
+				placeholder="Confirm password"
+				bind:formField={registerForm.confirmPassword}
 			/>
-			<label for="confirmPassword">Confirm Password</label>
-			<ValidationFeedback formField={registerForm.confirmPassword}></ValidationFeedback>
 		</div>
 	</div>
 

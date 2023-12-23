@@ -1,6 +1,5 @@
 <script>
-	import InputForm from '$lib/share/form/input-form.svelte';
-	import ValidationFeedback from '$lib/share/form/validation-feedback.svelte';
+	import InputValidation from '$lib/share/form/input-validation.svelte';
 
 	/**
 	 * @type {import("./form").AddressFormGroup}
@@ -9,63 +8,54 @@
 </script>
 
 <div class="col-12">
-	<label for="fullName">Full Name</label>
-	<InputForm
+	<InputValidation
 		class="form-control rounded-1"
-		bind:formField={addressForm.fullName}
 		id="fullName"
 		placeholder="Example: John Doe"
-		type="text"
+		label="Full Name"
+		bind:formField={addressForm.fullName}
 	/>
-	<ValidationFeedback formField={addressForm.fullName}></ValidationFeedback>
 </div>
 
 <div class="col-12">
-	<label for="phone">Phone Number</label>
-	<InputForm
+	<InputValidation
 		class="form-control rounded-1"
-		bind:formField={addressForm.phoneNumber}
 		id="phone"
 		placeholder="+1 (999) 999-9999"
-		type="text"
+		label="Phone Number"
+		bind:formField={addressForm.phoneNumber}
 	/>
-	<ValidationFeedback formField={addressForm.phoneNumber}></ValidationFeedback>
 </div>
 
 <div class="col-12">
-	<label for="email">Email</label>
-	<InputForm
+	<InputValidation
 		class="form-control rounded-1"
-		bind:formField={addressForm.email}
+		type="email"
 		id="email"
 		placeholder="johndoe@gmail.com"
-		type="email"
+		label="Email"
+		bind:formField={addressForm.email}
 	/>
-	<ValidationFeedback formField={addressForm.email}></ValidationFeedback>
 </div>
 
 <div class="col-12">
-	<label for="address">Address</label>
-	<InputForm
+	<InputValidation
 		class="form-control rounded-1"
-		bind:formField={addressForm.address}
 		id="address"
 		placeholder="1234 Main St"
-		type="text"
+		label="Address"
+		bind:formField={addressForm.address}
 	/>
-	<ValidationFeedback formField={addressForm.address}></ValidationFeedback>
 </div>
 
 <div class="col-12">
-	<label for="address2">Address 2 <span class="text-body-secondary">(Optional)</span></label>
-	<InputForm
+	<InputValidation
 		class="form-control rounded-1"
-		bind:formField={addressForm.address2}
 		id="address2"
 		placeholder="Apartment or suite"
-		type="text"
+		label={`Address 2 <span class="text-body-secondary">(Optional)</span>`}
+		bind:formField={addressForm.address2}
 	/>
-	<ValidationFeedback formField={addressForm.address2}></ValidationFeedback>
 </div>
 
 <div class="col-md-5">

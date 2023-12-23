@@ -2,11 +2,10 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
-	import ValidationFeedback from '$lib/share/form/validation-feedback.svelte';
 	import { LoginForm } from '$lib/(account)/login/model';
-	import InputForm from '$lib/share/form/input-form.svelte';
 	import { AccountService } from '$lib/(account)/service';
 	import { ToastrService } from '$lib/share/component/toastr.svelte';
+	import FloatingInputValidation from '$lib/share/form/floating-input-validation.svelte';
 
 	/**
 	 * @param {LoginDTO} loginDTO
@@ -55,32 +54,30 @@
 	<p class="text-center small">Enter your email &amp; password to login</p>
 </div>
 
-<form class="row g-3 px-1" on:submit={onSubmitForm}>
+<form class="row g-3 px-1 needs-validation" on:submit={onSubmitForm}>
 	<div class="col-12">
 		<div class="form-floating">
-			<InputForm
+			<FloatingInputValidation
 				class="form-control rounded-4"
-				bind:formField={loginForm.email}
-				id="email"
 				type="email"
+				id="email"
+				label="Email"
 				placeholder="name@example.com"
+				bind:formField={loginForm.email}
 			/>
-			<label for="email">Email</label>
-			<ValidationFeedback formField={loginForm.email}></ValidationFeedback>
 		</div>
 	</div>
 
 	<div class="col-12">
 		<div class="form-floating">
-			<InputForm
+			<FloatingInputValidation
 				class="form-control rounded-4"
-				bind:formField={loginForm.password}
-				id="password"
-				placeholder="Password"
 				type="password"
+				id="password"
+				label="Password"
+				placeholder="Password"
+				bind:formField={loginForm.password}
 			/>
-			<label for="password">Password</label>
-			<ValidationFeedback formField={loginForm.password}></ValidationFeedback>
 		</div>
 	</div>
 
