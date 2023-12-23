@@ -50,16 +50,14 @@
 	<title>{ECOMMERCE_NAME} - Sign In</title>
 </svelte:head>
 
-<div class="container">
-	<div class="p-3 mb-2">
-		<h3 class="text-uppercase text-center fw-bold">sign in</h3>
-		<p class="text-center">
-			Does not have an account yet? <a href="/register" class="text-decoration-none">Sign up</a>
-		</p>
-	</div>
+<div class="pt-4 pb-2">
+	<h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
+	<p class="text-center small">Enter your email &amp; password to login</p>
+</div>
 
-	<form on:submit={onSubmitForm}>
-		<div class="form-floating mt-2 mb-3">
+<form class="row g-3 px-1" on:submit={onSubmitForm}>
+	<div class="col-12">
+		<div class="form-floating">
 			<InputForm
 				class="form-control rounded-4"
 				bind:formField={loginForm.email}
@@ -70,8 +68,10 @@
 			<label for="email">Email</label>
 			<ValidationFeedback formField={loginForm.email}></ValidationFeedback>
 		</div>
+	</div>
 
-		<div class="form-floating mt-2 mb-3">
+	<div class="col-12">
+		<div class="form-floating">
 			<InputForm
 				class="form-control rounded-4"
 				bind:formField={loginForm.password}
@@ -82,9 +82,23 @@
 			<label for="password">Password</label>
 			<ValidationFeedback formField={loginForm.password}></ValidationFeedback>
 		</div>
+	</div>
 
+	<div class="col-12">
+		<div class="form-check">
+			<input
+				class="form-check-input"
+				type="checkbox"
+				name="remember"
+				value="true"
+				id="rememberMe"
+			/>
+			<label class="form-check-label" for="rememberMe">Remember me</label>
+		</div>
+	</div>
+	<div class="col-12">
 		<button
-			class="btn btn-primary w-100 py-2 mt-2 mb-3 rounded-4"
+			class="btn btn-info w-100 py-2 mt-2 mb-3 rounded-4"
 			type="submit"
 			disabled={!loginForm.valid}
 		>
@@ -94,37 +108,44 @@
 				<span class="visually-hidden" role="status">Loading...</span>
 			{/if} -->
 		</button>
-	</form>
-	<div class="d-flex mt-3 mb-4">
-		<div class="border-secondary-subtle w-100 flex-shrink-1">
-			<hr />
+	</div>
+	<div class="col-12">
+		<p class="small mb-0">
+			Don't have account? <a href="/register" class="text-decoration-none">Create an account</a>
+		</p>
+	</div>
+	<div class="col-12">
+		<div class="d-flex mb-2">
+			<div class="border-secondary-subtle w-100 flex-shrink-1">
+				<hr />
+			</div>
+			<span class="text-center text-nowrap text-secondary">or sign in as</span>
+			<div class="border-secondary-subtle w-100 flex-shrink-1">
+				<hr />
+			</div>
 		</div>
-		<span class="text-center text-nowrap text-secondary">or sign in as</span>
-		<div class="border-secondary-subtle w-100 flex-shrink-1">
-			<hr />
+		<div class="row row-cols-2 g-2">
+			<div class="col d-flex justify-content-center">
+				<button class="btn btn-outline-info rounded-4" type="submit" on:click={onLoginCustomer}>
+					Demo Customer
+					<!-- {#if isDemoAccountLogin && isAccounts[0]}
+						<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+						<span class="visually-hidden" role="status">Loading...</span>
+					{/if} -->
+				</button>
+			</div>
+			<div class="col d-flex justify-content-center">
+				<button class="btn btn-outline-info rounded-4" type="submit" on:click={onLoginCustomer1}>
+					Demo Customer1
+					<!-- {#if isDemoAccountLogin && isAccounts[1]}
+						<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+						<span class="visually-hidden" role="status">Loading...</span>
+					{/if} -->
+				</button>
+			</div>
 		</div>
 	</div>
-	<div class="row row-cols-2 g-2 mt-2">
-		<div class="col d-flex justify-content-center">
-			<button class="btn btn-outline-info rounded-4" type="submit" on:click={onLoginCustomer}>
-				Demo Customer
-				<!-- {#if isDemoAccountLogin && isAccounts[0]}
-					<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-					<span class="visually-hidden" role="status">Loading...</span>
-				{/if} -->
-			</button>
-		</div>
-		<div class="col d-flex justify-content-center">
-			<button class="btn btn-outline-info rounded-4" type="submit" on:click={onLoginCustomer1}>
-				Demo Customer1
-				<!-- {#if isDemoAccountLogin && isAccounts[1]}
-					<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-					<span class="visually-hidden" role="status">Loading...</span>
-				{/if} -->
-			</button>
-		</div>
-	</div>
-</div>
+</form>
 
 <style>
 	hr {
