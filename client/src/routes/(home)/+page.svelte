@@ -17,7 +17,7 @@
 	onMount(async () => {
 		const carousel = new (await import('bootstrap')).Carousel(carouselInstance, {
 			interval: 2000,
-			ride: "carousel",
+			ride: 'carousel',
 			pause: false
 		});
 	});

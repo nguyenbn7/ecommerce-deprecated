@@ -40,8 +40,8 @@
 </nav>
 
 <style lang="scss">
-    .active-link {
-        pointer-events: none;
-        cursor: default;
-    }
+	.active-link {
+		pointer-events: none;
+		cursor: default;
+	}
 </style>

@@ -53,7 +53,6 @@
 </div>
 
 <style lang="scss">
-
 	.cart-no {
 		top: 20%;
 		left: 100%;

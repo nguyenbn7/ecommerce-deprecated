@@ -40,9 +40,37 @@ function checkEmailFormat(errorMessage = 'Email has incorrect format') {
 	};
 }
 
+/**
+ * @param {import("./class").FormField} anotherField
+ * @returns {Validator}
+ */
+function doesFieldEqualTo(anotherField, errorMessage = 'Fields does not equal') {
+	return {
+		check: (value) => anotherField.value === value,
+		errorMessage
+	};
+}
+
+/**
+ * @returns {Validator}
+ */
+function isPasswordComplexEnough(
+	errorMessage = 'String must at least 8 characters long. - at least 1 uppercase, AND at least 1 lowercase - At least 1 digit OR at least 1 alphanumeric'
+) {
+	return {
+		check: (value) =>
+			/(?-i)(?=^.{8,}$)((?!.*\s)(?=.*[A-Z])(?=.*[a-z]))(?=(1)(?=.*\d)|.*[^A-Za-z0-9])^.*$/.test(
+				value
+			),
+		errorMessage
+	};
+}
+
 export const Validators = {
 	checkRequired,
 	checkMaxLength,
 	containsAlnumAndSpace,
-	checkEmailFormat
+	checkEmailFormat,
+	doesFieldEqualTo,
+	isPasswordComplexEnough
 };

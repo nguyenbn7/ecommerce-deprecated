@@ -46,9 +46,7 @@
 				Our Team
 				<div class="border-bottom mb-4 mt-2 border-4 border-warning" style="width: 1.7em;"></div>
 			</h2>
-			<p class="fst-italic text-muted">
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-			</p>
+			<p class="fst-italic text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
 		</div>
 
 		<div class="row text-center">

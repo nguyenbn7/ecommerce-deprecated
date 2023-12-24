@@ -47,8 +47,10 @@ export class FormField {
 	 * @param {FocusEvent & { currentTarget: EventTarget & HTMLInputElement; }} $event
 	 */
 	set onFocusOut($event) {
-		if (!this.#touched) this.#touched = true;
-		this.validate();
+		if (!this.#touched) {
+			this.#touched = true;
+			this.validate();
+		}
 	}
 
 	/**
@@ -67,14 +69,11 @@ export class FormField {
 	}
 
 	validate() {
-		// TODO: remove this
-		console.log('Validate called');
 		this.#valid = false;
 
 		for (const validator of this.validators) {
 			const { check, errorMessage } = validator;
 			if (!check(this.#value)) {
-				console.log(errorMessage)
 				this.#error = errorMessage;
 				return;
 			}

@@ -5,4 +5,3 @@
 <svelte:head>
 	<title>{ECOMMERCE_NAME} - Blog</title>
 </svelte:head>
-
