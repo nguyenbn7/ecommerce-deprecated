@@ -2,28 +2,28 @@
 
 type Product = {
 	price: number;
-	picture_url: string;
+	pictureUrl: string;
 	name: string;
 	description: string;
 	id: number;
-	product_type: string;
-	product_brand: string;
+	productType: string;
+	productBrand: string;
 };
 
 type Page<T> = {
-	page_number: number;
-	page_size: number;
-	total_items: number;
+	pageNumber: number;
+	pageSize: number;
+	totalItems: number;
 	data: T[];
 };
 
 type ShopParams = {
-	page_number: number;
-	page_size: number;
+	pageNumber: number;
+	pageSize: number;
 	sort: string;
 	search: string | undefined;
-	brand_id: number;
-	type_id: number;
+	brandId: number;
+	typeId: number;
 };
 
 type ProductBrand = {
@@ -137,7 +137,7 @@ type RegisterDTO = {
 };
 
 type SignInSuccess = {
-	display_name: string;
+	displayName: string;
 	email: string;
 	token: string;
 };
@@ -149,7 +149,7 @@ type User = {
 
 type UserInfoResponse = {
 	email: string;
-	display_name: string;
+	displayName: string;
 };
 
 type OrderForm = {

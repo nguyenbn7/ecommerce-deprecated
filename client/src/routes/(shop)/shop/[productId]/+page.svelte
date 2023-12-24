@@ -1,13 +1,13 @@
 <script>
 	import { page } from '$app/stores';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
-	import { currency } from '$lib/share/functions';
+	import { currency } from '$lib/share/helper';
 	import { breadcrumb } from '$lib/share/component/breadcrumb.svelte';
 	import { onMount } from 'svelte';
-	import ShopService from '$lib/(shop)/shop/service';
-	import { BasketService, basket } from '$lib/(shop)/basket/service';
 	import { icon } from '@fortawesome/fontawesome-svg-core';
 	import { faCircleMinus, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+	import { BasketService, basket } from '$lib/share/service/basket';
+	import { ShopService } from '$lib/share/service/shop';
 
 	const { addItemToBasket, removeItemFromBasket } = BasketService;
 
@@ -73,7 +73,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-6">
-				<img src={product.picture_url} alt={product.name} class="w-100" />
+				<img src={product.pictureUrl} alt={product.name} class="w-100" />
 			</div>
 			<div class="col-6 mt-5">
 				<h2>{product.name}</h2>

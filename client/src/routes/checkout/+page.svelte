@@ -2,14 +2,13 @@
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
 	import { onMount } from 'svelte';
 	import { startCase, toLower } from 'lodash';
-	import { BasketService, basket, basketTotals } from '$lib/(shop)/basket/service';
-	import { get } from 'svelte/store';
-	import { currency } from '$lib/share/functions';
-	import OrderService from '$lib/(checkout)/checkout/service';
-	import { AddressFormGroup, OrderFormGroup } from '$lib/(checkout)/checkout/form';
-	import OrderSummary from '$lib/(checkout)/checkout/order-summary.svelte';
-	import Address from '$lib/(checkout)/checkout/address.svelte';
-	import Footer from '$lib/share/layout/footer.svelte';
+	import { currency } from '$lib/share/helper';
+	import { AddressFormGroup, OrderFormGroup } from '$lib/layout/(nobars)/checkout/form';
+	import OrderSummary from '$lib/layout/(nobars)/checkout/order-summary.svelte';
+	import Address from '$lib/layout/(nobars)/checkout/address.svelte';
+	import Footer from '$lib/layout/(bars)/footer.svelte';
+	import { OrderService } from '$lib/share/service/order';
+	import { basket, basketTotals } from '$lib/share/service/basket';
 
 	let hasSameAddress = true;
 	/**
@@ -72,7 +71,7 @@
 	}
 
 	async function onSubmitForm() {
-		if (basket === null) return;
+		if ($basket === null) return;
 
 		/**
 		 * @type {Order}

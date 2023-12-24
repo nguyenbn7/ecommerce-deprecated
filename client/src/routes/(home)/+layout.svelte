@@ -1,8 +1,8 @@
 <script>
-	import BrandBar from '$lib/share/layout/brand-bar.svelte';
-	import Footer from '$lib/share/layout/footer.svelte';
-	import NavBar from '$lib/share/layout/nav-bar.svelte';
-	import TopBar from '$lib/share/layout/top-bar.svelte';
+	import BrandBar from '$lib/layout/(bars)/brand-bar.svelte';
+	import Footer from '$lib/layout/(bars)/footer.svelte';
+	import NavBar from '$lib/layout/(bars)/nav-bar.svelte';
+	import TopBar from '$lib/layout/(bars)/top-bar.svelte';
 </script>
 
 <TopBar />

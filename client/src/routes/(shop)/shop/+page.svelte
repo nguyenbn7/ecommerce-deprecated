@@ -1,12 +1,12 @@
 <script>
 	import Pagination from '$lib/share/component/pagination.svelte';
-	import ProductItem from '$lib/(shop)/shop/product-item.svelte';
-	import PagingHeader from '$lib/(shop)/shop/paging-header.svelte';
+	import ProductItem from '$lib/layout/(bars)/(shop)/shop/product-item.svelte';
+	import PagingHeader from '$lib/layout/(bars)/(shop)/shop/paging-header.svelte';
 	import { onMount } from 'svelte';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
-	import ShopService from '$lib/(shop)/shop/service';
 	import { icon } from '@fortawesome/fontawesome-svg-core';
 	import { faSearch } from '@fortawesome/free-solid-svg-icons';
+	import { ShopService } from '$lib/share/service/shop';
 
 	/**
 	 * @type {Product[]}
@@ -29,12 +29,12 @@
 	 * @type {ShopParams}
 	 */
 	let shopParams = {
-		page_number: 1,
-		page_size: 6,
+		pageNumber: 1,
+		pageSize: 6,
 		sort: 'name',
 		search: undefined,
-		brand_id: 0,
-		type_id: 0
+		brandId: 0,
+		typeId: 0
 	};
 	const maxSize = 5;
 
@@ -50,12 +50,12 @@
 	let searchTerm;
 
 	const defaultShopParams = {
-		page_number: 1,
-		page_size: 6,
+		pageNumber: 1,
+		pageSize: 6,
 		sort: 'name',
 		search: undefined,
-		brand_id: 0,
-		type_id: 0
+		brandId: 0,
+		typeId: 0
 	};
 
 	onMount(async () => {
@@ -63,8 +63,8 @@
 		products = result.products;
 		productBrands = result.productBrands;
 		productTypes = result.productTypes;
-		shopParams.page_number = result.page_number;
-		shopParams.page_size = result.page_size;
+		shopParams.pageNumber = result.pageNumber;
+		shopParams.pageSize = result.pageSize;
 		totalItems = result.totalItems;
 	});
 
@@ -72,9 +72,9 @@
 	 * @param {number} brandId
 	 */
 	async function onBrandIdSelected(brandId) {
-		shopParams.brand_id = brandId;
-		shopParams.page_number = 1;
-		shopParams.page_size = shopParams.page_size < 6 ? 6 : shopParams.page_size;
+		shopParams.brandId = brandId;
+		shopParams.pageNumber = 1;
+		shopParams.pageSize = shopParams.pageSize < 6 ? 6 : shopParams.pageSize;
 		await getNewPageProduct(shopParams);
 	}
 
@@ -84,18 +84,18 @@
 	async function getNewPageProduct(shopParams) {
 		const pageProduct = await ShopService.getPageProduct(shopParams);
 		products = [...pageProduct.data];
-		shopParams.page_number = pageProduct.page_number;
-		shopParams.page_size = pageProduct.page_size;
-		totalItems = pageProduct.total_items;
+		shopParams.pageNumber = pageProduct.pageNumber;
+		shopParams.pageSize = pageProduct.pageSize;
+		totalItems = pageProduct.totalItems;
 	}
 
 	/**
 	 * @param {number} typeId
 	 */
 	async function onTypeIdSelected(typeId) {
-		shopParams.type_id = typeId;
-		shopParams.page_number = 1;
-		shopParams.page_size = shopParams.page_size < 6 ? 6 : shopParams.page_size;
+		shopParams.typeId = typeId;
+		shopParams.pageNumber = 1;
+		shopParams.pageSize = shopParams.pageSize < 6 ? 6 : shopParams.pageSize;
 		await getNewPageProduct(shopParams);
 	}
 
@@ -103,7 +103,7 @@
 	 * @param {CustomEvent<any>} $event
 	 */
 	async function pageChanged($event) {
-		shopParams.page_number = $event.detail.pageNumber;
+		shopParams.pageNumber = $event.detail.pageNumber;
 		await getNewPageProduct(shopParams);
 	}
 
@@ -134,7 +134,7 @@
 			return await getNewPageProduct(shopParams);
 		}
 		shopParams.search = searchTerm;
-		shopParams.page_number = 1;
+		shopParams.pageNumber = 1;
 		return await getNewPageProduct(shopParams);
 	}
 </script>
@@ -177,7 +177,7 @@
 							href={'#'}
 							class="list-group-item"
 							on:click={() => onBrandIdSelected(brand.id)}
-							class:active={brand.id === shopParams.brand_id}
+							class:active={brand.id === shopParams.brandId}
 						>
 							{brand.name}
 						</a>
@@ -192,7 +192,7 @@
 							href={'#'}
 							class="list-group-item"
 							on:click={() => onTypeIdSelected(type.id)}
-							class:active={type.id === shopParams.type_id}
+							class:active={type.id === shopParams.typeId}
 						>
 							{type.name}
 						</a>
@@ -203,9 +203,9 @@
 		<div class="col-12 col-md-9">
 			<div class="d-flex justify-content-between pt-3 pb-4p pt-md-0">
 				<PagingHeader
-					pageNumber={shopParams.page_number}
+					pageNumber={shopParams.pageNumber}
 					{totalItems}
-					pageSize={shopParams.page_size}
+					pageSize={shopParams.pageSize}
 				></PagingHeader>
 				<!-- TODO: select page size -->
 			</div>
@@ -221,8 +221,8 @@
 			<div class="d-flex justify-content-center mb-3">
 				<Pagination
 					{totalItems}
-					itemsPerPage={shopParams.page_size}
-					pageNumber={shopParams.page_number}
+					itemsPerPage={shopParams.pageSize}
+					pageNumber={shopParams.pageNumber}
 					{maxSize}
 					previousText="&lsaquo;"
 					nextText="&rsaquo;"

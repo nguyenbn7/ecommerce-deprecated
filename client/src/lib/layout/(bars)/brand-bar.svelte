@@ -1,7 +1,7 @@
 <script>
+	import { basket } from '$lib/share/service/basket';
 	import { icon } from '@fortawesome/fontawesome-svg-core';
 	import { faBasketShopping, faHeart, faSearch } from '@fortawesome/free-solid-svg-icons';
-	import { basket } from '$lib/(shop)/basket/service';
 
 	/**
 	 * @param {BasketItem[]} items

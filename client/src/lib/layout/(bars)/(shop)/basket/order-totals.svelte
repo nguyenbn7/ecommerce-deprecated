@@ -1,6 +1,6 @@
 <script>
-	import { basketTotals } from '$lib/(shop)/basket/service';
-	import { currency } from '$lib/share/functions';
+	import { currency } from '$lib/share/helper';
+	import { basketTotals } from '$lib/share/service/basket';
 </script>
 
 <div class="bg-light px-4 py-3 text-uppercase fw-bold">Order Summary</div>

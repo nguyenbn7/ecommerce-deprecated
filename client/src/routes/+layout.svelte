@@ -1,11 +1,11 @@
 <script>
-	import { AccountService } from '$lib/(account)/service';
-	import { BasketService } from '$lib/(shop)/basket/service';
 	import Spinner, { SpinnerService } from '$lib/share/component/spinner.svelte';
-	import Toastr from '$lib/share/component/toastr.svelte';
 	import { onMount } from 'svelte';
 	import '@fortawesome/fontawesome-svg-core/styles.css';
-	import BackToTopBtn from '$lib/share/component/back-to-top-btn.svelte';
+	import BackToTopBtn from '$lib/layout/back-to-top-btn.svelte';
+	import { AccountService } from '$lib/share/service/account';
+	import Toastr from '$lib/share/component/toastr.svelte';
+	import { BasketService } from '$lib/share/service/basket';
 
 	const spinnerId = 'spinnerModal';
 

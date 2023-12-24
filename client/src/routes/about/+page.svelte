@@ -1,13 +1,13 @@
 <script>
-	import Intro from '$lib/about/intro.svelte';
-	import Team from '$lib/about/team.svelte';
-	import Techstack from '$lib/about/techstack.svelte';
+	import Intro from '$lib/layout/(nobars)/about/intro.svelte';
+	import Team from '$lib/layout/(nobars)/about/team.svelte';
+	import Techstack from '$lib/layout/(nobars)/about/techstack.svelte';
 	import Breadcrumb from '$lib/share/component/breadcrumb.svelte';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
-	import BrandBar from '$lib/share/layout/brand-bar.svelte';
-	import Footer from '$lib/share/layout/footer.svelte';
-	import NavBar from '$lib/share/layout/nav-bar.svelte';
-	import TopBar from '$lib/share/layout/top-bar.svelte';
+	import BrandBar from '$lib/layout/(bars)/brand-bar.svelte';
+	import Footer from '$lib/layout/(bars)/footer.svelte';
+	import NavBar from '$lib/layout/(bars)/nav-bar.svelte';
+	import TopBar from '$lib/layout/(bars)/top-bar.svelte';
 </script>
 
 <svelte:head>

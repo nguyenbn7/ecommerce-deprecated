@@ -1,11 +1,52 @@
+<script context="module">
+	class RegisterForm extends FormGroup {
+		/**
+		 * @param {number | undefined} displayNameMaxLen
+		 */
+		constructor(displayNameMaxLen) {
+			super();
+			this.displayName = new FormField(
+				Validators.checkRequired('Name is required'),
+				Validators.containsAlnumAndSpace('Name contains only letters and spaces'),
+				Validators.checkMaxLength(
+					`Name's max length is ${displayNameMaxLen} characters`,
+					displayNameMaxLen
+				)
+			);
+
+			this.email = new FormField(
+				Validators.checkRequired('Email is required'),
+				Validators.checkEmailFormat('Incorrect email. Example: bob@test.com')
+			);
+
+			this.password = new FormField(
+				Validators.checkRequired('Password is required'),
+				Validators.isPasswordComplexEnough(
+					'Password must have At least 8 characters long. - At least 1 uppercase, AND at least 1 lowercase - At least 1 digit OR at least 1 alphanumeric'
+				)
+			);
+
+			this.confirmPassword = new FormField(
+				Validators.checkRequired('Confirm Password is required'),
+				Validators.doesFieldEqualTo(this.password, 'Confirm Password does not match with Password')
+			);
+		}
+	}
+</script>
+
 <script>
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { RegisterForm } from '$lib/(account)/register/model';
-	import { AccountService } from '$lib/(account)/service';
 	import { ToastrService } from '$lib/share/component/toastr.svelte';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
+	import { FormField, FormGroup } from '$lib/share/form/class';
 	import FloatingInputValidation from '$lib/share/form/floating-input-validation.svelte';
+	import { Validators } from '$lib/share/form/validation';
+	import { AccountService } from '$lib/share/service/account';
+
+	const displayNameMaxLen = 70;
+
+	let registerForm = new RegisterForm(displayNameMaxLen);
 
 	async function onSubmitForm() {
 		const userInfo = await AccountService.register({
@@ -22,10 +63,6 @@
 			return goto('/');
 		}
 	}
-
-	const displayNameMaxLen = 70;
-
-	let registerForm = new RegisterForm(displayNameMaxLen);
 </script>
 
 <svelte:head>

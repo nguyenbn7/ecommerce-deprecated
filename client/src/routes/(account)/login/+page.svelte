@@ -1,11 +1,27 @@
+<script context="module">
+	class LoginForm extends FormGroup {
+		constructor() {
+			super();
+			this.email = new FormField(
+				Validators.checkRequired('Email is required'),
+				Validators.checkEmailFormat('Incorrect email. Example: bob@test.com')
+			);
+			this.password = new FormField(Validators.checkRequired('Password is required'));
+		}
+	}
+</script>
+
 <script>
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
-	import { LoginForm } from '$lib/(account)/login/model';
-	import { AccountService } from '$lib/(account)/service';
-	import { ToastrService } from '$lib/share/component/toastr.svelte';
 	import FloatingInputValidation from '$lib/share/form/floating-input-validation.svelte';
+	import { FormField, FormGroup } from '$lib/share/form/class';
+	import { Validators } from '$lib/share/form/validation';
+	import { AccountService } from '$lib/share/service/account';
+	import { page } from '$app/stores';
+	import { ToastrService } from '$lib/share/component/toastr.svelte';
+
+	let loginForm = new LoginForm();
 
 	/**
 	 * @param {LoginDTO} loginDTO
@@ -20,8 +36,6 @@
 			return goto('/');
 		}
 	}
-
-	let loginForm = new LoginForm();
 
 	async function onSubmitForm() {
 		await handleLogin({

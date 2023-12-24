@@ -1,6 +1,6 @@
 <script>
-	import { BasketService } from '$lib/(shop)/basket/service';
-	import { currency } from '$lib/share/functions';
+	import { currency } from '$lib/share/helper';
+	import { BasketService } from '$lib/share/service/basket';
 	import { icon } from '@fortawesome/fontawesome-svg-core';
 	import { faBasketShopping, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 
@@ -12,7 +12,7 @@
 
 <div class="card shadow-sm">
 	<div class="image position-relative">
-		<img src={product.picture_url} alt={product.name} class="img-fluid bg-info" />
+		<img src={product.pictureUrl} alt={product.name} class="img-fluid bg-info" />
 		<div class="d-flex align-items-center justify-content-center hover-overlay">
 			<button
 				class="btn btn-success me-2"
