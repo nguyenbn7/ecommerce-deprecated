@@ -59,7 +59,7 @@ function isPasswordComplexEnough(
 ) {
 	return {
 		check: (value) =>
-			/(?-i)(?=^.{8,}$)((?!.*\s)(?=.*[A-Z])(?=.*[a-z]))(?=(1)(?=.*\d)|.*[^A-Za-z0-9])^.*$/.test(
+			/(?=^.{8,}$)((?!.*\s)(?=.*[A-Z])(?=.*[a-z]))(?=(1)(?=.*\d)|.*[^A-Za-z0-9])^.*$/.test(
 				value
 			),
 		errorMessage
