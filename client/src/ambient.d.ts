@@ -132,8 +132,8 @@ type LoginDTO = {
 type RegisterDTO = {
 	email: string;
 	password: string;
-	display_name: string;
-	confirm_password: string;
+	displayName: string;
+	confirmPassword: string;
 };
 
 type SignInSuccess = {

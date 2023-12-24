@@ -20,20 +20,27 @@
 	import { AccountService } from '$lib/share/service/account';
 	import { page } from '$app/stores';
 	import { ToastrService } from '$lib/share/component/toastr.svelte';
+	import ButtonSpinner from '$lib/share/component/button-spinner.svelte';
 
 	let loginForm = new LoginForm();
+
+	let isSubmitted = false;
 
 	/**
 	 * @param {LoginDTO} loginDTO
 	 */
 	async function handleLogin(loginDTO) {
-		const userInfo = await AccountService.login(loginDTO);
-
-		if (userInfo) {
-			ToastrService.notifySuccess(`Welcome back ${userInfo.displayName}`);
-			const returnUrl = $page.url.searchParams.get('redirect');
-			if (returnUrl) return goto(returnUrl);
-			return goto('/');
+		try {
+			isSubmitted = true;
+			const userInfo = await AccountService.login(loginDTO);
+			if (userInfo) {
+				ToastrService.notifySuccess(`Welcome back ${userInfo.displayName}`);
+				const returnUrl = $page.url.searchParams.get('redirect');
+				if (returnUrl) return goto(returnUrl);
+				return goto('/');
+			}
+		} finally {
+			isSubmitted = false;
 		}
 	}
 
@@ -78,6 +85,7 @@
 				label="Email"
 				placeholder="name@example.com"
 				bind:formField={loginForm.email}
+				disabled={isSubmitted}
 			/>
 		</div>
 	</div>
@@ -91,6 +99,7 @@
 				label="Password"
 				placeholder="Password"
 				bind:formField={loginForm.password}
+				disabled={isSubmitted}
 			/>
 		</div>
 	</div>
@@ -111,13 +120,12 @@
 		<button
 			class="btn btn-info w-100 py-2 mt-2 mb-3 rounded-4"
 			type="submit"
-			disabled={!loginForm.valid}
+			disabled={!loginForm.valid || isSubmitted}
 		>
 			Login
-			<!-- {#if LoginForm.isSubmiting}
-				<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-				<span class="visually-hidden" role="status">Loading...</span>
-			{/if} -->
+			{#if isSubmitted}
+				<ButtonSpinner />
+			{/if}
 		</button>
 	</div>
 	<div class="col-12">
@@ -137,21 +145,29 @@
 		</div>
 		<div class="row row-cols-2 g-2">
 			<div class="col d-flex justify-content-center">
-				<button class="btn btn-outline-info rounded-4" type="submit" on:click={onLoginCustomer}>
+				<button
+					class="btn btn-outline-info rounded-4"
+					type="submit"
+					on:click={onLoginCustomer}
+					disabled={isSubmitted}
+				>
 					Demo Customer
-					<!-- {#if isDemoAccountLogin && isAccounts[0]}
-						<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-						<span class="visually-hidden" role="status">Loading...</span>
-					{/if} -->
+					{#if isSubmitted}
+						<ButtonSpinner />
+					{/if}
 				</button>
 			</div>
 			<div class="col d-flex justify-content-center">
-				<button class="btn btn-outline-info rounded-4" type="submit" on:click={onLoginCustomer1}>
+				<button
+					class="btn btn-outline-info rounded-4"
+					type="submit"
+					on:click={onLoginCustomer1}
+					disabled={isSubmitted}
+				>
 					Demo Customer1
-					<!-- {#if isDemoAccountLogin && isAccounts[1]}
-						<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-						<span class="visually-hidden" role="status">Loading...</span>
-					{/if} -->
+					{#if isSubmitted}
+						<ButtonSpinner />
+					{/if}
 				</button>
 			</div>
 		</div>

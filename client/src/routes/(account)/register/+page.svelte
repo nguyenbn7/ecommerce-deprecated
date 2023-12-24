@@ -37,6 +37,7 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import ButtonSpinner from '$lib/share/component/button-spinner.svelte';
 	import { ToastrService } from '$lib/share/component/toastr.svelte';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
 	import { FormField, FormGroup } from '$lib/share/form/class';
@@ -47,20 +48,26 @@
 	const displayNameMaxLen = 70;
 
 	let registerForm = new RegisterForm(displayNameMaxLen);
+	let isSubmitted = false;
 
 	async function onSubmitForm() {
-		const userInfo = await AccountService.register({
-			email: registerForm.email.value,
-			password: registerForm.password.value,
-			display_name: registerForm.displayName.value,
-			confirm_password: registerForm.confirmPassword.value
-		});
+		try {
+			isSubmitted = true;
+			const userInfo = await AccountService.register({
+				email: registerForm.email.value,
+				password: registerForm.password.value,
+				displayName: registerForm.displayName.value,
+				confirmPassword: registerForm.confirmPassword.value
+			});
 
-		if (userInfo) {
-			ToastrService.notifySuccess(`Welcome ${userInfo?.displayName}`);
-			const returnUrl = $page.url.searchParams.get('redirect');
-			if (returnUrl) return goto(returnUrl);
-			return goto('/');
+			if (userInfo) {
+				ToastrService.notifySuccess(`Welcome ${userInfo?.displayName}`);
+				const returnUrl = $page.url.searchParams.get('redirect');
+				if (returnUrl) return goto(returnUrl);
+				return goto('/');
+			}
+		} finally {
+			isSubmitted = false;
 		}
 	}
 </script>
@@ -83,6 +90,7 @@
 				label="Display Name"
 				placeholder="I am cute"
 				bind:formField={registerForm.displayName}
+				disabled={isSubmitted}
 			/>
 		</div>
 	</div>
@@ -96,6 +104,7 @@
 				label="Email"
 				placeholder="name@example.com"
 				bind:formField={registerForm.email}
+				disabled={isSubmitted}
 			/>
 		</div>
 	</div>
@@ -109,6 +118,7 @@
 				label="Password"
 				placeholder="Password"
 				bind:formField={registerForm.password}
+				disabled={isSubmitted}
 			/>
 		</div>
 	</div>
@@ -122,6 +132,7 @@
 				label="Confirm Password"
 				placeholder="Confirm password"
 				bind:formField={registerForm.confirmPassword}
+				disabled={isSubmitted}
 			/>
 		</div>
 	</div>
@@ -139,13 +150,12 @@
 		<button
 			class="btn btn-info w-100 py-2 mt-2 mb-3 rounded-4"
 			type="submit"
-			disabled={!registerForm.valid}
+			disabled={!registerForm.valid || isSubmitted}
 		>
 			Create Account
-			<!-- {#if isLocked}
-				<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-				<span class="visually-hidden" role="status">Loading...</span>
-			{/if} -->
+			{#if isSubmitted}
+				<ButtonSpinner />
+			{/if}
 		</button>
 	</div>
 	<div class="col-12">
