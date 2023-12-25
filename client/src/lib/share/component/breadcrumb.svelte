@@ -18,22 +18,12 @@
 			}
 		};
 	}
-	export const breadcrumb = breadcrumbService();
-</script>
-
-<script>
-	import { page } from '$app/stores';
-	import _ from 'lodash';
-	export { styleClasses as class };
-	let styleClasses = '';
-
-	$: breadcrumbPaths = buildBreadcrumbPaths($page, $breadcrumb);
 
 	/**
 	 * @param {import("@sveltejs/kit").Page<Record<string, string>, string | null>} pageStore
 	 * @param {{}} breadcrumbStore
 	 */
-	function buildBreadcrumbPaths(pageStore, breadcrumbStore) {
+	export function buildBreadcrumbPaths(pageStore, breadcrumbStore) {
 		const paths = pageStore.route.id?.split('/').filter((path) => path && path[0] !== '(') ?? [];
 		const pathParams = pageStore.params;
 		const mapper = breadcrumbStore;
@@ -65,6 +55,17 @@
 
 		return builtPaths;
 	}
+	
+	export const breadcrumb = breadcrumbService();
+</script>
+
+<script>
+	import { page } from '$app/stores';
+	import _ from 'lodash';
+	export { styleClasses as class };
+	let styleClasses = '';
+
+	$: breadcrumbPaths = buildBreadcrumbPaths($page, $breadcrumb);
 </script>
 
 <ol

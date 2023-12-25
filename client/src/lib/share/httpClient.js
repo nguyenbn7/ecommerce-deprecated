@@ -4,13 +4,21 @@ import { ToastrService } from './component/toastr.svelte';
 import { SpinnerService } from './component/spinner.svelte';
 import { AccountService } from './service/account';
 
-export async function delay(ms = 1500) {
+async function delay(ms = 1500) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export const httpClient = axios.create({
+const httpClient = axios.create({
 	baseURL: PUBLIC_BASE_API_URL,
 	timeout: 5000
+});
+
+httpClient.interceptors.response.use(async response => {
+	await delay(1500);
+	return response;
+}, async error => {
+	await delay(1500);
+	defaultHandleError(error);
 });
 
 const httpClientSpinner = axios.create({
@@ -39,12 +47,10 @@ httpClientSpinner.interceptors.response.use(async (response) => {
 	throw error;
 });
 
-export { httpClientSpinner };
-
 /**
  * @param {AxiosError} error
  */
-export function defaultHandleError(error) {
+function defaultHandleError(error) {
 	const response = error.response;
 	let errorMessage = error.message;
 	if (response) {
@@ -81,4 +87,4 @@ httpClientAuthSpinner.interceptors.response.use(async (response) => {
 	throw error;
 });
 
-export { httpClientAuthSpinner };
+export { defaultHandleError, delay, httpClient, httpClientSpinner, httpClientAuthSpinner };

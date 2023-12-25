@@ -1,13 +1,5 @@
-import { defaultHandleError, delay, httpClient } from '$lib/share/httpClient';
+import { httpClient } from '$lib/share/httpClient';
 import { get, readonly, writable } from 'svelte/store';
-
-httpClient.interceptors.response.use(async response => {
-    await delay(1500);
-    return response;
-}, async error => {
-    await delay(1500);
-    defaultHandleError(error);
-});
 
 const ACCESS_TOKEN = 'token';
 

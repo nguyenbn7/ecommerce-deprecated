@@ -1,0 +1,153 @@
+<script>
+	import { page } from '$app/stores';
+	import { readMoreString } from '$lib/share/helper';
+	import { AccountService, currentUser } from '$lib/share/service/account';
+	import { basket } from '$lib/share/service/basket';
+	import { icon } from '@fortawesome/fontawesome-svg-core';
+	import {
+		faBasketShopping,
+		faCircleUser,
+		faHeart,
+		faRightFromBracket,
+		faSearch
+	} from '@fortawesome/free-solid-svg-icons';
+	import { onMount } from 'svelte';
+
+	/**
+	 * @type {number}
+	 */
+	let y;
+
+	const paths = [
+		{ link: '/', name: 'Home' },
+		{ link: '/shop', name: 'Shop' },
+		{ link: '/about', name: 'About' },
+		{ link: '/blog', name: 'Blog' }
+	];
+
+	/**
+	 * @param {BasketItem[]} items
+	 */
+	function getCount(items) {
+		return items.reduce((total, item) => total + item.quantity, 0);
+	}
+
+	onMount(async () => {
+		(await import('bootstrap')).Dropdown;
+	});
+</script>
+
+<svelte:window bind:scrollY={y} />
+<nav class="navbar navbar-expand-md py-3" class:bg-primary={y >= 56}>
+	<div class="container">
+		<a class="navbar-brand col-3" href="/">
+			<img src="/images/logo.png" alt="logo" style="max-height: 2.5em;" class="logo" />
+		</a>
+		<button
+			class="navbar-toggler"
+			type="button"
+			data-bs-toggle="collapse"
+			data-bs-target="#linkNavbar"
+			aria-controls="linkNavbar"
+			aria-expanded="false"
+			aria-label="Toggle navigation"
+		>
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="linkNavbar">
+			<ul class="navbar-nav mx-md-auto mb-2 mb-lg-0">
+				{#each paths as path}
+					<li>
+						<a
+							href={path.link}
+							class="nav-link text-white"
+							class:active-link={$page.url.pathname === path.link}
+						>
+							{path.name}
+						</a>
+					</li>
+				{/each}
+			</ul>
+			<ul class="navbar-nav ms-md-auto mb-2 mb-lg-0">
+				<a href={'#'} class="nav-link text-white me-3"> {@html icon(faSearch).html}</a>
+				<a class="nav-link text-white me-3" href="/favorites" title="Wish list">
+					{@html icon(faHeart).html}
+				</a>
+				<a
+					class="nav-link text-white me-3"
+					class:text-secondary={!$basket || !$basket.items.length}
+					class:text-info={$basket && $basket.items.length}
+					href="/basket"
+					title="Basket"
+				>
+					{@html icon(faBasketShopping).html}
+					{#if $basket && $basket.items.length}
+						<span
+							class="position-absolute translate-middle p-2 bg-transparent badge rounded-pill text-danger fs-5 cart-no"
+						>
+							{getCount($basket.items)}
+						</span>
+					{/if}
+				</a>
+				{#if !$currentUser}
+					<a href="/login" class="btn btn-outline-success text-white px-3 me-3"> Login </a>
+				{:else}
+					<a
+						class="nav-btn text-info me-4"
+						data-bs-toggle="dropdown"
+						aria-expanded="false"
+						href={'#'}
+						title="Profile"
+					>
+						{@html icon(faCircleUser, {
+							classes: ['fs-2']
+						}).html}
+					</a>
+					<ul class="dropdown-menu dropdown-menu-end me-5">
+						<li>
+							<h2 class="dropdown-header" title={$currentUser.displayName}>
+								{readMoreString($currentUser.displayName, 25)}
+							</h2>
+						</li>
+						<li>
+							<a class="dropdown-item" href={'#'}>
+								<i class="bi bi-card-checklist"></i> View Order
+							</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href={'#'}>
+								<i class="bi bi-person-fill-gear"></i> View Profile
+							</a>
+						</li>
+						<li><hr class="dropdown-divider" /></li>
+						<li>
+							<a class="dropdown-item" href={'#'} on:click={AccountService.logout}>
+								{@html icon(faRightFromBracket).html} Logout
+							</a>
+						</li>
+					</ul>
+				{/if}
+			</ul>
+		</div>
+	</div>
+</nav>
+
+<style lang="scss">
+	.navbar {
+		transition: all 0.5s;
+	}
+	.active-link {
+		color: var(--bs-warning) !important;
+		pointer-events: none;
+		cursor: default;
+	}
+
+	.cart-no {
+		top: 20%;
+		left: 100%;
+	}
+
+	.logo {
+		cursor: pointer;
+	}
+</style>

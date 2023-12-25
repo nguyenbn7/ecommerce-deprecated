@@ -27,7 +27,7 @@
 	<title>{ECOMMERCE_NAME} - Home</title>
 </svelte:head>
 
-<div bind:this={carouselInstance} class="carousel slide mt-3" id="carouselExample">
+<div bind:this={carouselInstance} class="carousel slide" id="carouselExample">
 	<div class="carousel-indicators">
 		<button
 			type="button"
@@ -52,19 +52,19 @@
 	</div>
 	<div class="carousel-inner">
 		<div class="carousel-item active">
-			<img src="/images/hero1.jpg" class="d-block w-100" alt="slide" />
+			<img src="/images/hero1.jpg" class="m-0 min-vw-100 min-vh-100" alt="slide" />
 		</div>
 		<div class="carousel-item">
-			<img src="/images/hero2.jpg" class="d-block w-100" alt="slide" />
+			<img src="/images/hero2.jpg" class="m-0 min-vw-100 min-vh-100" alt="slide" />
 		</div>
 		<div class="carousel-item">
-			<img src="/images/hero3.jpg" class="d-block w-100" alt="slide" />
+			<img src="/images/hero3.jpg" class="min-vw-100 min-vh-100" alt="slide" />
 		</div>
 	</div>
 </div>
 
 <!-- Featured Start -->
-<div class="row pb-3 mt-5">
+<!-- <div class="row pb-3 mt-5">
 	<div class="col-lg-3 col-md-6 col-sm-12 pb-1">
 		<div class="d-flex align-items-center border mb-4" style="padding: 30px;">
 			<h1 class="text-primary m-0 me-3 fs-1 fw-bolder">
@@ -97,11 +97,11 @@
 			<h5 class="fw-semibold m-0">24/7 Support</h5>
 		</div>
 	</div>
-</div>
+</div> -->
 
 <!-- Featured End -->
 
-<div class="row offer pt-5">
+<!-- <div class="row offer pt-5">
 	<div class="col-md-6 pb-4">
 		<div
 			class="position-relative bg-secondary-subtle text-center text-md-end text-white mb-2 py-5 px-5"
@@ -126,7 +126,7 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div> -->
 
 <style lang="scss">
 	img {
