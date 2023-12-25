@@ -1,5 +1,6 @@
 <script>
 	import { icon } from '@fortawesome/fontawesome-svg-core';
+	import { faFacebookF, faInstagram, faLinkedinIn, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
 	import { faEnvelope, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons';
 </script>
 
@@ -32,7 +33,7 @@
 							</a>
 						</li>
 
-						<li class="nav-item mt-4 mb-3">
+						<!-- <li class="nav-item mt-4 mb-3">
 							<iframe
 								class="w-100"
 								src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3323.356430445871!2d-101.8624006172556!3d33.59605527293671!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86fe12c4f4115643%3A0x4be2acd0830de582!2s199%20Avenue%20S%2C%20Lubbock%2C%20TX%2079415%2C%20Hoa%20K%E1%BB%B3!5e0!3m2!1svi!2s!4v1701750814877!5m2!1svi!2s"
@@ -41,7 +42,7 @@
 								referrerpolicy="no-referrer-when-downgrade"
 								title="199 Heffernan Avenue, Texas, 77218, United States"
 							></iframe>
-						</li>
+						</li> -->
 					</ul>
 				</div>
 				<div class="col-md-8">
@@ -161,7 +162,23 @@
 			<div class="row pt-4 pb-4 mt-5 border-top">
 				<p class="col-md-6 text-center text-md-start">© 2023 Skinet. All rights reserved.</p>
 				<div class="col-md-6 text-center text-md-end">
-					<img src="/images/payments.png" alt="payments" />
+					<div class="d-inline-flex align-items-center fs-5">
+						<a class="px-2" href="https://www.facebook.com/">
+							<i>{@html icon(faFacebookF).html}</i>
+						</a>
+						<a class="px-2" href="https://twitter.com/">
+							<i>{@html icon(faTwitter).html}</i>
+						</a>
+						<a class="px-2" href="https://www.linkedin.com/">
+							<i>{@html icon(faLinkedinIn).html}</i>
+						</a>
+						<a class="px-2" href="https://www.instagram.com/">
+							<i>{@html icon(faInstagram).html}</i>
+						</a>
+						<a class="ps-2" href="https://www.youtube.com/">
+							<i>{@html icon(faYoutube).html}</i>
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>

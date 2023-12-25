@@ -2,69 +2,80 @@
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
 	import { onMount } from 'svelte';
 	import { icon } from '@fortawesome/fontawesome-svg-core';
-	import {
-		faCheck,
-		faPhoneVolume,
-		faRightLeft,
-		faTruckFast
-	} from '@fortawesome/free-solid-svg-icons';
+	import { faCheck, faPhoneVolume, faSync, faTruckFast } from '@fortawesome/free-solid-svg-icons';
+	import { tns } from 'tiny-slider';
+	import '$lib/layout/(nobars)/about/style.scss';
 
-	/**
-	 * @type {HTMLDivElement}
-	 */
-	let carouselInstance;
+	const heroSectionId = 'heroSection';
 
 	onMount(async () => {
-		const carousel = new (await import('bootstrap')).Carousel(carouselInstance, {
+		new (await import('bootstrap')).Carousel(document.getElementById(heroSectionId), {
 			interval: 2000,
 			ride: 'carousel',
 			pause: false
 		});
+
+		tns({
+			items: 1,
+			slideBy: 'page',
+			autoplay: true,
+			speed: 400,
+			autoplayButtonOutput: false,
+			controls: false,
+			responsive: {
+				768: {
+					items: 3
+				},
+				576: {
+					items: 2
+				},
+				992: {
+					items: 4
+				}
+			}
+		});
 	});
+
+	const features = [
+		{ icon: faCheck, name: 'Quality Product' },
+		{ icon: faTruckFast, name: 'Free Shipping' },
+		{ icon: faSync, name: '7-Day Return' },
+		{ icon: faPhoneVolume, name: '24/7 Support' }
+	];
+
+	const heroImages = ['hero1.jpg', 'hero2.jpg', 'hero3.jpg'];
+
+	const logoImages = ['angular.png', 'netcore.png', 'react.png', 'redis.png', 'typescript.png'];
 </script>
 
 <svelte:head>
 	<title>{ECOMMERCE_NAME} - Home</title>
 </svelte:head>
 
-<div bind:this={carouselInstance} class="carousel slide" id="carouselExample">
+<div class="carousel slide" id={heroSectionId}>
 	<div class="carousel-indicators">
-		<button
-			type="button"
-			data-bs-target="#carouselExample"
-			data-bs-slide-to="0"
-			class="active"
-			aria-current="true"
-			aria-label="Slide 1"
-		></button>
-		<button
-			type="button"
-			data-bs-target="#carouselExample"
-			data-bs-slide-to="1"
-			aria-label="Slide 2"
-		></button>
-		<button
-			type="button"
-			data-bs-target="#carouselExample"
-			data-bs-slide-to="2"
-			aria-label="Slide 3"
-		></button>
+		{#each heroImages as _, idx}
+			<button
+				type="button"
+				data-bs-target="#{heroSectionId}"
+				data-bs-slide-to={idx}
+				class:active={idx === 0}
+				aria-current="true"
+				aria-label="Slide {idx + 1}"
+			></button>
+		{/each}
 	</div>
 	<div class="carousel-inner">
-		<div class="carousel-item active">
-			<img src="/images/hero1.jpg" class="m-0 min-vw-100 min-vh-100" alt="slide" />
-		</div>
-		<div class="carousel-item">
-			<img src="/images/hero2.jpg" class="m-0 min-vw-100 min-vh-100" alt="slide" />
-		</div>
-		<div class="carousel-item">
-			<img src="/images/hero3.jpg" class="min-vw-100 min-vh-100" alt="slide" />
-		</div>
+		{#each heroImages as image, idx}
+			<div class="carousel-item" class:active={idx === 0}>
+				<img src="/images/{image}" class="m-0 min-vw-100 min-vh-100 hero-img" alt="slide" />
+			</div>
+		{/each}
 	</div>
 	<button
 		class="carousel-control-prev"
 		type="button"
-		data-bs-target="#carouselExample"
+		data-bs-target="#{heroSectionId}"
 		data-bs-slide="prev"
 	>
 		<span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -73,7 +84,7 @@
 	<button
 		class="carousel-control-next"
 		type="button"
-		data-bs-target="#carouselExample"
+		data-bs-target="#{heroSectionId}"
 		data-bs-slide="next"
 	>
 		<span class="carousel-control-next-icon" aria-hidden="true"></span>
@@ -82,94 +93,65 @@
 </div>
 
 <!-- Featured Start -->
-<!-- <div class="row pb-3 mt-5">
-	<div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-		<div class="d-flex align-items-center border mb-4" style="padding: 30px;">
-			<h1 class="text-primary m-0 me-3 fs-1 fw-bolder">
-				{@html icon(faCheck).html}
-			</h1>
-			<h5 class="fw-semibold m-0">Quality Product</h5>
+<div class="bg-light">
+	<div class="container">
+		<div class="row py-5">
+			{#each features as feature}
+				<div class="col-lg-3 col-md-6 col-sm-12">
+					<div class="d-flex align-items-center" style="padding: 30px;">
+						<h1 class="text-warning fs-1 fw-bolder me-3">
+							{@html icon(feature.icon).html}
+						</h1>
+						<h5 class="fw-semibold m-0">{feature.name}</h5>
+					</div>
+				</div>
+			{/each}
 		</div>
 	</div>
-	<div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-		<div class="d-flex align-items-center border mb-4" style="padding: 30px;">
-			<h1 class="text-primary m-0 me-3">
-				{@html icon(faTruckFast).html}
-			</h1>
-			<h5 class="fw-semibold m-0">Free Shipping</h5>
-		</div>
-	</div>
-	<div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-		<div class="d-flex align-items-center border mb-4" style="padding: 30px;">
-			<h1 class="text-primary m-0 me-3 fw-bolder">
-				{@html icon(faRightLeft).html}
-			</h1>
-			<h5 class="fw-semibold m-0">14-Day Return</h5>
-		</div>
-	</div>
-	<div class="col-lg-3 col-md-6 col-sm-12 pb-1">
-		<div class="d-flex align-items-center border mb-4" style="padding: 30px;">
-			<h1 class="text-primary m-0 me-3">
-				{@html icon(faPhoneVolume).html}
-			</h1>
-			<h5 class="fw-semibold m-0">24/7 Support</h5>
-		</div>
-	</div>
-</div> -->
+</div>
 
 <!-- Featured End -->
 
-<!-- <div class="row offer pt-5">
-	<div class="col-md-6 pb-4">
+<!-- Logo Start -->
+<div class="container py-5 overflow-x-hidden">
+	<h2 class="display-5 fw-light text-center">
+		Trusted by
 		<div
-			class="position-relative bg-secondary-subtle text-center text-md-end text-white mb-2 py-5 px-5"
-		>
-			<img class="feature-img" src="/images/offer-1.png" alt="" />
-			<div class="position-relative" style="z-index: 1;">
-				<h5 class="text-uppercase text-primary mb-3">20% off the all order</h5>
-				<h1 class="mb-4 fw-semibold">Spring Collection</h1>
-				<a href="/" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
+			class="border-bottom mb-5 mt-2 border-4 border-warning mx-auto"
+			style="width: 1.7em;"
+		></div>
+	</h2>
+	<div class="row align-items-center justify-content-center slider">
+		{#each logoImages as image}
+			<div class="single-logo-item col-xl-3 col-sm-6 text-center position-relative">
+				<img src="/images/home/company-logos/{image}" alt="" />
 			</div>
-		</div>
+		{/each}
 	</div>
-	<div class="col-md-6 pb-4">
-		<div
-			class="position-relative bg-secondary-subtle text-center text-md-start text-white mb-2 py-5 px-5"
-		>
-			<img class="feature-img" src="/images/offer-2.png" alt="" />
-			<div class="position-relative" style="z-index: 1;">
-				<h5 class="text-uppercase text-primary mb-3">20% off the all order</h5>
-				<h1 class="mb-4 fw-semibold">Winter Collection</h1>
-				<a href="/shop" class="btn btn-outline-primary py-md-2 px-md-3">Shop Now</a>
-			</div>
-		</div>
-	</div>
-</div> -->
+</div>
+
+<!-- Logo End -->
 
 <style lang="scss">
-	img {
+	.hero-img {
 		object-fit: cover;
 		height: 600px;
 		width: 100%;
 	}
 
-	.offer .feature-img {
-		position: absolute;
-		max-width: 50%;
-		max-height: 90%;
-		bottom: 0;
+	.single-logo-item img {
+		max-width: 180px;
+		max-height: 180px;
+		margin: 0 auto;
 	}
 
-	.offer .text-md-end .feature-img {
-		left: 0;
+	.single-logo-item {
+		-webkit-transition: 0.3s;
+		-o-transition: 0.3s;
+		transition: 0.3s;
 	}
 
-	.offer .text-md-start .feature-img {
-		right: 0;
-	}
-
-	.feature-img {
-		object-fit: contain;
-		width: 30%;
+	.single-logo-item:hover {
+		opacity: 0.7;
 	}
 </style>

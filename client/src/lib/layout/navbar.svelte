@@ -40,9 +40,11 @@
 <svelte:window bind:scrollY={y} />
 <nav class="navbar navbar-expand-md py-3" class:bg-primary={y >= 56}>
 	<div class="container">
-		<a class="navbar-brand col-3" href="/">
-			<img src="/images/logo.png" alt="logo" style="max-height: 2.5em;" class="logo" />
-		</a>
+		<div class="col-3">
+			<a class="navbar-brand" href="/">
+				<img src="/images/logo.png" alt="logo" style="max-height: 2.5em;" class="logo" />
+			</a>
+		</div>
 		<button
 			class="navbar-toggler"
 			type="button"
