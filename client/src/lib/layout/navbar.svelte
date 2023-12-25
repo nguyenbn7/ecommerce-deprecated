@@ -61,7 +61,8 @@
 						<a
 							href={path.link}
 							class="nav-link text-white"
-							class:active-link={$page.url.pathname === path.link}
+							class:active-link={$page.url.pathname === path.link ||
+								$page.url.pathname === path.link + '/'}
 						>
 							{path.name}
 						</a>
