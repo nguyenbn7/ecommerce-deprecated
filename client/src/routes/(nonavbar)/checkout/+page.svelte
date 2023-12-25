@@ -3,10 +3,10 @@
 	import { onMount } from 'svelte';
 	import { startCase, toLower } from 'lodash';
 	import { currency } from '$lib/share/helper';
-	import { AddressFormGroup, OrderFormGroup } from '$lib/layout/(nobars)/checkout/form';
-	import OrderSummary from '$lib/layout/(nobars)/checkout/order-summary.svelte';
-	import Address from '$lib/layout/(nobars)/checkout/address.svelte';
-	import Footer from '$lib/layout/(bars)/footer.svelte';
+	import { AddressFormGroup, OrderFormGroup } from '$lib/layout/(nonavbar)/checkout/form';
+	import OrderSummary from '$lib/layout/(nonavbar)/checkout/order-summary.svelte';
+	import Address from '$lib/layout/(nonavbar)/checkout/address.svelte';
+	import Footer from '$lib/layout/(navbar)/footer.svelte';
 	import { OrderService } from '$lib/share/service/order';
 	import { basket, basketTotals } from '$lib/share/service/basket';
 

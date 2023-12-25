@@ -1,5 +1,5 @@
 <script>
-	import Footer from '$lib/layout/(bars)/footer.svelte';
+	import Footer from '$lib/layout/(navbar)/footer.svelte';
 	import Navbar from '$lib/layout/navbar.svelte';
 </script>
 

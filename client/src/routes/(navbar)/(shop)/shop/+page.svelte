@@ -1,7 +1,7 @@
 <script>
 	import Pagination from '$lib/share/component/pagination.svelte';
-	import ProductItem from '$lib/layout/(bars)/(shop)/shop/product-item.svelte';
-	import PagingHeader from '$lib/layout/(bars)/(shop)/shop/paging-header.svelte';
+	import ProductItem from '$lib/layout/(navbar)/(shop)/shop/product-item.svelte';
+	import PagingHeader from '$lib/layout/(navbar)/(shop)/shop/paging-header.svelte';
 	import { onMount } from 'svelte';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
 	import { icon } from '@fortawesome/fontawesome-svg-core';

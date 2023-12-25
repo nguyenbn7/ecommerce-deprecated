@@ -1,9 +1,9 @@
 <script>
-	import Intro from '$lib/layout/(nobars)/about/intro.svelte';
-	import Team from '$lib/layout/(nobars)/about/team.svelte';
-	import Techstack from '$lib/layout/(nobars)/about/techstack.svelte';
+	import Intro from '$lib/layout/(nonavbar)/about/intro.svelte';
+	import Team from '$lib/layout/(nonavbar)/about/team.svelte';
+	import Techstack from '$lib/layout/(nonavbar)/about/techstack.svelte';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
-	import PageTitle from '$lib/layout/(bars)/(shop)/page-title.svelte';
+	import PageTitle from '$lib/layout/(navbar)/(shop)/page-title.svelte';
 </script>
 
 <svelte:head>

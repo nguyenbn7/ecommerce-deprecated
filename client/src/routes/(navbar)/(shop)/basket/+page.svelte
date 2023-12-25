@@ -1,5 +1,5 @@
 <script>
-	import OrderTotals from '$lib/layout/(bars)/(shop)/basket/order-totals.svelte';
+	import OrderTotals from '$lib/layout/(navbar)/(shop)/basket/order-totals.svelte';
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
 	import { currency } from '$lib/share/helper';
 	import { BasketService, basket } from '$lib/share/service/basket';
