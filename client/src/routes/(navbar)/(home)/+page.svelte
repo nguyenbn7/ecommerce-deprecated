@@ -115,7 +115,7 @@
 <!-- Logo Start -->
 <div class="container py-5 overflow-x-hidden">
 	<h2 class="display-5 fw-light text-center">
-		Trusted by
+		Popular Brands
 		<div
 			class="border-bottom mb-5 mt-2 border-4 border-warning mx-auto"
 			style="width: 1.7em;"
