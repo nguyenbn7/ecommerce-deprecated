@@ -1,11 +1,10 @@
 <script>
-	import { icon } from "@fortawesome/fontawesome-svg-core";
+	import { icon } from '@fortawesome/fontawesome-svg-core';
 
-
-	import { faBasketShopping } from "@fortawesome/free-solid-svg-icons";
-
+	import { faBasketShopping } from '@fortawesome/free-solid-svg-icons';
 </script>
-<section class="cart-banner py-5 my-5">
+
+<section class="cart-banner py-5">
 	<div class="container">
 		<div class="row clearfix">
 			<!--Image Column-->
@@ -26,9 +25,9 @@
 				<h3><span class="text-warning">Deal</span> of the month</h3>
 				<h4>Hikan Strwaberry</h4>
 				<div class="text">
-					Quisquam minus maiores repudiandae nobis, minima saepe id, fugit ullam similique! Beatae,
-					minima quisquam molestias facere ea. Perspiciatis unde omnis iste natus error sit
-					voluptatem accusant
+					Quisquam minus maiores repudiandae nobis, minima saepe id, fugit ullam similique!
+					Beatae, minima quisquam molestias facere ea. Perspiciatis unde omnis iste natus error
+					sit voluptatem accusant
 				</div>
 				<!--Countdown Timer-->
 				<div class="time-counter">
