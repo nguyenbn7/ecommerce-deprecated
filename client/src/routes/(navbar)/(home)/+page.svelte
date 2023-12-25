@@ -167,7 +167,7 @@
 
 <!-- Testimonials -->
 <div class="py-5 my-5">
-	<div class="container">
+	<div class="container overflow-x-hidden">
 		<h2 class="display-5 fw-light text-center">
 			What Customers Said
 			<div
