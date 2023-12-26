@@ -22,7 +22,8 @@
 		{ link: '/', name: 'Home' },
 		{ link: '/shop', name: 'Shop' },
 		{ link: '/about', name: 'About' },
-		{ link: '/blog', name: 'Blog' }
+		{ link: '/blog', name: 'Blog' },
+		{ link: '/contact', name: 'Contact' }
 	];
 
 	/**

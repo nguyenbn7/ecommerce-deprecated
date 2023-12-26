@@ -46,7 +46,7 @@
 						</div>
 					</div>
 				</div>
-				<a href="cart.html" class="btn btn-warning rounded-5 px-3 py-2 mt-3">
+				<a href="/cart" class="btn btn-warning rounded-5 px-3 py-2 mt-3">
 					{@html icon(faBasketShopping, { classes: 'me-1' }).html} Add to Basket
 				</a>
 			</div>

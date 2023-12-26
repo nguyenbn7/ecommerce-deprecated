@@ -1,6 +1,12 @@
 <script>
 	import { icon } from '@fortawesome/fontawesome-svg-core';
-	import { faFacebookF, faInstagram, faLinkedinIn, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
+	import {
+		faFacebookF,
+		faInstagram,
+		faLinkedinIn,
+		faTwitter,
+		faYoutube
+	} from '@fortawesome/free-brands-svg-icons';
 	import { faEnvelope, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons';
 </script>
 
@@ -98,7 +104,7 @@
 							<ul class="nav flex-column">
 								<li class="nav-item mb-2">
 									<a
-										href="/contact-us"
+										href="/contact"
 										class="link-underline-secondary link-underline-opacity-0 link-underline-opacity-75-hover p-0 text-secondary"
 									>
 										Contact Us
@@ -160,8 +166,10 @@
 			</div>
 
 			<div class="row pt-4 pb-4 mt-5 border-top">
-				<p class="col-md-6 text-center text-md-start">© 2023 Skinet. All rights reserved.</p>
-				<div class="col-md-6 text-center text-md-end">
+				<p class="col-12 col-md-4 text-center text-md-start">
+					© 2023 Skinet. All rights reserved.
+				</p>
+				<div class="col-12 col-md-4 text-center">
 					<div class="d-inline-flex align-items-center fs-5">
 						<a class="px-2" href="https://www.facebook.com/">
 							<i>{@html icon(faFacebookF).html}</i>
@@ -179,6 +187,9 @@
 							<i>{@html icon(faYoutube).html}</i>
 						</a>
 					</div>
+				</div>
+				<div class="col-12 col-md-4 text-center text-md-end">
+					<img src="/images/payments.png" alt="Accepted Payments" />
 				</div>
 			</div>
 		</div>
