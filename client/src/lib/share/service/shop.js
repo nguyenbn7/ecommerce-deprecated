@@ -1,4 +1,4 @@
-import { httpClientSpinner } from "../httpClient";
+import { httpClient, httpClientSpinner } from "../httpClient";
 
 /**
  * @param {number} productId
@@ -64,10 +64,19 @@ async function loadShopData(shopParams) {
     };
 }
 
+/**
+ * @returns {Promise<Product>}
+ */
+async function getDealProduct() {
+    const response = await httpClient.get('products/deal');
+    return response.data;
+}
+
 export const ShopService = {
     getProduct,
     loadShopData,
     getPageProduct,
     getProductBrands,
-    getProductTypes
+    getProductTypes,
+    getDealProduct
 };

@@ -6,6 +6,7 @@ from route.products.model import (
     ProductType,
     Product,
     ProductsQueryParams,
+    ProjectedDealProduct,
     ProjectedProduct,
 )
 from route.products.service import apply_predicate, apply_sort, to_page
@@ -51,6 +52,13 @@ def get_product_types(db_session: Annotated[Session, Depends(get_db_session)]):
 @product_router.get("/brands")
 def get_product_brands(db_session: Annotated[Session, Depends(get_db_session)]):
     return db_session.query(ProductBrand).all()
+
+
+@product_router.get("/deal")
+def get_product_deal(db_session: Annotated[Session, Depends(get_db_session)]):
+    projected_product = db_session.query(ProjectedDealProduct).first()
+
+    return projected_product.to_dto()
 
 
 @product_router.get("/{id}")

@@ -1,58 +1,89 @@
 <script>
+	import { BasketService } from '$lib/share/service/basket';
+	import { ShopService } from '$lib/share/service/shop';
 	import { icon } from '@fortawesome/fontawesome-svg-core';
 
 	import { faBasketShopping } from '@fortawesome/free-solid-svg-icons';
+	import { onMount } from 'svelte';
+
+	/**
+	 * @type {Product}
+	 */
+	let product;
+
+	let now = new Date().getTime();
+	let end = now + 1000 * 60 * 60 * 24 * 3;
+
+	$: distance = end - now;
+	$: days = Math.floor(distance / (1000 * 60 * 60 * 24));
+	$: hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+	$: minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+	$: seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+	setInterval(function () {
+		now = Date.now();
+	}, 1000);
+
+	onMount(async () => (product = await ShopService.getDealProduct()));
 </script>
 
-<section class="cart-banner py-5">
-	<div class="container">
-		<div class="row clearfix">
-			<!--Image Column-->
-			<div class="image-column col-lg-6">
-				<div class="image">
-					<div class="price-box">
-						<div class="inner-price">
-							<span class="price">
-								<strong>30%</strong> <br /> off
-							</span>
+{#if product}
+	<section class="cart-banner py-5">
+		<div class="container">
+			<div class="row clearfix">
+				<!--Image Column-->
+				<div class="image-column col-lg-6">
+					<div class="image">
+						<div class="price-box">
+							<div class="inner-price">
+								<span class="price">
+									<strong>30%</strong> <br /> off
+								</span>
+							</div>
 						</div>
-					</div>
-					<img src="/images/home/deal/a.jpg" alt="" />
-				</div>
-			</div>
-			<!--Content Column-->
-			<div class="content-column col-lg-6">
-				<h3><span class="text-warning">Deal</span> of the month</h3>
-				<h4>Hikan Strwaberry</h4>
-				<div class="text">
-					Quisquam minus maiores repudiandae nobis, minima saepe id, fugit ullam similique!
-					Beatae, minima quisquam molestias facere ea. Perspiciatis unde omnis iste natus error
-					sit voluptatem accusant
-				</div>
-				<!--Countdown Timer-->
-				<div class="time-counter">
-					<div class="time-countdown clearfix" data-countdown="2020/2/01">
-						<div class="counter-column">
-							<div class="inner"><span class="count">00</span>Days</div>
-						</div>
-						<div class="counter-column">
-							<div class="inner"><span class="count">00</span>Hours</div>
-						</div>
-						<div class="counter-column">
-							<div class="inner"><span class="count">00</span>Mins</div>
-						</div>
-						<div class="counter-column">
-							<div class="inner"><span class="count">00</span>Secs</div>
-						</div>
+						<img
+							class="img-thumbnail bg-transparent border-0"
+							src={product.pictureUrl}
+							alt={product.name}
+						/>
 					</div>
 				</div>
-				<a href="/cart" class="btn btn-warning rounded-5 px-3 py-2 mt-3">
-					{@html icon(faBasketShopping, { classes: 'me-1' }).html} Add to Basket
-				</a>
+				<!--Content Column-->
+				<div class="content-column col-lg-6">
+					<h3><span class="text-warning">Deal</span> of the month</h3>
+					<h4>{product.name}</h4>
+					<div class="text">
+						{product.description}
+					</div>
+					<!--Countdown Timer-->
+					<div class="time-counter">
+						<div class="time-countdown clearfix" data-countdown="2020/2/01">
+							<div class="counter-column">
+								<div class="inner"><span class="count">{days}</span>Days</div>
+							</div>
+							<div class="counter-column">
+								<div class="inner"><span class="count">{hours}</span>Hours</div>
+							</div>
+							<div class="counter-column">
+								<div class="inner"><span class="count">{minutes}</span>Mins</div>
+							</div>
+							<div class="counter-column">
+								<div class="inner"><span class="count">{seconds}</span>Secs</div>
+							</div>
+						</div>
+					</div>
+					<a
+						href={'#'}
+						class="btn btn-warning rounded-5 px-3 py-2 mt-3"
+						on:click={() => BasketService.addItemToBasket(product)}
+					>
+						{@html icon(faBasketShopping, { classes: 'me-1' }).html} Add to Basket
+					</a>
+				</div>
 			</div>
 		</div>
-	</div>
-</section>
+	</section>
+{/if}
 
 <style lang="scss">
 	.cart-banner {

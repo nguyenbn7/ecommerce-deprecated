@@ -91,3 +91,20 @@ class ProjectedProduct(BaseORM):
             self.product_brand,
             self.product_type,
         )
+
+
+class ProjectedDealProduct(BaseORM):
+    __table__ = Product.__table__
+
+    __mapper_args__ = {"exclude_properties": ["product_brand_id", "product_type_id"]}
+
+    def to_dto(self) -> ProductDTO:
+        return ProductDTO(
+            self.id,
+            self.name,
+            self.description,
+            self.price,
+            f"http://localhost:8000/{self.picture_url}",  # TODO: read url from env
+            None,
+            None
+        )
