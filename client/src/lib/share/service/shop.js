@@ -71,6 +71,13 @@ async function getDealProduct() {
     const response = await httpClient.get('products/deal');
     return response.data;
 }
+/**
+ * @returns {Promise<Array<Product>>}
+ */
+async function getNewArrivalProducts() {
+    const response = await httpClient.get('products/new-arrivals');
+    return response.data;
+}
 
 export const ShopService = {
     getProduct,
@@ -78,5 +85,6 @@ export const ShopService = {
     getPageProduct,
     getProductBrands,
     getProductTypes,
-    getDealProduct
+    getDealProduct,
+    getNewArrivalProducts
 };
