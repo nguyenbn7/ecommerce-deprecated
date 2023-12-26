@@ -74,7 +74,7 @@
 					</div>
 					<a
 						href={'#'}
-						class="btn btn-warning rounded-5 px-3 py-2 mt-3"
+						class="btn btn-danger rounded-5 px-3 py-2 mt-3"
 						on:click={() => BasketService.addItemToBasket(product)}
 					>
 						{@html icon(faBasketShopping, { classes: 'me-1' }).html} Add to Basket

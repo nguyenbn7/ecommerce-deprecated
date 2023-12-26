@@ -1,5 +1,7 @@
 <script>
 	import { ShopService } from '$lib/share/service/shop';
+	import { icon } from '@fortawesome/fontawesome-svg-core';
+	import { faBasketShopping } from '@fortawesome/free-solid-svg-icons';
 	import { onMount } from 'svelte';
 
 	/**
@@ -12,7 +14,7 @@
 	});
 </script>
 
-<div class="bg-light pb-5">
+<div class="pb-5" style="background-color: #f5f5f5;">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-8 offset-lg-2 text-center">
@@ -42,7 +44,7 @@
 						<h3>{product.name}</h3>
 						<p class="product-price">{product.price}</p>
 						<a href={'#'} class="btn btn-danger">
-							<i class="fas fa-shopping-cart"></i> Add to Cart
+							{@html icon(faBasketShopping, {classes: "me-1"}).html} Add to Basket
 						</a>
 					</div>
 				</div>
