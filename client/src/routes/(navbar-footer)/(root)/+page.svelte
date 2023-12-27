@@ -1,13 +1,12 @@
 <script>
 	import { APP_NAME } from '$lib/share/constant';
 	import AboutSection from '$lib/component/(root)/(navbar-footer)/(root)/about-section.svelte';
-	import FeatureSection from '$lib/component/(root)/(navbar-footer)/(root)/feature-section.svelte';
 	import DealSection from '$lib/component/(root)/(navbar-footer)/(root)/deal-section.svelte';
-	import DiscountSection from '$lib/component/(root)/(navbar-footer)/(root)/discount-section.svelte';
 	import NewArrivalsSection from '$lib/component/(root)/(navbar-footer)/(root)/new-arrivals-section.svelte';
 	import TestinomialSection from '$lib/component/(root)/(navbar-footer)/(root)/testinomial-section.svelte';
-	import BrandSection from '$lib/component/(root)/(navbar-footer)/(root)/brand-section.svelte';
 	import { onMount } from 'svelte';
+	import Section from '$lib/component/share/section.svelte';
+	import { tns } from 'tiny-slider';
 
 	/**
 	 * @type {HTMLElement}
@@ -23,6 +22,31 @@
 		{ subtitle: 'Unique style', heading: 'Fashionable and Reasonable Price' }
 	];
 
+	const features = [
+		{
+			iconClass: 'fa-solid fa-check',
+			name: 'Quality Product',
+			description: 'Product with long lifespan'
+		},
+		{
+			iconClass: 'fa-solid fa-truck-fast',
+			name: 'Free Shipping',
+			description: 'When order over $100'
+		},
+		{
+			iconClass: 'fa-solid fa-rotate',
+			name: '7-Day Return',
+			description: 'Get refund within 3 days!'
+		},
+		{
+			iconClass: 'fa-solid fa-phone-volume',
+			name: '24/7 Support',
+			description: 'Get support all day'
+		}
+	];
+
+	const logoImages = ['angular.png', 'netcore.png', 'react.png', 'redis.png', 'typescript.png'];
+
 	onMount(async () => {
 		new (await import('bootstrap')).Carousel(heroCarousel, {
 			ride: 'carousel',
@@ -32,6 +56,27 @@
 		heroCarousel.addEventListener('slid.bs.carousel', (event) => {
 			// @ts-ignore
 			active = event.to;
+		});
+
+		tns({
+			container: '.logo-slider',
+			items: 1,
+			autoplay: true,
+			animateDelay: 3,
+			speed: 1000,
+			autoplayButtonOutput: false,
+			controls: false,
+			responsive: {
+				768: {
+					items: 3
+				},
+				576: {
+					items: 2
+				},
+				992: {
+					items: 4
+				}
+			}
 		});
 	});
 </script>
@@ -116,11 +161,35 @@
 	</button>
 </section>
 
-<FeatureSection />
+<section class="features-section">
+	<div class="container">
+		<div class="row py-5">
+			{#each features as feature}
+				<div class="col-lg-3 col-md-6 col-sm-12">
+					<div class="d-flex align-items-center" style="padding: 30px;">
+						<h1 class="text-warning fs-1 fw-bolder me-3">
+							<i class={feature.iconClass}></i>
+						</h1>
+						<span>
+							<h5 class="fw-semibold m-0 mb-1">{feature.name}</h5>
+							<p class="text-muted fw-light">{feature.description}</p>
+						</span>
+					</div>
+				</div>
+			{/each}
+		</div>
+	</div>
+</section>
 
 <DealSection />
 
-<DiscountSection />
+<section class="discount-section">
+	<div class="container">
+		<h3>December sale is on! <br /> with big <span class="text-warning">Discount...</span></h3>
+		<div class="sale-percent"><span>Sale! <br /> Upto</span>50% <span>off</span></div>
+		<a href="/shop" class="btn btn-danger">Shop Now</a>
+	</div>
+</section>
 
 <!-- New Arrivals -->
 <NewArrivalsSection />
@@ -211,7 +280,17 @@
 	</div>
 </div> -->
 
-<BrandSection />
+<section class="brand-section">
+	<Section containerClass="overflow-x-hidden">
+		<div class="row align-items-center justify-content-center logo-slider mt-5">
+			{#each logoImages as image}
+				<div class="single-logo-item col-xl-3 col-sm-6 text-center position-relative">
+					<img src="/images/home/company-logo/{image}" alt={image} />
+				</div>
+			{/each}
+		</div>
+	</Section>
+</section>
 
 <style lang="scss">
 	// Hero section
@@ -275,5 +354,59 @@
 	.animated {
 		-webkit-animation-duration: 1s !important;
 		animation-duration: 1s !important;
+	}
+
+	.features-section {
+		background-color: #f5f5f5;
+	}
+
+	.discount-section {
+		position: relative;
+		background-size: cover;
+		padding: 110px 0px 115px;
+		background-image: url(/images/home/discount/1.jpg);
+
+		& h3 {
+			position: relative;
+			font-size: 50px;
+			line-height: 1.2em;
+			margin-bottom: 0px;
+		}
+
+		& .sale-percent {
+			position: relative;
+			font-size: 60px;
+			font-weight: 700;
+			color: #f28123;
+
+			& span {
+				position: relative;
+				font-size: 24px;
+				line-height: 1.1em;
+				color: #051922;
+				font-weight: 400;
+				text-align: center;
+				margin-right: 10px;
+				display: inline-block;
+			}
+		}
+	}
+
+	.brand-section {
+		.single-logo-item {
+			-webkit-transition: 0.3s;
+			-o-transition: 0.3s;
+			transition: 0.3s;
+
+			& img {
+				max-width: 180px;
+				max-height: 180px;
+				margin: 0 auto;
+			}
+
+			&:hover {
+				opacity: 0.7;
+			}
+		}
 	}
 </style>

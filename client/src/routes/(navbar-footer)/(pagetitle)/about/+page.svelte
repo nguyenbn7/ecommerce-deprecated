@@ -111,7 +111,7 @@
 	<title>{APP_NAME} - About Us</title>
 </svelte:head>
 
-<div class="why-section py-5">
+<section class="why-section py-5">
 	<Section>
 		<div class="row justify-content-between align-items-center">
 			<div class="col-lg-6">
@@ -145,7 +145,7 @@
 			</div>
 		</div>
 	</Section>
-</div>
+</section>
 
 <Section class="bg-light">
 	<div class="mb-4">
