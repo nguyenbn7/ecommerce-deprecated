@@ -1,4 +1,6 @@
 <script>
+	import { onMount } from 'svelte';
+
 	/**
 	 * @type {import("./class").FormField}
 	 */
@@ -23,6 +25,10 @@
 	 * @type {string | null}
 	 */
 	export let successMessage = null;
+
+	onMount(() => {
+		formField.validate();
+	});
 </script>
 
 <label for={id}>{@html label}</label>

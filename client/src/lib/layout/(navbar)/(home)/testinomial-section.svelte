@@ -43,7 +43,7 @@
 <div class="py-5" style="background-color: #f5f5f5;">
 	<div class="container overflow-x-hidden">
 		<h2 class="display-5 fw-light text-center my-5">
-			What Customers Said
+			Customers Thanks
 			<div
 				class="border-bottom mb-5 mt-2 border-4 border-warning mx-auto"
 				style="width: 1.7em;"

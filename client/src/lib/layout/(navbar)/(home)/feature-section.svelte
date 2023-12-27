@@ -3,10 +3,10 @@
 	import { faCheck, faPhoneVolume, faSync, faTruckFast } from '@fortawesome/free-solid-svg-icons';
 
 	const features = [
-		{ icon: faCheck, name: 'Quality Product' },
-		{ icon: faTruckFast, name: 'Free Shipping' },
-		{ icon: faSync, name: '7-Day Return' },
-		{ icon: faPhoneVolume, name: '24/7 Support' }
+		{ icon: faCheck, name: 'Quality Product', description: 'Product with long lifespan' },
+		{ icon: faTruckFast, name: 'Free Shipping', description: 'When order over $100' },
+		{ icon: faSync, name: '7-Day Return', description: 'Get refund within 3 days!' },
+		{ icon: faPhoneVolume, name: '24/7 Support', description: 'Get support all day' }
 	];
 </script>
 
@@ -19,7 +19,10 @@
 						<h1 class="text-warning fs-1 fw-bolder me-3">
 							{@html icon(feature.icon).html}
 						</h1>
-						<h5 class="fw-semibold m-0">{feature.name}</h5>
+						<span>
+							<h5 class="fw-semibold m-0 mb-1">{feature.name}</h5>
+							<p class="text-muted fw-light">{feature.description}</p>
+						</span>
 					</div>
 				</div>
 			{/each}

@@ -86,9 +86,7 @@
 				>
 					{@html icon(faBasketShopping).html}
 					{#if $basket && $basket.items.length}
-						<span
-							class="position-absolute translate-middle p-2 bg-transparent badge rounded-pill text-danger fs-5 cart-no"
-						>
+						<span class="position-absolute translate-middle bg-danger badge rounded-pill">
 							{getCount($basket.items)}
 						</span>
 					{/if}
@@ -97,14 +95,14 @@
 					<a href="/login" class="btn btn-outline-success text-white px-3 me-3"> Login </a>
 				{:else}
 					<a
-						class="nav-btn text-info me-4"
+						class="nav-btn text-info me-3 d-flex align-items-center"
 						data-bs-toggle="dropdown"
 						aria-expanded="false"
 						href={'#'}
 						title="Profile"
 					>
 						{@html icon(faCircleUser, {
-							classes: ['fs-2']
+							classes: ['fs-4']
 						}).html}
 					</a>
 					<ul class="dropdown-menu dropdown-menu-end me-5">
@@ -144,11 +142,6 @@
 		color: var(--bs-warning) !important;
 		pointer-events: none;
 		cursor: default;
-	}
-
-	.cart-no {
-		top: 20%;
-		left: 100%;
 	}
 
 	.logo {

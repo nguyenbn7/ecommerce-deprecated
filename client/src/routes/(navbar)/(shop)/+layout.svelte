@@ -1,10 +1,5 @@
 <script>
 	import PageTitle from '$lib/layout/(navbar)/(shop)/page-title.svelte';
-	const mapTitle = [
-		{ link: '/shop', name: 'Our Shop' },
-		{ link: '/about', name: 'About Us' },
-		{ link: '/blog', name: 'Blog' }
-	];
 </script>
 
 <PageTitle />

@@ -24,10 +24,10 @@ class Basket:
 
 class CustomerBasketItem(BaseModel):
     id: int
-    product_name: str
+    productName: str
     price: float
     quantity: int
-    picture_url: str
+    pictureUrl: str
     brand: str
     type: str
 

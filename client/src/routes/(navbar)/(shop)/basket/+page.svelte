@@ -3,6 +3,8 @@
 	import { ECOMMERCE_NAME } from '$lib/share/constant';
 	import { currency } from '$lib/share/helper';
 	import { BasketService, basket } from '$lib/share/service/basket';
+	import { icon } from '@fortawesome/fontawesome-svg-core';
+	import { faCircleMinus, faCross, faPlusCircle, faX } from '@fortawesome/free-solid-svg-icons';
 
 	const { addItemToBasket, removeItemFromBasket } = BasketService;
 </script>
@@ -45,8 +47,8 @@
 								<th>
 									<div class="p-2 d-inline-block">
 										<img
-											src={item.picture_url}
-											alt={item.product_name}
+											src={item.pictureUrl}
+											alt={item.productName}
 											class="img-fluid"
 											style="max-height: 50px;"
 										/>
@@ -54,7 +56,7 @@
 									<div class="ms-3 d-inline-block align-middle">
 										<h5 class="mb-0">
 											<a href="/shop/{item.id}" class="text-dark text-decoration-none">
-												{item.product_name}
+												{item.productName}
 											</a>
 										</h5>
 										<span class="text-muted fst-italic"> Type: {item.type} </span>
@@ -70,14 +72,14 @@
 											on:click={() => removeItemFromBasket(item.id, 1)}
 											disabled={item.quantity < 1}
 										>
-											<i class="bi bi-dash-circle" style="font-size: 2em;"></i>
+											<i>{@html icon(faCircleMinus).html}</i>
 										</button>
-										<strong style="font-size: 1.5em;">{item.quantity}</strong>
+										<strong class="fw-semibold" style="font-size: 1.5em;">{item.quantity}</strong>
 										<button
 											class="p-0 m-0 ms-2 border-0 quantity-btn"
 											on:click={() => addItemToBasket(item, 1)}
 										>
-											<i class="bi bi-plus-circle" style="font-size: 2em;"></i>
+											<i>{@html icon(faPlusCircle).html}</i>
 										</button>
 									</div>
 								</td>
@@ -90,7 +92,8 @@
 										href={'#'}
 										on:click={() => removeItemFromBasket(item.id, item.quantity)}
 									>
-										<i class="bi bi-trash" style="font-size: 2em; cursor: pointer;"></i>
+										<i class="remove-btn">{@html icon(faX).html}</i>
+										<i class="bi bi-trash"></i>
 									</a>
 								</td>
 							</tr>
@@ -124,6 +127,10 @@
 		background-color: transparent;
 	}
 
+	.quantity-btn i {
+		font-size: 2em;
+	}
+
 	.quantity-btn:hover i {
 		color: rgba(245, 197, 53, 0.8);
 	}
@@ -135,5 +142,10 @@
 	.quantity-btn:disabled i {
 		color: rgb(207, 183, 109, 0.65);
 		pointer-events: none;
+	}
+
+	.remove-btn {
+		font-size: 1.5rem;
+		cursor: pointer;
 	}
 </style>

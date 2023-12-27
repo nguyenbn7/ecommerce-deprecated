@@ -11,7 +11,7 @@ export class AddressFormGroup extends FormGroup {
 		);
 		this.phoneNumber = new FormField(Validators.checkRequired('Phone number is required'));
 		this.address = new FormField(Validators.checkRequired('Address is required'));
-		this.address2 = new FormField();
+		this.address2 = new FormField(Validators.isOptional());
 	}
 }
 

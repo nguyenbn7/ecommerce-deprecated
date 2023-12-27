@@ -43,10 +43,10 @@ type Basket = {
 
 type BasketItem = {
 	id: number;
-	product_name: string;
+	productName: string;
 	price: number;
 	quantity: number;
-	picture_url: string;
+	pictureUrl: string;
 	brand: string;
 	type: string;
 };
@@ -98,22 +98,22 @@ type ErrorResponse = {
 
 // CHECKOUT
 type Order = {
-	basket_id: string;
-	billing_address: OrderAddress;
-	shipping_address: OrderAddress?;
-	delivery_method_id: number;
-	payment_type: string;
+	basketId: string;
+	billingAddress: OrderAddress;
+	shippingAddress: OrderAddress?;
+	deliveryMethodId: number;
+	paymentType: string;
 };
 
 type OrderAddress = {
-	full_name: string;
+	fullName: string;
 	email: string;
-	phone_number: string;
+	phoneNumber: string;
 	address: string;
 	address2: string;
 	country: string;
 	state: string;
-	zip_code: string;
+	zipCode: string;
 };
 
 type DeliveryMethod = {

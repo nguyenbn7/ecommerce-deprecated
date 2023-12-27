@@ -78,37 +78,37 @@
 		 */
 		const order = {};
 
-		order.basket_id = $basket?.id ?? '';
+		order.basketId = $basket?.id ?? '';
 		/**
 		 * @type {OrderAddress}
 		 */
-		order.billing_address = {
-			full_name: orderForm.billingAddress.fullName.value ?? '',
+		order.billingAddress = {
+			fullName: orderForm.billingAddress.fullName.value ?? '',
 			email: orderForm.billingAddress.email.value ?? '',
-			phone_number: orderForm.billingAddress.phoneNumber.value ?? '',
+			phoneNumber: orderForm.billingAddress.phoneNumber.value ?? '',
 			address: orderForm.billingAddress.address.value ?? '',
 			address2: orderForm.billingAddress.address2.value ?? '',
 			country: 'USA',
 			state: 'Texas',
-			zip_code: '74494'
+			zipCode: '74494'
 		};
 
 		/**
 		 * @type {OrderAddress}
 		 */
-		order.shipping_address = {
-			full_name: orderForm.shippingAddress.fullName.value,
+		order.shippingAddress = {
+			fullName: orderForm.shippingAddress.fullName.value,
 			email: orderForm.shippingAddress.email.value,
-			phone_number: orderForm.shippingAddress.phoneNumber.value,
+			phoneNumber: orderForm.shippingAddress.phoneNumber.value,
 			address: orderForm.shippingAddress.address.value,
 			address2: orderForm.shippingAddress.address.value,
 			country: 'USA',
 			state: 'Texas',
-			zip_code: '74494'
+			zipCode: '74494'
 		};
 
-		order.payment_type = paymentType;
-		order.delivery_method_id = deliveryMethodId;
+		order.paymentType = paymentType;
+		order.deliveryMethodId = deliveryMethodId;
 
 		await OrderService.createOrder(order);
 	}

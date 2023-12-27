@@ -66,11 +66,23 @@ function isPasswordComplexEnough(
 	};
 }
 
+/**
+ * @returns {Validator}
+ */
+function isOptional() {
+	let errorMessage = '';
+	return {
+		check: (value) => true,
+		errorMessage
+	}
+}
+
 export const Validators = {
 	checkRequired,
 	checkMaxLength,
 	containsAlnumAndSpace,
 	checkEmailFormat,
 	doesFieldEqualTo,
-	isPasswordComplexEnough
+	isPasswordComplexEnough,
+	isOptional
 };

@@ -84,10 +84,10 @@ function createBasket() {
 function mapProductItemToBasketItem(item) {
     return {
         id: item.id,
-        product_name: item.name,
+        productName: item.name,
         price: item.price,
         quantity: 0,
-        picture_url: item.pictureUrl,
+        pictureUrl: item.pictureUrl,
         brand: item.productBrand,
         type: item.productType
     };

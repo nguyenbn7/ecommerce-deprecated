@@ -24,7 +24,7 @@
 					<li class="list-group-item d-flex justify-content-between align-items-center lh-sm">
 						<div class="row align-items-center">
 							<div class="col-3 p-1 position-relative">
-								<img src={item.picture_url} class="img-thumbnail" alt={item.product_name} />
+								<img src={item.pictureUrl} class="img-thumbnail" alt={item.productName} />
 								<span
 									class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary"
 								>
@@ -32,7 +32,7 @@
 								</span>
 							</div>
 							<div class="col-8 ms-1">
-								<h5 class="my-0">{item.product_name}</h5>
+								<h5 class="my-0">{item.productName}</h5>
 							</div>
 						</div>
 						<span class="text-body-secondary">{currency(item.price * item.quantity)}</span>
