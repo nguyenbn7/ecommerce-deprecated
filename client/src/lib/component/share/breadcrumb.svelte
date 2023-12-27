@@ -61,7 +61,8 @@
 <script>
 	export { styleClasses as class };
 	let styleClasses = '';
-	styleClasses = 'breadcrumb' + styleClasses.trim();
+	styleClasses = 'breadcrumb ' + styleClasses.trim();
+	styleClasses.trim();
 	/**
 	 * @type {{alias: string, href: string | null}[]}
 	 */
