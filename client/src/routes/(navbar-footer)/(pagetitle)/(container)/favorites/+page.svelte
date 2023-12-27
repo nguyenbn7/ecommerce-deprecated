@@ -1,0 +1,7 @@
+<script>
+	import { APP_NAME } from '$lib/constant';
+</script>
+
+<svelte:head>
+	<title>{APP_NAME} - Wish list</title>
+</svelte:head>
