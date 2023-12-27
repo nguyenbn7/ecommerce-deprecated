@@ -1,13 +1,5 @@
 <script>
-	import { icon } from '@fortawesome/fontawesome-svg-core';
-	import {
-		faFacebookF,
-		faInstagram,
-		faLinkedinIn,
-		faTwitter,
-		faYoutube
-	} from '@fortawesome/free-brands-svg-icons';
-	import { faEnvelope, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons';
+	import { APP_NAME } from '$lib/constant';
 </script>
 
 <footer class="bg-light-subtle">
@@ -22,23 +14,22 @@
 								href="http://maps.google.com/?q=199 Avenue S, Lubbock, TX 79415, USA"
 								class="nav-link p-0 text-body-secondary"
 							>
-								{@html icon(faLocationDot, { classes: ['me-1'] }).html} 199 Avenue S, Lubbock, Texas
-								79415, USA
+								<i class="fa-solid fa-location-dot me-1"></i> 199 Avenue S, Lubbock, Texas 79415, USA
 							</a>
 						</li>
 
 						<li class="nav-item mb-2">
 							<a href="mailto:info@example.com" class="nav-link p-0 text-body-secondary">
-								{@html icon(faEnvelope, { classes: ['me-1'] }).html} info@example.com
+								<i class="fa-solid fa-envelope me-1"></i> info@example.com
 							</a>
 						</li>
 
 						<li class="nav-item mb-2">
 							<a href="tel:+1999999999" class="nav-link p-0 text-body-secondary">
-								{@html icon(faPhone, { classes: ['me-1'] }).html} (999) 999-9999
+								<i class="fa-solid fa-phone me-1"></i> (999) 999-9999
 							</a>
 						</li>
-
+						<!-- TODO: move this to contact page -->
 						<!-- <li class="nav-item mt-4 mb-3">
 							<iframe
 								class="w-100"
@@ -54,7 +45,7 @@
 				<div class="col-md-8">
 					<div class="row">
 						<div class="col-3 col-md-2 mb-3">
-							<h5>About Skinet</h5>
+							<h5>About {APP_NAME}</h5>
 							<ul class="nav flex-column">
 								<li class="nav-item mb-2">
 									<a
@@ -172,19 +163,19 @@
 				<div class="col-12 col-md-4 text-center">
 					<div class="d-inline-flex align-items-center fs-5">
 						<a class="px-2" href="https://www.facebook.com/">
-							<i>{@html icon(faFacebookF).html}</i>
+							<i class="fa-brands fa-facebook"></i>
 						</a>
 						<a class="px-2" href="https://twitter.com/">
-							<i>{@html icon(faTwitter).html}</i>
+							<i class="fa-brands fa-square-x-twitter"></i>
 						</a>
 						<a class="px-2" href="https://www.linkedin.com/">
-							<i>{@html icon(faLinkedinIn).html}</i>
+							<i class="fa-brands fa-linkedin"></i>
 						</a>
 						<a class="px-2" href="https://www.instagram.com/">
-							<i>{@html icon(faInstagram).html}</i>
+							<i class="fa-brands fa-instagram"></i>
 						</a>
 						<a class="ps-2" href="https://www.youtube.com/">
-							<i>{@html icon(faYoutube).html}</i>
+							<i class="fa-brands fa-youtube"></i>
 						</a>
 					</div>
 				</div>

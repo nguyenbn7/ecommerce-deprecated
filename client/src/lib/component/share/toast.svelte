@@ -19,13 +19,6 @@
 </script>
 
 <script>
-	import { icon } from '@fortawesome/fontawesome-svg-core';
-	import {
-		faCheckCircle,
-		faExclamationCircle,
-		faInfoCircle,
-		faTimesCircle
-	} from '@fortawesome/free-solid-svg-icons';
 	import { onMount } from 'svelte';
 
 	/**
@@ -40,22 +33,22 @@
 	/**
 	 * @param {Toastr.Type | null} toastType
 	 */
-	function getToastIcon(toastType) {
+	function getToastIconClass(toastType) {
 		switch (toastType) {
 			case 'DANGER':
-				return faTimesCircle;
+				return 'fa-solid fa-circle-xmark';
 			case 'INFO':
-				return faInfoCircle;
+				return 'fa-solid fa-circle-info';
 			case 'SUCCESS':
-				return faCheckCircle;
+				return 'fa-solid fa-circle-check';
 			case 'WARNING':
-				return faExclamationCircle;
+				return 'fa-solid fa-circle-exclamation';
 			default:
 				return null;
 		}
 	}
 
-	const typeIcon = getToastIcon(type);
+	const classIcon = getToastIconClass(type);
 
 	onMount(() => {
 		let toast = new Toast(ele);
@@ -84,14 +77,9 @@
 		class:bg-warning={type === 'WARNING'}
 		class:bg-info={type === 'INFO'}
 	>
-		{#if typeIcon}
+		{#if classIcon}
 			<div class="col-3 text-center ps-0">
-				{@html icon(typeIcon, {
-					styles: {
-						'font-size': '2.5em',
-						margin: '0.25em 0'
-					}
-				}).html}
+				<i class={`${classIcon} toast-icon`}></i>
 			</div>
 		{/if}
 		<div class="col-9 py-2 pe-1 fs-6">
@@ -99,3 +87,10 @@
 		</div>
 	</div>
 </div>
+
+<style lang="scss">
+	.toast-icon {
+		font-size: 2.5em;
+		margin: 0.25em 0;
+	}
+</style>

@@ -1,6 +1,4 @@
 <script>
-	import { icon } from '@fortawesome/fontawesome-svg-core';
-	import { faQuoteRight } from '@fortawesome/free-solid-svg-icons';
 	import { onMount } from 'svelte';
 	import { tns } from 'tiny-slider';
 
@@ -61,7 +59,7 @@
 							"{client.quote}"
 						</p>
 						<span class="quote-icon">
-							{@html icon(faQuoteRight).html}
+							<i class="fa-solid fa-quote-right"></i>
 						</span>
 					</div>
 				</div>

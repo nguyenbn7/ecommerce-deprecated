@@ -3,14 +3,6 @@
 	import { readMoreString } from '$lib/helper';
 	import { basket } from '$lib/service';
 	import { AccountService, currentUser } from '$lib/service/_account';
-	import { icon } from '@fortawesome/fontawesome-svg-core';
-	import {
-		faBasketShopping,
-		faCircleUser,
-		faHeart,
-		faRightFromBracket,
-		faSearch
-	} from '@fortawesome/free-solid-svg-icons';
 	import { onMount } from 'svelte';
 
 	/**
@@ -73,9 +65,11 @@
 				{/each}
 			</ul>
 			<ul class="navbar-nav ms-md-auto mb-2 mb-lg-0">
-				<a href={'#'} class="nav-link text-white me-3"> {@html icon(faSearch).html}</a>
+				<a href={'#'} class="nav-link text-white me-3">
+					<i class="fa-solid fa-magnifying-glass"></i>
+				</a>
 				<a class="nav-link text-white me-3" href="/favorites" title="Wish list">
-					{@html icon(faHeart).html}
+					<i class="fa-solid fa-heart"></i>
 				</a>
 				<a
 					class="nav-link text-white me-3"
@@ -84,7 +78,7 @@
 					href="/basket"
 					title="Basket"
 				>
-					{@html icon(faBasketShopping).html}
+					<i class="fa-solid fa-basket-shopping"></i>
 					{#if $basket && $basket.items.length}
 						<span class="position-absolute translate-middle bg-danger badge rounded-pill">
 							{getCount($basket.items)}
@@ -101,9 +95,7 @@
 						href={'#'}
 						title="Profile"
 					>
-						{@html icon(faCircleUser, {
-							classes: ['fs-4']
-						}).html}
+						<i class="fa-regular fa-circle-user fs-4"></i>
 					</a>
 					<ul class="dropdown-menu dropdown-menu-end me-5">
 						<li>
@@ -124,7 +116,7 @@
 						<li><hr class="dropdown-divider" /></li>
 						<li>
 							<a class="dropdown-item" href={'#'} on:click={AccountService.logout}>
-								{@html icon(faRightFromBracket).html} Logout
+								<i class="fa-solid fa-right-from-bracket"></i> Logout
 							</a>
 						</li>
 					</ul>

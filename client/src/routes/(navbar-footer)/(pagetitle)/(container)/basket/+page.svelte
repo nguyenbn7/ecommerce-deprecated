@@ -3,8 +3,6 @@
 	import { APP_NAME } from '$lib/constant';
 	import { currency } from '$lib/helper';
 	import { BasketService, basket } from '$lib/service';
-	import { icon } from '@fortawesome/fontawesome-svg-core';
-	import { faCircleMinus, faPlusCircle, faX } from '@fortawesome/free-solid-svg-icons';
 
 	const { addItemToBasket, removeItemFromBasket } = BasketService;
 </script>
@@ -72,14 +70,14 @@
 											on:click={() => removeItemFromBasket(item.id, 1)}
 											disabled={item.quantity < 1}
 										>
-											<i>{@html icon(faCircleMinus).html}</i>
+											<i class="fa-solid fa-circle-minus"></i>
 										</button>
 										<strong class="fw-semibold" style="font-size: 1.5em;">{item.quantity}</strong>
 										<button
 											class="p-0 m-0 ms-2 border-0 quantity-btn"
 											on:click={() => addItemToBasket(item, 1)}
 										>
-											<i>{@html icon(faPlusCircle).html}</i>
+											<i class="fa-solid fa-circle-plus"></i>
 										</button>
 									</div>
 								</td>
@@ -92,8 +90,7 @@
 										href={'#'}
 										on:click={() => removeItemFromBasket(item.id, item.quantity)}
 									>
-										<i class="remove-btn">{@html icon(faX).html}</i>
-										<i class="bi bi-trash"></i>
+										<i class="fa-solid fa-x remove-btn"></i>
 									</a>
 								</td>
 							</tr>

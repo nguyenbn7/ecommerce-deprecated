@@ -1,7 +1,5 @@
 <script>
 	import { ProductService } from '$lib/service';
-	import { icon } from '@fortawesome/fontawesome-svg-core';
-	import { faBasketShopping } from '@fortawesome/free-solid-svg-icons';
 	import { onMount } from 'svelte';
 
 	/**
@@ -44,7 +42,7 @@
 						<h3>{product.name}</h3>
 						<p class="product-price">{product.price}</p>
 						<a href={'#'} class="btn btn-danger">
-							{@html icon(faBasketShopping, { classes: 'me-1' }).html} Add to Basket
+							<i class="fa-solid fa-basket-shopping me-1"></i> Add to Basket
 						</a>
 					</div>
 				</div>

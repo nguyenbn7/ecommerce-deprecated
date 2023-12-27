@@ -1,7 +1,5 @@
 <script>
 	import { BasketService, ProductService } from '$lib/service';
-	import { icon } from '@fortawesome/fontawesome-svg-core';
-	import { faBasketShopping } from '@fortawesome/free-solid-svg-icons';
 	import { onMount } from 'svelte';
 
 	/**
@@ -75,7 +73,7 @@
 						class="btn btn-danger rounded-5 px-3 py-2 mt-3"
 						on:click={() => BasketService.addItemToBasket(product)}
 					>
-						{@html icon(faBasketShopping, { classes: 'me-1' }).html} Add to Basket
+						<i class="fa-solid fa-basket-shopping me-1"></i> Add to Basket
 					</a>
 				</div>
 			</div>

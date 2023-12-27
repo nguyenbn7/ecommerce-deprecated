@@ -1,7 +1,7 @@
 <script>
-	import '@fortawesome/fontawesome-svg-core/styles.css';
-	import 'animate.css';
-	import '~bootswatch/dist/flatly/bootstrap.min.css';
+	import 'animate.css/animate.min.css';
+	import 'bootswatch/dist/flatly/bootstrap.min.css';
+	import '@fortawesome/fontawesome-free/css/all.min.css';
 	import '$lib/style/tinySlider.scss';
 	import Spinner, { SpinnerService } from '$lib/share/component/spinner.svelte';
 	import BackToTopBtn from '$lib/component/(root)/back-to-top-btn.svelte';

@@ -1,7 +1,5 @@
 <script>
 	import { onMount } from 'svelte';
-	import { icon } from '@fortawesome/fontawesome-svg-core';
-	import { faSearch } from '@fortawesome/free-solid-svg-icons';
 	import { ProductService } from '$lib/service';
 	import { APP_NAME } from '$lib/constant';
 	import PagingHeader from '$lib/component/(root)/(navbar-footer)/(pagetitle)/(container)/shop/paging-header.svelte';
@@ -157,7 +155,7 @@
 						on:keyup={onKeyUpSearch}
 					/>
 					<button class="btn btn-outline-secondary" type="button" on:click={onSearch}>
-						<i>{@html icon(faSearch).html}</i>
+						<i class="fa-solid fa-magnifying-glass"></i>
 					</button>
 				</div>
 			</div>

@@ -1,11 +1,7 @@
 <script>
-	import { config, icon } from '@fortawesome/fontawesome-svg-core';
-	import { faAnglesUp } from '@fortawesome/free-solid-svg-icons';
 	import { fade } from 'svelte/transition';
 	import jq from 'jquery';
 	import { onMount } from 'svelte';
-
-	config.autoAddCss = false;
 
 	/**
 	 * @type {number}
@@ -33,7 +29,7 @@
 		transition:fade={{ duration: 400 }}
 		on:click={scrollToTop}
 	>
-		{@html icon(faAnglesUp).html}
+		<i class="fa-solid fa-angles-up"></i>
 	</a>
 {/if}
 
