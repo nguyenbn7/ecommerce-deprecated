@@ -2,6 +2,7 @@
 	import '@fortawesome/fontawesome-svg-core/styles.css';
 	import 'animate.css';
 	import '~bootswatch/dist/flatly/bootstrap.min.css';
+	import '$lib/style/tinySlider.scss';
 	import Spinner, { SpinnerService } from '$lib/share/component/spinner.svelte';
 	import BackToTopBtn from '$lib/component/(root)/back-to-top-btn.svelte';
 	import Toastr from '$lib/component/share/toastr.svelte';
@@ -16,4 +17,3 @@
 <BackToTopBtn />
 
 <slot />
-

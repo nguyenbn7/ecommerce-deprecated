@@ -8,6 +8,9 @@
 		faLinkedinIn,
 		faTwitter
 	} from '@fortawesome/free-brands-svg-icons';
+	import { faBoxesPacking, faPhone, faSync, faTruckFast } from '@fortawesome/free-solid-svg-icons';
+	import { onMount } from 'svelte';
+	import { tns } from 'tiny-slider';
 
 	const teamMembers = [
 		{
@@ -39,13 +42,120 @@
 				'Separated they live in. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.'
 		}
 	];
+
+	const techStackImages = [
+		{
+			image: 'sveltekit.png',
+			link: 'https://kit.svelte.dev/'
+		},
+		{
+			image: 'fastapi.png',
+			link: 'https://fastapi.tiangolo.com/'
+		},
+		{
+			image: 'postgresql.png',
+			link: 'https://www.postgresql.org/'
+		},
+		{
+			image: 'docker.png',
+			link: 'https://www.docker.com/'
+		},
+		{
+			image: 'bootstrap.png',
+			link: 'https://getbootstrap.com/'
+		}
+	];
+
+	const features = [
+		{
+			icon: faTruckFast,
+			name: 'Fast &amp; Free Shipping',
+			description:
+				'Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.'
+		},
+		{
+			icon: faBoxesPacking,
+			name: 'Easy to Shop',
+			description:
+				'Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.'
+		},
+		{
+			icon: faPhone,
+			name: '24/7 Support',
+			description:
+				'Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.'
+		},
+		{
+			icon: faSync,
+			name: 'Free Returns',
+			description:
+				'Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.'
+		}
+	];
+
+	onMount(() => {
+		tns({
+			items: 1,
+			autoplay: true,
+			speed: 400,
+			autoplayButtonOutput: false,
+			controls: false,
+			responsive: {
+				768: {
+					items: 3
+				},
+				576: {
+					items: 2
+				},
+				992: {
+					items: 4
+				}
+			}
+		});
+	});
 </script>
 
 <svelte:head>
-	<title>{APP_NAME} - About</title>
+	<title>{APP_NAME} - About Us</title>
 </svelte:head>
 
-<Section class="bg-white">
+<div class="why-section py-5">
+	<Section>
+		<div class="row justify-content-between align-items-center">
+			<div class="col-lg-6">
+				<h2 class="section-title">
+					Why <span class="fw-bold blue">{APP_NAME}</span>
+				</h2>
+				<p>
+					Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate
+					velit imperdiet dolor tempor tristique.
+				</p>
+
+				<div class="row my-5">
+					{#each features as feature}
+						<div class="col-6 col-md-6">
+							<div class="feature">
+								<div class="icon">
+									{@html icon(feature.icon, { classes: ['fs-4'] }).html}
+								</div>
+								<h3 class="fw-semibold">{@html feature.name}</h3>
+								<p>{feature.description}</p>
+							</div>
+						</div>
+					{/each}
+				</div>
+			</div>
+
+			<div class="col-lg-5">
+				<div class="img-wrap">
+					<img src="/images/about/why-section/why-us.jpg" alt="why-us" class="img-fluid" />
+				</div>
+			</div>
+		</div>
+	</Section>
+</div>
+
+<Section class="bg-light">
 	<div class="mb-4">
 		<h2 class="display-4 fw-light">
 			Our Story
@@ -75,9 +185,36 @@
 	</div>
 </Section>
 
-<!-- <Techstack /> -->
+<Section containerClass="overflow-x-hidden py-5">
+	<div class="mb-4">
+		<h2 class="display-4 fw-light text-end">
+			Our Tech Stacks
+			<div
+				class="border-bottom mb-5 mt-2 border-4 border-warning ms-auto"
+				style="width: 1.7em;"
+			></div>
+		</h2>
+		<div class="row align-items-center justify-content-center slider">
+			{#each techStackImages as techStack}
+				<div class="col-xl-3 col-sm-6 text-center position-relative cursor-pointer techstack">
+					<div
+						class="shadow-md techstack-img rounded"
+						style="background-image: url(/images/about/techstack/{techStack.image});"
+					></div>
+					<a
+						href={techStack.link}
+						class="btn btn-danger rounded-pill position-absolute techstack-btn"
+						style="top: 37%; left: 37%"
+					>
+						Learn More
+					</a>
+				</div>
+			{/each}
+		</div>
+	</div>
+</Section>
 
-<Section>
+<Section class="bg-light">
 	<div class="row mb-4">
 		<h2 class="display-4 fw-light">
 			Our Team
@@ -128,3 +265,119 @@
 		{/each}
 	</div>
 </Section>
+
+<style lang="scss">
+	.blue {
+		color: #0d6efd;
+	}
+
+	.section-title {
+		color: #2f2f2f;
+	}
+
+	.why-section {
+		& .img-wrap {
+			position: relative;
+			&::before {
+				position: absolute;
+				content: '';
+				width: 255px;
+				height: 217px;
+				background-image: url('/images/about/why-section/dots-yellow.svg');
+				background-repeat: no-repeat;
+				background-size: contain;
+				-webkit-transform: translate(-40%, -40%);
+				-ms-transform: translate(-40%, -40%);
+				transform: translate(-40%, -40%);
+				z-index: -1;
+			}
+			& img {
+				border-radius: 20px;
+			}
+		}
+	}
+
+	.feature {
+		margin-bottom: 30px;
+
+		& .icon {
+			display: inline-block;
+			position: relative;
+			margin-bottom: 20px;
+
+			&::before {
+				content: '';
+				width: 33px;
+				height: 33px;
+				position: absolute;
+				right: -8px;
+				bottom: 0;
+			}
+		}
+
+		& h3 {
+			font-size: 14px;
+			color: #2f2f2f;
+		}
+
+		& p {
+			font-size: 14px;
+			line-height: 22px;
+			color: #6a6a6a;
+		}
+	}
+
+	.social-link {
+		width: 30px;
+		height: 30px;
+		border: 1px solid #ddd;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #666;
+		border-radius: 50%;
+		transition: all 0.3s;
+		font-size: 0.9rem;
+
+		&:focus,
+		&:hover {
+			background: #ddd;
+			text-decoration: none;
+			color: #555;
+		}
+	}
+
+	.cursor-pointer {
+		cursor: pointer;
+	}
+
+	.techstack-img {
+		width: 100%;
+		height: 9em;
+		background-size: 100% 100%;
+	}
+
+	.techstack:hover .techstack-btn {
+		opacity: 1;
+		animation: fly 0.1s linear;
+	}
+
+	@keyframes fly {
+		0% {
+			transform: translateY(50%);
+		}
+		100% {
+			transform: translateY(0%);
+		}
+	}
+
+	.techstack:hover .techstack-img {
+		filter: blur(1.7px);
+	}
+
+	.techstack-btn {
+		opacity: 0;
+	}
+
+	/** background-color: #f5f5f5; */
+</style>

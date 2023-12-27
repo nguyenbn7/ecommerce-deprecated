@@ -5,7 +5,7 @@
 	$: breadcrumbs = breadcrumbService.buildAliasPaths($page);
 </script>
 
-<div class="container-fluid bg-secondary pb-2 mb-5 page-title">
+<div class="container-fluid bg-secondary pb-2 pb-5 page-title">
 	<div
 		class="d-flex flex-column align-items-center justify-content-center"
 		style="min-height: 300px"

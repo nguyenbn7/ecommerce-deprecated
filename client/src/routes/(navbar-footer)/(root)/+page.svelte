@@ -1,5 +1,4 @@
 <script>
-	import '$lib/style/tinySlider.scss';
 	import AboutSection from '$lib/component/(root)/(navbar-footer)/(root)/about-section.svelte';
 	import { APP_NAME } from '$lib/constant';
 	import HeroSection from '$lib/component/(root)/(navbar-footer)/(root)/hero-section.svelte';
