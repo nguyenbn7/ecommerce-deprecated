@@ -1,14 +1,6 @@
 <script>
 	import Section from '$lib/component/share/section.svelte';
-	import { APP_NAME } from '$lib/constant';
-	import { icon } from '@fortawesome/fontawesome-svg-core';
-	import {
-		faFacebookF,
-		faInstagram,
-		faLinkedinIn,
-		faTwitter
-	} from '@fortawesome/free-brands-svg-icons';
-	import { faBoxesPacking, faPhone, faSync, faTruckFast } from '@fortawesome/free-solid-svg-icons';
+	import { APP_NAME } from '$lib/share/constant';
 	import { onMount } from 'svelte';
 	import { tns } from 'tiny-slider';
 
@@ -68,25 +60,25 @@
 
 	const features = [
 		{
-			icon: faTruckFast,
+			iconClass: 'fa-solid fa-truck-fast',
 			name: 'Fast &amp; Free Shipping',
 			description:
 				'Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.'
 		},
 		{
-			icon: faBoxesPacking,
+			iconClass: 'fa-solid fa-box-open',
 			name: 'Easy to Shop',
 			description:
 				'Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.'
 		},
 		{
-			icon: faPhone,
+			iconClass: 'fa-solid fa-phone',
 			name: '24/7 Support',
 			description:
 				'Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.'
 		},
 		{
-			icon: faSync,
+			iconClass: 'fa-solid fa-rotate',
 			name: 'Free Returns',
 			description:
 				'Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.'
@@ -136,7 +128,7 @@
 						<div class="col-6 col-md-6">
 							<div class="feature">
 								<div class="icon">
-									{@html icon(feature.icon, { classes: ['fs-4'] }).html}
+									<i class="fs-4 {feature.iconClass}"></i>
 								</div>
 								<h3 class="fw-semibold">{@html feature.name}</h3>
 								<p>{feature.description}</p>
@@ -241,22 +233,22 @@
 					<ul class="social mb-0 list-inline mt-3">
 						<li class="list-inline-item">
 							<a href="https://www.facebook.com/" class="social-link">
-								<i> {@html icon(faFacebookF).html} </i>
+								<i class="fa-brands fa-facebook-f"></i>
 							</a>
 						</li>
 						<li class="list-inline-item">
 							<a href="https://twitter.com/" class="social-link">
-								<i> {@html icon(faTwitter).html} </i>
+								<i class="fa-brands fa-x-twitter"></i>
 							</a>
 						</li>
 						<li class="list-inline-item">
 							<a href="https://www.instagram.com/" class="social-link">
-								<i>{@html icon(faInstagram).html}</i>
+								<i class="fa-brands fa-instagram"></i>
 							</a>
 						</li>
 						<li class="list-inline-item">
 							<a href="https://www.linkedin.com/" class="social-link">
-								<i>{@html icon(faLinkedinIn).html}</i>
+								<i class="fa-brands fa-linkedin-in"></i>
 							</a>
 						</li>
 					</ul>
@@ -267,6 +259,7 @@
 </Section>
 
 <style lang="scss">
+	// TODO: re style this
 	.blue {
 		color: #0d6efd;
 	}

@@ -1,5 +1,5 @@
 <script>
-	import { APP_NAME } from '$lib/constant';
+	import { APP_NAME } from '$lib/share/constant';
 </script>
 
 <footer class="bg-light-subtle">

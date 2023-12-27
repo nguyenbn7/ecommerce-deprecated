@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
-	import { ProductService } from '$lib/service';
-	import { APP_NAME } from '$lib/constant';
+	import { ProductService } from '$lib/share/service';
+	import { APP_NAME } from '$lib/share/constant';
 	import PagingHeader from '$lib/component/(root)/(navbar-footer)/(pagetitle)/(container)/shop/paging-header.svelte';
 	import ProductItem from '$lib/component/(root)/(navbar-footer)/(pagetitle)/(container)/shop/product-item.svelte';
 	import Pagination from '$lib/component/share/pagination.svelte';

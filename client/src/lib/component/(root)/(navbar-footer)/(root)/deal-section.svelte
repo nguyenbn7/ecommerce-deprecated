@@ -1,5 +1,5 @@
 <script>
-	import { BasketService, ProductService } from '$lib/service';
+	import { BasketService, ProductService } from '$lib/share/service';
 	import { onMount } from 'svelte';
 
 	/**

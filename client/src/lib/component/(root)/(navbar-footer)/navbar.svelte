@@ -1,8 +1,8 @@
 <script>
 	import { page } from '$app/stores';
-	import { readMoreString } from '$lib/helper';
-	import { basket } from '$lib/service';
-	import { AccountService, currentUser } from '$lib/service/_account';
+	import { readMoreString } from '$lib/share/helper';
+	import { basket } from '$lib/share/service';
+	import { AccountService, currentUser } from '$lib/share/service/_account';
 	import { onMount } from 'svelte';
 
 	/**

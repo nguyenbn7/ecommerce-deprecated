@@ -1,8 +1,6 @@
 <script>
-	import { currency } from '$lib/helper';
-	import { BasketService } from '$lib/service';
-	import { icon } from '@fortawesome/fontawesome-svg-core';
-	import { faBasketShopping, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+	import { currency } from '$lib/share/helper';
+	import { BasketService } from '$lib/share/service';
 
 	/**
 	 * @type {Product}
@@ -19,10 +17,10 @@
 				title="Add to basket"
 				on:click={() => BasketService.addItemToBasket(product)}
 			>
-				{@html icon(faBasketShopping).html}
+				<i class="fa-solid fa-basket-shopping"></i>
 			</button>
 			<a class="btn btn-primary" href="/shop/{product.id}" title="Detail">
-				{@html icon(faCircleInfo).html}
+				<i class="fa-solid fa-info"></i>
 			</a>
 		</div>
 	</div>

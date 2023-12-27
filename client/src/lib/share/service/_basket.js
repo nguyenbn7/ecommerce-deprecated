@@ -1,5 +1,23 @@
 import { get, readonly, writable } from 'svelte/store';
-import { httpClient, httpClientSpinner } from '../share/httpClient';
+import { createHttpClient } from '../httpClient';
+import { SpinnerService } from '$lib/component/share/spinner/page-spinner.svelte';
+import { delayFetch, notifyFetchError } from '../httpClient/plugin';
+
+const httpClientBackground = createHttpClient();
+const httpClientPageSpinner = createHttpClient();
+httpClientPageSpinner.interceptors.request.use(config => {
+    SpinnerService.showSpinner();
+    return config;
+})
+httpClientPageSpinner.interceptors.response.use(async (response) => {
+    await delayFetch(1000);
+    SpinnerService.hideSpinner();
+    return response;
+}, async (error) => {
+    await delayFetch(1000);
+    SpinnerService.hideSpinner();
+    notifyFetchError(error);
+});
 
 const BASKET_ID = 'basketId';
 
@@ -19,7 +37,7 @@ async function getBasket(id) {
     /**
      * @type {Basket}
      */
-    const newBasket = (await httpClient.get(`basket?id=${id}`)).data;
+    const newBasket = (await httpClientBackground.get(`basket?id=${id}`)).data;
     basketSource.update(() => newBasket);
     calculateTotals();
 }
@@ -31,7 +49,7 @@ async function setBasket(basket) {
     /**
      * @type {Basket}
      */
-    const newBasket = (await httpClientSpinner.post(`basket/`, basket)).data;
+    const newBasket = (await httpClientPageSpinner.post(`basket/`, basket)).data;
     basketSource.update(() => newBasket);
     calculateTotals();
 }
@@ -40,7 +58,7 @@ async function setBasket(basket) {
  * @param {Basket} basket
  */
 async function deleteBasket(basket) {
-    const response = await httpClientSpinner.delete(`basket?id=${basket.id}`);
+    const response = await httpClientPageSpinner.delete(`basket?id=${basket.id}`);
 
     if (response.status === 200) {
         basketSource.update(() => null);
@@ -110,7 +128,7 @@ function calculateTotals() {
     basketTotalsSource.update(() => ({ shipping, subtotal, total }));
 }
 
-async function loadBasketBackground() {
+async function loadBasket() {
     const basketId = localStorage.getItem(BASKET_ID);
     if (basketId) await getBasket(basketId);
 }
@@ -150,6 +168,6 @@ export const basket = readonly(basketSource);
 export const BasketService = {
     removeItemFromBasket,
     addItemToBasket,
-    loadBasketBackground
+    loadBasket
 };
 

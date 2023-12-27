@@ -13,13 +13,13 @@
 <script>
 	import { onMount } from 'svelte';
 	import { startCase, toLower } from 'lodash';
-	import { OrderService, basket, basketTotals } from '$lib/service';
-	import { APP_NAME } from '$lib/constant';
+	import { OrderService, basket, basketTotals } from '$lib/share/service';
+	import { APP_NAME } from '$lib/share/constant';
 	import OrderSummary from '$lib/component/(root)/(no-navbar-footer)/checkout/order-summary.svelte';
 	import Address, {
 		AddressFormGroup
 	} from '$lib/component/(root)/(no-navbar-footer)/checkout/address.svelte';
-	import { currency } from '$lib/helper';
+	import { currency } from '$lib/share/helper';
 
 	let hasSameAddress = true;
 	/**

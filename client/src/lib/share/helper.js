@@ -1,4 +1,4 @@
-import { CURRENCY_CODE } from "$lib/constant";
+import { CURRENCY_CODE } from "$lib/share/constant";
 
 /**
  * @param {string} code

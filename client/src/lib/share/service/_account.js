@@ -1,48 +1,47 @@
-import { httpClient } from '$lib/share/httpClient';
 import { get, readonly, writable } from 'svelte/store';
+import { createHttpClient } from '../httpClient';
+import { delayFetch, notifyFetchError } from '../httpClient/plugin';
+
+const httpClientBackground = createHttpClient();
+
+const httpClient = createHttpClient();
+httpClient.interceptors.response.use(async response => {
+    await delayFetch(1500);
+    return response;
+}, async error => {
+    await delayFetch(1500);
+    notifyFetchError(error);
+});
 
 const ACCESS_TOKEN = 'token';
 
-/**
- * @type {import("svelte/store").Writable<string>}
- */
-const tokenSource = writable('');
 /**
  * @type {import("svelte/store").Writable<User | null>}
  */
 const currentUserStore = writable(null);
 
-/**
- * @returns {Promise<UserInfoResponse>}
- */
-async function getDisplayInfo() {
-    const response = await httpClient.get('account/display', {
+function getAccessToken() {
+    return localStorage.getItem(ACCESS_TOKEN) ?? ''
+}
+
+async function loadUser() {
+    const accessToken = getAccessToken();
+    if (!accessToken) return;
+
+    const response = await httpClientBackground.get('account/display', {
         headers: {
             Authorization: `Bearer ${AccountService.getAccessToken()}`
         }
     });
-    return response.data;
-}
-
-function getAccessToken() {
-    tokenSource.update(() => localStorage.getItem(ACCESS_TOKEN) ?? '');
-    return get(tokenSource);
-}
-
-async function loadUserBackground() {
-    const accessToken = getAccessToken();
-    if (!accessToken) return;
-
-    // Check if token is correct one
-    const data = await getDisplayInfo();
+    /**
+     * @type {UserInfoResponse}
+     */
+    const data = response.data;
     currentUserStore.update(() => ({ email: data.email, displayName: data.displayName }));
 }
 
 function logout() {
-    tokenSource.update(() => {
-        localStorage.removeItem(ACCESS_TOKEN);
-        return '';
-    });
+    localStorage.removeItem(ACCESS_TOKEN);
     currentUserStore.update(() => null);
 }
 
@@ -57,7 +56,6 @@ async function login(loginDTO) {
 
     localStorage.setItem(ACCESS_TOKEN, data.token);
 
-    tokenSource.update(() => data.token);
     currentUserStore.update(() => ({ email: data.email, displayName: data.displayName }));
 
     return get(currentUserStore);
@@ -74,7 +72,6 @@ async function register(registerDTO) {
 
     localStorage.setItem(ACCESS_TOKEN, data.token);
 
-    tokenSource.update(() => data.token);
     currentUserStore.update(() => ({ email: data.email, displayName: data.displayName }));
 
     return get(currentUserStore);
@@ -84,7 +81,7 @@ export const currentUser = readonly(currentUserStore);
 
 export const AccountService = {
     getAccessToken,
-    loadUserBackground,
+    loadUser,
     logout,
     login,
     register

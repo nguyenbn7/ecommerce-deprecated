@@ -1,8 +1,8 @@
 <script>
 	import OrderTotals from '$lib/component/(root)/(navbar-footer)/(pagetitle)/(container)/basket/order-totals.svelte';
-	import { APP_NAME } from '$lib/constant';
-	import { currency } from '$lib/helper';
-	import { BasketService, basket } from '$lib/service';
+	import { APP_NAME } from '$lib/share/constant';
+	import { currency } from '$lib/share/helper';
+	import { BasketService, basket } from '$lib/share/service';
 
 	const { addItemToBasket, removeItemFromBasket } = BasketService;
 </script>

@@ -4,7 +4,7 @@ import { OrderService } from "./_order";
 import { ProductService } from "./_product";
 
 async function init() {
-    await Promise.all([AccountService.loadUserBackground(), BasketService.loadBasketBackground()]);
+    await Promise.all([AccountService.loadUser(), BasketService.loadBasket()]);
 }
 
 export {

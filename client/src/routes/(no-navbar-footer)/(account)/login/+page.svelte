@@ -16,11 +16,11 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import ButtonSpinner from '$lib/share/component/button-spinner.svelte';
 	import FloatingInput from '$lib/component/share/form/floating-input.svelte';
 	import { ToastrService } from '$lib/component/share/toastr.svelte';
-	import { AccountService } from '$lib/service';
-	import { APP_NAME } from '$lib/constant';
+	import { AccountService } from '$lib/share/service';
+	import { APP_NAME } from '$lib/share/constant';
+	import ButtonSpinner from '$lib/component/share/spinner/button-spinner.svelte';
 
 	let loginForm = new LoginForm();
 

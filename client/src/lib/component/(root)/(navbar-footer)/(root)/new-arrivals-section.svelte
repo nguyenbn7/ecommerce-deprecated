@@ -1,5 +1,5 @@
 <script>
-	import { ProductService } from '$lib/service';
+	import { ProductService } from '$lib/share/service';
 	import { onMount } from 'svelte';
 
 	/**

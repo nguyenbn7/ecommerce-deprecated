@@ -1,12 +1,10 @@
 <script>
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
-	import { icon } from '@fortawesome/fontawesome-svg-core';
-	import { faCircleMinus, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
-	import { BasketService, ProductService, basket } from '$lib/service';
+	import { BasketService, ProductService, basket } from '$lib/share/service';
 	import { breadcrumbService } from '$lib/component/share/breadcrumb.svelte';
-	import { APP_NAME } from '$lib/constant';
-	import { currency } from '$lib/helper';
+	import { APP_NAME } from '$lib/share/constant';
+	import { currency } from '$lib/share/helper';
 
 	const { addItemToBasket, removeItemFromBasket } = BasketService;
 
@@ -88,11 +86,11 @@
 						on:click={decrementQuantity}
 						disabled={quantity < 1}
 					>
-						<i>{@html icon(faCircleMinus).html}</i>
+						<i class="fa-solid fa-circle-minus"></i>
 					</button>
 					<span class="fw-semibold" style="font-size: 1.5em;">{quantity}</span>
 					<button class="p-0 m-0 ms-2 border-0 quantity-btn" on:click={incrementQuantity}>
-						<i>{@html icon(faPlusCircle).html}</i>
+						<i class="fa-solid fa-circle-plus"></i>
 					</button>
 					<button
 						class="btn btn-danger ms-4"

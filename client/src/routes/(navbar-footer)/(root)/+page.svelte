@@ -1,5 +1,5 @@
 <script>
-	import { APP_NAME } from '$lib/constant';
+	import { APP_NAME } from '$lib/share/constant';
 	import AboutSection from '$lib/component/(root)/(navbar-footer)/(root)/about-section.svelte';
 	import FeatureSection from '$lib/component/(root)/(navbar-footer)/(root)/feature-section.svelte';
 	import DealSection from '$lib/component/(root)/(navbar-footer)/(root)/deal-section.svelte';
