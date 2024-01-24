@@ -1,8 +1,9 @@
 <script context="module">
 	import _ from 'lodash';
-	import { writable } from 'svelte/store';
+	import { readonly, writable } from 'svelte/store';
 
 	const breadcrumbStore = writable({});
+	export const mapper = readonly(breadcrumbStore);
 
 	/**
 	 * @param {string} pathVariable
@@ -18,11 +19,11 @@
 
 	/**
 	 * @param {import("@sveltejs/kit").Page<Record<string, string>, string | null>} page
+	 * @param {{ [x: string]: string | undefined; }} mapper
 	 */
-	function buildAliasPaths(page) {
+	function buildAliasPaths(page, mapper) {
 		const paths = page.route.id?.split('/').filter((path) => path && path[0] !== '(') ?? [];
 		const pathParams = page.params;
-		const mapper = breadcrumbStore;
 
 		const builtPaths = [{ alias: _.startCase('home'), href: paths.length ? '/' : null }];
 
